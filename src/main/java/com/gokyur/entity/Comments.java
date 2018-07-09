@@ -17,38 +17,38 @@ public class Comments {
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	@Column(name="id")
-	private String id;
+	private int id;
 	
 	@OneToOne(cascade={CascadeType.DETACH,CascadeType.MERGE,CascadeType.PERSIST,CascadeType.REFRESH})
-	@JoinColumn(name="userId")
-	private Users writer;
+	@JoinColumn(nullable=false, name="taskId")
+	private Tasks commentedForTask;
 	
-	@Column(length=250, name="comment")
+	@Column(length=250, nullable=false, name="comment")
 	private String comment;
 
 	public Comments() {
 		
 	}
 
-	public Comments(Users writer, String comment) {
-		this.writer = writer;
+	public Comments(Tasks commentedForTask, String comment) {
+		this.commentedForTask = commentedForTask;
 		this.comment = comment;
 	}
 
-	public String getId() {
+	public int getId() {
 		return id;
 	}
 
-	public void setId(String id) {
+	public void setId(int id) {
 		this.id = id;
 	}
 
-	public Users getWriter() {
-		return writer;
+	public Tasks getTask() {
+		return commentedForTask;
 	}
 
-	public void setWriter(Users writer) {
-		this.writer = writer;
+	public void setTask(Tasks commentedForTask) {
+		this.commentedForTask = commentedForTask;
 	}
 
 	public String getComment() {

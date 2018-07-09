@@ -17,4 +17,12 @@ public class UserDAOImpl implements UserDAO{
 		Session currentSession = sessionFactory.getCurrentSession();
 		currentSession.saveOrUpdate(theUser);
 	}
+
+	public Users getUser(int id) {
+		Session currentSession = sessionFactory.getCurrentSession();
+		Users tempUser = (Users) currentSession.get(Users.class, id);
+		return tempUser;
+	}
+
+	
 }

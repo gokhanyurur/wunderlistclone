@@ -19,4 +19,11 @@ public class UserServiceImpl implements UserService{
 		
 	}
 
+	@Transactional
+	public Users getUser(int id) {
+		return userDAO.getUser(id);
+	}
+
+	
+
 }

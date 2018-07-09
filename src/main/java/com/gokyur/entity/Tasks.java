@@ -27,9 +27,9 @@ public class Tasks {
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	@Column(name="id")
-	private String id;
+	private int id;
 	
-	@Column(name="task")
+	@Column(nullable=false, name="task")
 	private String task;
 	
 	@Column(name="stared")
@@ -43,11 +43,15 @@ public class Tasks {
 	private String notes;
 	
 	@ManyToOne(cascade={CascadeType.DETACH,CascadeType.MERGE,CascadeType.PERSIST,CascadeType.REFRESH})
-	@JoinColumn(name="listId")
+	@JoinColumn(nullable=false, name="listId")
 	private Lists list;
 	
 	@LazyCollection(LazyCollectionOption.FALSE)
-	@OneToMany(mappedBy="task", cascade=CascadeType.ALL)
+	@OneToMany(mappedBy="commentedForTask", cascade=CascadeType.ALL)
+	private List<Comments> comments;
+	
+	@LazyCollection(LazyCollectionOption.FALSE)
+	@OneToMany(mappedBy="belongsToTask", cascade=CascadeType.ALL)
 	private List<SubTasks> subTasks;
 	
 	
@@ -59,11 +63,11 @@ public class Tasks {
 		this.task = task;
 	}
 
-	public String getId() {
+	public int getId() {
 		return id;
 	}
 
-	public void setId(String id) {
+	public void setId(int id) {
 		this.id = id;
 	}
 
@@ -115,11 +119,21 @@ public class Tasks {
 		this.subTasks = subTasks;
 	}
 
+	public List<Comments> getComments() {
+		return comments;
+	}
+
+	public void setComments(List<Comments> comments) {
+		this.comments = comments;
+	}
+
 	@Override
 	public String toString() {
 		return "Tasks [id=" + id + ", task=" + task + ", stared=" + stared + ", date=" + date + ", notes=" + notes
-				+ ", list=" + list + ", subTasks=" + subTasks + "]";
+				+ ", list=" + list + ", comments=" + comments + ", subTasks=" + subTasks + "]";
 	}
+	
+	
 		
 	
 	

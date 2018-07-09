@@ -22,13 +22,13 @@ public class Users {
 	@Column(length=50, name="fullname")
 	private String fullname;
 	
-	@Column(length=30, name="username")
+	@Column(length=30, nullable=false, name="username")
 	private String username;
 	
-	@Column(length=25, name="password")
+	@Column(length=25, nullable=false, name="password")
 	private String password;
 		
-	@Column(length=30, name="email")
+	@Column(length=30, nullable=false, name="email")
 	private String email;
 			
 	@Temporal(TemporalType.DATE)

@@ -23,23 +23,19 @@ public class Lists {
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	@Column(name="id")
-	private String id;
+	private int id;
 	
-	@Column(length=75, name="listName")
+	@Column(length=75, nullable=false, name="listName")
 	private String listName;
 	
 	@ManyToOne(cascade={CascadeType.DETACH,CascadeType.MERGE,CascadeType.PERSIST,CascadeType.REFRESH})
-	@JoinColumn(name="userId")
+	@JoinColumn(nullable=false, name="userId")
 	private Users owner;
 	
 	@LazyCollection(LazyCollectionOption.FALSE)
 	@OneToMany(mappedBy="list", cascade=CascadeType.ALL)
 	private List<Tasks> tasks;
-	
-	@LazyCollection(LazyCollectionOption.FALSE)
-	@OneToMany(mappedBy="writer", cascade=CascadeType.ALL)
-	private List<Comments> comments;
-	
+		
 	@LazyCollection(LazyCollectionOption.FALSE)
 	@OneToMany(mappedBy="sharedWith", cascade=CascadeType.ALL)
 	private List<SharedLists> sharedUsers;
@@ -48,16 +44,20 @@ public class Lists {
 		
 	}
 
+	public Lists(String listName) {
+		this.listName = listName;
+	}
+	
 	public Lists(String listName, Users owner) {
 		this.listName = listName;
 		this.owner = owner;
 	}
 
-	public String getId() {
+	public int getId() {
 		return id;
 	}
 
-	public void setId(String id) {
+	public void setId(int id) {
 		this.id = id;
 	}
 
@@ -85,13 +85,6 @@ public class Lists {
 		this.tasks = tasks;
 	}
 
-	public List<Comments> getComments() {
-		return comments;
-	}
-
-	public void setComments(List<Comments> comments) {
-		this.comments = comments;
-	}
 
 	public List<SharedLists> getSharedUsers() {
 		return sharedUsers;
@@ -103,8 +96,7 @@ public class Lists {
 
 	@Override
 	public String toString() {
-		return "Lists [id=" + id + ", listName=" + listName + ", owner=" + owner + ", tasks=" + tasks + ", comments="
-				+ comments + ", sharedUsers=" + sharedUsers + "]";
+		return "Lists [id=" + id + ", listName=" + listName + ", owner=" + owner + ", tasks=" + tasks + ", sharedUsers=" + sharedUsers + "]";
 	}
 	
 	

@@ -17,37 +17,37 @@ public class SharedLists {
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	@Column(name="id")
-	private String id;
+	private int id;
 		
-	@Column(name="listId")
-	private String sharedList;
+	@Column(nullable=false, name="listId")
+	private int sharedList;
 	
 	@ManyToOne(cascade={CascadeType.DETACH,CascadeType.MERGE,CascadeType.PERSIST,CascadeType.REFRESH})
-	@JoinColumn(name="user_id")
+	@JoinColumn(nullable=false ,name="user_id")
 	private Users sharedWith;
 	
 	public SharedLists() {
 		
 	}
 
-	public SharedLists(String sharedList, Users sharedWith) {
+	public SharedLists(int sharedList, Users sharedWith) {
 		this.sharedList = sharedList;
 		this.sharedWith = sharedWith;
 	}
 
-	public String getId() {
+	public int getId() {
 		return id;
 	}
 
-	public void setId(String id) {
+	public void setId(int id) {
 		this.id = id;
 	}
 
-	public String getSharedList() {
+	public int getSharedList() {
 		return sharedList;
 	}
 
-	public void setSharedList(String sharedList) {
+	public void setSharedList(int sharedList) {
 		this.sharedList = sharedList;
 	}
 

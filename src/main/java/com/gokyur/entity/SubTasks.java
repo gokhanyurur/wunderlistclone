@@ -17,14 +17,14 @@ public class SubTasks {
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	@Column(name="id")
-	private String id;
+	private int id;
 	
-	@Column(length=250, name="subtask")
+	@Column(length=250, nullable=false, name="subtask")
 	private String subTask;
 	
 	@ManyToOne(cascade={CascadeType.DETACH,CascadeType.MERGE,CascadeType.PERSIST,CascadeType.REFRESH})
-	@JoinColumn(name="taskId")
-	private Tasks task;
+	@JoinColumn(nullable=false, name="taskId")
+	private Tasks belongsToTask;
 
 	public SubTasks() {
 		
@@ -34,11 +34,11 @@ public class SubTasks {
 		this.subTask = subTask;
 	}
 
-	public String getId() {
+	public int getId() {
 		return id;
 	}
 
-	public void setId(String id) {
+	public void setId(int id) {
 		this.id = id;
 	}
 
@@ -50,17 +50,17 @@ public class SubTasks {
 		this.subTask = subTask;
 	}
 
-	public Tasks getTask() {
-		return task;
+	public Tasks getBelongsToTask() {
+		return belongsToTask;
 	}
 
-	public void setTask(Tasks task) {
-		this.task = task;
+	public void setBelongsToTask(Tasks belongsToTask) {
+		this.belongsToTask = belongsToTask;
 	}
 
 	@Override
 	public String toString() {
-		return "SubTasks [id=" + id + ", subTask=" + subTask + ", task=" + task + "]";
+		return "SubTasks [id=" + id + ", subTask=" + subTask + ", belongsToTask=" + belongsToTask + "]";
 	}
 	
 	
