@@ -15,9 +15,13 @@
 		http://www.springframework.org/schema/tx/spring-tx.xsd">
 
 
-	<!-- Add support for component scanning -->
+	<!-- Add support for component scanning  -->
 	<context:component-scan
 		base-package="com.gokyur" />
+	<!-- 
+	<context:component-scan base-package="com.gokyur">
+     	<context:include-filter type="aspectj" expression="com.gokyur.*" />
+	</context:component-scan> -->	
 
 	<!-- Add support for conversion, formatting and validation support -->
 	<mvc:annotation-driven />

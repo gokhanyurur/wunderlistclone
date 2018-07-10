@@ -1,5 +1,9 @@
 package com.gokyur.controller;
 
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -91,6 +95,7 @@ public class HomeController {
 		return "addSubTask";
 	}
 	
+	
 	@RequestMapping(value="/addSubTaskProcess", method=RequestMethod.POST)
 	public String addSubTaskProcess(@ModelAttribute("theSubTask") SubTasks theSubTask, Model theModel) {
 		Tasks theTask = listService.getTask(1);
@@ -101,16 +106,34 @@ public class HomeController {
 	
 	@RequestMapping("/shareList")
 	public String shareListPage(Model theModel) {
-		SharedLists sharedList = new SharedLists();
-		theModel.addAttribute("theSharedList", sharedList);
+		theModel.addAttribute("allLists", userService.getUser(1).getLists());
+		theModel.addAttribute("allUsers", userService.getAllUsers());
+		theModel.addAttribute("theSharedList",new SharedLists());
+		for(Lists list:userService.getUser(1).getLists()) {
+			System.out.println(list.getListName());
+		}
+		for(Users user:userService.getAllUsers()) {
+			System.out.println(user.getUsername()+" - "+user.getEmail());
+		}
 		return "shareList";
 	}
+
 	
 	@RequestMapping(value="/shareListProcess", method=RequestMethod.POST)
-	public String shareListProcess(@ModelAttribute("theSharedList") SharedLists theSharedList, Model theModel) {
-		Users sharedWith = userService.getUser(theSharedList.getSharedWith().getId());
-		theSharedList.setSharedWith(sharedWith);
+	public String shareListProcess(@ModelAttribute("theSharedList") SharedLists theSharedList,
+									Model theModel) {
+		Users theUser = userService.getUser(theSharedList.getSharedWith().getId());
+		Lists sharedList = listService.getList(theSharedList.getSharedList());
+		theSharedList.setSharedListId(sharedList.getId());
+		theSharedList.setSharedWith(theUser);
 		listService.shareList(theSharedList);
 		return "redirect:/";
 	}
+//	@RequestMapping(value="/shareListProcess", method=RequestMethod.POST)
+//	public String shareListProcess(HttpServletRequest req, HttpServletResponse res) {
+//
+//		int listid = Integer.parseInt(req.getParameter("listid").trim());
+//		
+//		return "redirect:/";
+//	}
 }

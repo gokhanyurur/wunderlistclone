@@ -1,5 +1,7 @@
 package com.gokyur.dao;
 
+import java.util.List;
+
 import com.gokyur.entity.Comments;
 import com.gokyur.entity.Lists;
 import com.gokyur.entity.SharedLists;
@@ -20,5 +22,7 @@ public interface ListDAO {
 	public void addComment(Comments theComment);
 	
 	public void shareList(SharedLists theSharedList);
+	
+	/*public List<Lists> getAllListsOfUser(int userId);*/
 	
 }

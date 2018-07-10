@@ -19,13 +19,15 @@ public class SharedLists {
 	@Column(name="id")
 	private int id;
 		
-	@Column(nullable=false, name="listId")
+	
+	//@JoinColumn(nullable=false, name="sharedListId")
+	@Column(name="sharedListId")
 	private int sharedList;
 	
 	@ManyToOne(cascade={CascadeType.DETACH,CascadeType.MERGE,CascadeType.PERSIST,CascadeType.REFRESH})
-	@JoinColumn(nullable=false ,name="user_id")
+	@JoinColumn(nullable=false ,name="sharedUserId")
 	private Users sharedWith;
-	
+		
 	public SharedLists() {
 		
 	}
@@ -47,7 +49,7 @@ public class SharedLists {
 		return sharedList;
 	}
 
-	public void setSharedList(int sharedList) {
+	public void setSharedListId(int sharedList) {
 		this.sharedList = sharedList;
 	}
 
@@ -58,7 +60,11 @@ public class SharedLists {
 	public void setSharedWith(Users sharedWith) {
 		this.sharedWith = sharedWith;
 	}
-	
+
+	public void setSharedList(int sharedList) {
+		this.sharedList = sharedList;
+	}
+
 	
 	
 }

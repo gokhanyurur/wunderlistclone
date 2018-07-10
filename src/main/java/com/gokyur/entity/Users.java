@@ -22,7 +22,7 @@ public class Users {
 	@Column(length=50, name="fullname")
 	private String fullname;
 	
-	@Column(length=30, nullable=false, name="username")
+	@Column(length=30, nullable=false, unique=true, name="username")
 	private String username;
 	
 	@Column(length=25, nullable=false, name="password")
@@ -106,12 +106,6 @@ public class Users {
 		this.lists = lists;
 	}
 
-	@Override
-	public String toString() {
-		return "Users [id=" + id + ", fullname=" + fullname + ", username=" + username + ", password=" + password
-				+ ", email=" + email + ", createdAt=" + createdAt + ", lists=" + lists + "]";
-	}
-	
 	
 				
 }

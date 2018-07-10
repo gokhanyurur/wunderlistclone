@@ -1,5 +1,7 @@
 package com.gokyur.service;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -56,5 +58,10 @@ public class ListServiceImpl implements ListService{
 	public void shareList(SharedLists theSharedList) {
 		listDAO.shareList(theSharedList);
 	}
+
+	/*@Transactional
+	public List<Lists> getAllListsOfUser(int userId) {
+		return listDAO.getAllListsOfUser(userId);
+	}*/
 
 }

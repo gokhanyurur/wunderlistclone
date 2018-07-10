@@ -39,7 +39,7 @@ public class Lists {
 	@LazyCollection(LazyCollectionOption.FALSE)
 	@OneToMany(mappedBy="sharedWith", cascade=CascadeType.ALL)
 	private List<SharedLists> sharedUsers;
-	
+		
 	public Lists() {
 		
 	}
@@ -92,11 +92,6 @@ public class Lists {
 
 	public void setSharedUsers(List<SharedLists> sharedUsers) {
 		this.sharedUsers = sharedUsers;
-	}
-
-	@Override
-	public String toString() {
-		return "Lists [id=" + id + ", listName=" + listName + ", owner=" + owner + ", tasks=" + tasks + ", sharedUsers=" + sharedUsers + "]";
 	}
 	
 	

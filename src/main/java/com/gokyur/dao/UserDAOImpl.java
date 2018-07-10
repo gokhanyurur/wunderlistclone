@@ -3,6 +3,9 @@ package com.gokyur.dao;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
+
 import org.hibernate.Session;
 
 import com.gokyur.entity.Users;
@@ -22,6 +25,13 @@ public class UserDAOImpl implements UserDAO{
 		Session currentSession = sessionFactory.getCurrentSession();
 		Users tempUser = (Users) currentSession.get(Users.class, id);
 		return tempUser;
+	}
+
+	public List<Users> getAllUsers() {
+		Session currentSession = sessionFactory.getCurrentSession();
+		@SuppressWarnings("unchecked")
+		List<Users> allUsers =(List<Users>) currentSession.createQuery("from Users").list();
+		return allUsers;
 	}
 
 	
