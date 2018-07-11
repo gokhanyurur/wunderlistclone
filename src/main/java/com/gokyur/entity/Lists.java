@@ -17,7 +17,7 @@ import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
 
 @Entity
-@Table(name="Lists")
+@Table(name="lists")
 public class Lists {
 	
 	@Id
@@ -35,11 +35,12 @@ public class Lists {
 	@LazyCollection(LazyCollectionOption.FALSE)
 	@OneToMany(mappedBy="list", cascade=CascadeType.ALL)
 	private List<Tasks> tasks;
-		
+	
+	/*
 	@LazyCollection(LazyCollectionOption.FALSE)
 	@OneToMany(mappedBy="sharedWith", cascade=CascadeType.ALL)
 	private List<SharedLists> sharedUsers;
-		
+	*/	
 	public Lists() {
 		
 	}
@@ -85,7 +86,7 @@ public class Lists {
 		this.tasks = tasks;
 	}
 
-
+	/*
 	public List<SharedLists> getSharedUsers() {
 		return sharedUsers;
 	}
@@ -93,7 +94,7 @@ public class Lists {
 	public void setSharedUsers(List<SharedLists> sharedUsers) {
 		this.sharedUsers = sharedUsers;
 	}
-	
+	*/
 	
 	
 }

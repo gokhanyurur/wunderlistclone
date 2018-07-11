@@ -9,9 +9,10 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 @Entity
-@Table(name="SharedList")
+@Table(name="sharedlists")
 public class SharedLists {
 	
 	@Id
@@ -20,13 +21,15 @@ public class SharedLists {
 	private int id;
 		
 	
-	//@JoinColumn(nullable=false, name="sharedListId")
 	@Column(name="sharedListId")
 	private int sharedList;
 	
 	@ManyToOne(cascade={CascadeType.DETACH,CascadeType.MERGE,CascadeType.PERSIST,CascadeType.REFRESH})
 	@JoinColumn(nullable=false ,name="sharedUserId")
 	private Users sharedWith;
+	
+	@Transient
+	private int sharedUser_ID;
 		
 	public SharedLists() {
 		
@@ -63,6 +66,14 @@ public class SharedLists {
 
 	public void setSharedList(int sharedList) {
 		this.sharedList = sharedList;
+	}
+
+	public int getSharedUser_ID() {
+		return sharedUser_ID;
+	}
+
+	public void setSharedUser_ID(int sharedUser_ID) {
+		this.sharedUser_ID = sharedUser_ID;
 	}
 
 	

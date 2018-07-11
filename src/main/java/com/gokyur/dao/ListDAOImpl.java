@@ -1,8 +1,6 @@
 package com.gokyur.dao;
 
 
-import java.util.List;
-
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +11,6 @@ import com.gokyur.entity.Lists;
 import com.gokyur.entity.SharedLists;
 import com.gokyur.entity.SubTasks;
 import com.gokyur.entity.Tasks;
-import com.gokyur.entity.Users;
 
 @Service
 public class ListDAOImpl implements ListDAO{
@@ -63,12 +60,5 @@ public class ListDAOImpl implements ListDAO{
 		Session currentSession = sessionFactory.getCurrentSession();
 		currentSession.saveOrUpdate(theSharedList);
 	}
-
-	/*public List<Lists> getAllListsOfUser(int userId) {
-		Session currentSession = sessionFactory.getCurrentSession();
-		@SuppressWarnings("unchecked")
-		List<Lists> allLists =(List<Lists>) currentSession.createQuery("from Lists").list();
-		return allUsers;
-	}*/
 
 }

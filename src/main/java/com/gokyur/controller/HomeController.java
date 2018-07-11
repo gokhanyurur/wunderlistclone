@@ -1,8 +1,7 @@
 package com.gokyur.controller;
 
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -109,26 +108,58 @@ public class HomeController {
 		theModel.addAttribute("allLists", userService.getUser(1).getLists());
 		theModel.addAttribute("allUsers", userService.getAllUsers());
 		theModel.addAttribute("theSharedList",new SharedLists());
-		for(Lists list:userService.getUser(1).getLists()) {
-			System.out.println(list.getListName());
-		}
-		for(Users user:userService.getAllUsers()) {
-			System.out.println(user.getUsername()+" - "+user.getEmail());
-		}
+		
+		/*
+		 * 
+		 * For testing ---------------------
+		 * 
+		 */
+			Users loginedUser = userService.getUser(1);
+			
+			System.out.println("Logined User: "+loginedUser.getUsername());
+			System.out.println("\tLists:");
+			for(Lists list:loginedUser.getLists()) {
+				System.out.println("\t"+list.getListName());
+				System.out.println("\t\tTasks:");
+				for(Tasks task:list.getTasks()) {
+					System.out.println("\t\t"+task.getTask());
+					System.out.println("\t\t\tComments of this task:");
+					for(Comments comment:task.getComments()) {
+						System.out.println("\t\t\t"+comment.getComment());
+					}
+					System.out.println("\t\t\t\tSubtasks:");
+					for(SubTasks subtask: task.getSubTasks()) {
+						System.out.println("\t\t\t\t"+subtask.getSubTask());
+					}
+				}
+				System.out.print("This list shared with: ");
+				List<SharedLists> sharedList = userService.getAllSharedLists();
+				for(SharedLists sl: sharedList) {
+					if(sl.getSharedList() == list.getId()) {
+						System.out.println(sl.getSharedWith().getUsername());
+					}
+				}
+			}
+			
+		/*
+		 * 
+		 * For Testing ---------------------
+		 * 
+		 */
+		
 		return "shareList";
 	}
 
-	
 	@RequestMapping(value="/shareListProcess", method=RequestMethod.POST)
 	public String shareListProcess(@ModelAttribute("theSharedList") SharedLists theSharedList,
 									Model theModel) {
-		Users theUser = userService.getUser(theSharedList.getSharedWith().getId());
-		Lists sharedList = listService.getList(theSharedList.getSharedList());
-		theSharedList.setSharedListId(sharedList.getId());
-		theSharedList.setSharedWith(theUser);
-		listService.shareList(theSharedList);
+		Users tempUser = userService.getUser(theSharedList.getSharedUser_ID());
+		Lists tempList = listService.getList(theSharedList.getSharedList());
+		SharedLists sharedList = new SharedLists(tempList.getId(), tempUser);
+		listService.shareList(sharedList);
 		return "redirect:/";
 	}
+	
 //	@RequestMapping(value="/shareListProcess", method=RequestMethod.POST)
 //	public String shareListProcess(HttpServletRequest req, HttpServletResponse res) {
 //

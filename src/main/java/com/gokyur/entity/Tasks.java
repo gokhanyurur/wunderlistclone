@@ -21,7 +21,7 @@ import org.hibernate.annotations.LazyCollectionOption;
 import org.springframework.format.annotation.DateTimeFormat;
 
 @Entity
-@Table(name="Tasks")
+@Table(name="tasks")
 public class Tasks {
 	
 	@Id
@@ -127,14 +127,5 @@ public class Tasks {
 		this.comments = comments;
 	}
 
-	@Override
-	public String toString() {
-		return "Tasks [id=" + id + ", task=" + task + ", stared=" + stared + ", date=" + date + ", notes=" + notes
-				+ ", list=" + list + ", comments=" + comments + ", subTasks=" + subTasks + "]";
-	}
-	
-	
-		
-	
 	
 }

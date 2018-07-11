@@ -11,7 +11,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 @Entity
-@Table(name="SubTasks")
+@Table(name="subtasks")
 public class SubTasks {
 	
 	@Id
@@ -57,12 +57,5 @@ public class SubTasks {
 	public void setBelongsToTask(Tasks belongsToTask) {
 		this.belongsToTask = belongsToTask;
 	}
-
-	@Override
-	public String toString() {
-		return "SubTasks [id=" + id + ", subTask=" + subTask + ", belongsToTask=" + belongsToTask + "]";
-	}
-	
-	
 
 }

@@ -15,14 +15,14 @@
 
 		<form:select path="sharedList">
 			<c:forEach var="list" items="${allLists}">
-				<form:option value="${list.id}" id="${list.id}">${list.listName}</form:option>
+				<form:option value="${list.id}">${list.listName}</form:option>
 			</c:forEach>
 		</form:select>
 		<br>
 		<label>User to be shared: </label>
-		<form:select path="sharedWith">
+		<form:select path="sharedUser_ID">
 			<c:forEach var="user" items="${allUsers}">
-				<form:option value="${user}" id="${user}">${user.username}</form:option>
+				<form:option value="${user.id}">${user.username}</form:option>
 			</c:forEach>
 		</form:select>
 		<br>

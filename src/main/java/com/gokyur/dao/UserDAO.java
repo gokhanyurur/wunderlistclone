@@ -2,6 +2,7 @@ package com.gokyur.dao;
 
 import java.util.List;
 
+import com.gokyur.entity.SharedLists;
 import com.gokyur.entity.Users;
 
 public interface UserDAO {
@@ -10,6 +11,9 @@ public interface UserDAO {
 	public Users getUser(int id);
 
 	public List<Users> getAllUsers();
+	
+	public List<SharedLists> getSharedLists(int listId);
+	public List<SharedLists> getAllSharedLists();
 
 
 }

@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.gokyur.dao.UserDAO;
+import com.gokyur.entity.SharedLists;
 import com.gokyur.entity.Users;
 
 @Service
@@ -29,6 +30,16 @@ public class UserServiceImpl implements UserService{
 	@Transactional
 	public List<Users> getAllUsers() {
 		return userDAO.getAllUsers();
+	}
+
+	@Transactional
+	public List<SharedLists> getSharedLists(int listId) {
+		return userDAO.getSharedLists(listId);
+	}
+
+	@Transactional
+	public List<SharedLists> getAllSharedLists() {
+		return userDAO.getAllSharedLists();
 	}
 
 	
