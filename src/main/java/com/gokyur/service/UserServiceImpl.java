@@ -26,6 +26,11 @@ public class UserServiceImpl implements UserService{
 	public Users getUser(int id) {
 		return userDAO.getUser(id);
 	}
+	
+	@Transactional
+	public Users getUser(String username) {
+		return userDAO.getUser(username);
+	}
 
 	@Transactional
 	public List<Users> getAllUsers() {
@@ -41,7 +46,5 @@ public class UserServiceImpl implements UserService{
 	public List<SharedLists> getAllSharedLists() {
 		return userDAO.getAllSharedLists();
 	}
-
-	
 
 }

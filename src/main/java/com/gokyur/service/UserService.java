@@ -10,11 +10,14 @@ public interface UserService{
 	public void saveUser(Users theUser);
 	
 	public Users getUser(int id);
+	public Users getUser(String username);
 	
 	public List<Users> getAllUsers();
 	
 	public List<SharedLists> getAllSharedLists();
 	public List<SharedLists> getSharedLists(int listId);
+
+
 
 
 }

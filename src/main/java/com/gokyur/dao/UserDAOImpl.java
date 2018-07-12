@@ -28,6 +28,14 @@ public class UserDAOImpl implements UserDAO{
 		Users tempUser = (Users) currentSession.get(Users.class, id);
 		return tempUser;
 	}
+	
+	public Users getUser(String username) {
+		Session currentSession = sessionFactory.getCurrentSession();
+		Query theQuery=currentSession.createQuery("FROM Users WHERE username=:userName");
+		theQuery.setParameter("userName", username);
+		Users tempUser = (Users) theQuery.uniqueResult();
+		return tempUser;
+	}
 
 	public List<Users> getAllUsers() {
 		Session currentSession = sessionFactory.getCurrentSession();
@@ -54,6 +62,8 @@ public class UserDAOImpl implements UserDAO{
 		List<SharedLists> allSharedLists =(List<SharedLists>) currentSession.createQuery("from SharedLists").list();
 		return allSharedLists;
 	}
+
+	
 
 	
 }

@@ -25,7 +25,7 @@ public class Users {
 	@Column(length=30, nullable=false, unique=true, name="username")
 	private String username;
 	
-	@Column(length=25, nullable=false, name="password")
+	@Column(nullable=false, name="password")
 	private String password;
 		
 	@Column(length=30, nullable=false, name="email")
@@ -39,9 +39,12 @@ public class Users {
 	@OneToMany(mappedBy="owner", cascade=CascadeType.ALL)
 	private List<Lists> lists;
 	
-	@LazyCollection(LazyCollectionOption.TRUE)
+	@LazyCollection(LazyCollectionOption.FALSE) //True
 	@OneToMany(mappedBy="sharedWith", cascade=CascadeType.ALL)
 	private List<SharedLists> sharedUsers;
+	
+	@OneToOne(mappedBy="roledUser", cascade=CascadeType.ALL)
+	private Roles role = new Roles();
 			
 	public Users() {
 		
@@ -117,5 +120,15 @@ public class Users {
 	public void setSharedUsers(List<SharedLists> sharedUsers) {
 		this.sharedUsers = sharedUsers;
 	}
+
+	public Roles getRoles() {
+		return role;
+	}
+
+	public void setRole(Roles role) {
+		this.role = role;
+	}
+	
+	
 				
 }
