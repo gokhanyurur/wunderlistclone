@@ -1,6 +1,26 @@
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@page session="true"%>
 <html>
+<head>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script type="text/javascript">
+/*
+	function ajaxtest(){
+	
+		$.ajax({
+			url: "/ajaxtest",
+			data:{
+				name: inputvalue
+			},
+			success:function(result){
+				alert(result);
+			}
+		});
+		
+	} 
+*/
+ </script>
+</head>
 <body>
 	<h1>Title : ${title}</h1>
 	<h1>Message : ${message}</h1>

@@ -1,16 +1,25 @@
 package com.gokyur.controller;
 
 
+
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.gokyur.entity.Comments;
 import com.gokyur.entity.Lists;
@@ -22,6 +31,11 @@ import com.gokyur.entity.Users;
 import com.gokyur.service.ListService;
 import com.gokyur.service.UserService;
 import com.gokyur.utilities.GokyurUtilities;
+import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonParser;
+import com.google.gson.reflect.TypeToken;
+
 
 @Controller
 public class HomeController {
@@ -52,8 +66,38 @@ public class HomeController {
         theUser.setPassword(encodedPass);
         theUser.setRole(userRole);
 		userService.saveUser(theUser);
-		return "redirect:/createList";
+		return "redirect:/login";
 		
+	}
+	
+	@RequestMapping(value="/lists**", method = RequestMethod.GET)
+	public String listsPage(Model theModel, HttpServletRequest req) {
+		//Users loginedUser = userService.getUser(req.getUserPrincipal().getName());
+		
+		//List<Lists> userLists = loginedUser.getLists();
+		
+		String username = req.getUserPrincipal().getName();
+		theModel.addAttribute("username", username);
+		return "lists";
+	}
+	
+	@RequestMapping(value = "/showLists", method = RequestMethod.GET)
+	public @ResponseBody Map<String, Object> test(HttpServletRequest req, HttpServletResponse resp) {
+		//@RequestParam("name") String name, 
+		List<Lists> userLists = userService.getUser(req.getUserPrincipal().getName()).getLists();
+	
+		Map<String, Object> map = new HashMap<String, Object>();
+		
+		/*boolean status = true;
+		map.put("status", status);
+		map.put("message", "Basarili");
+		map.put("data", name);*/
+		
+		for(Lists list:userLists) {
+			map.put(String.valueOf(list.getId()), list.getListName());
+		}
+			
+		return map;
 	}
 	
 	@RequestMapping("/createList")
@@ -64,8 +108,8 @@ public class HomeController {
 	}
 	
 	@RequestMapping(value="/createListProcess", method=RequestMethod.POST)
-	public String createList(@ModelAttribute("theList") Lists theList, Model theModel, Authentication authentication) {
-		Users theUser = userService.getUser(authentication.getName());
+	public String createList(@ModelAttribute("theList") Lists theList, Model theModel, HttpServletRequest req) {
+		Users theUser = userService.getUser(req.getUserPrincipal().getName());
 		theList.setOwner(theUser);
 		listService.createList(theList);
 		return "redirect:/addTask";
@@ -79,7 +123,8 @@ public class HomeController {
 	}
 	
 	@RequestMapping(value="/addTaskProcess", method=RequestMethod.POST)
-	public String addTask(@ModelAttribute("theTask") Tasks theTask, Model theModel) {
+	public String addTask(@ModelAttribute("theTask") Tasks theTask,
+						  Model theModel, HttpServletRequest req) {
 		Lists theList = listService.getList(1);
 		theTask.setList(theList);
 		listService.addTask(theTask);
@@ -118,15 +163,15 @@ public class HomeController {
 	}
 	
 	@RequestMapping("/shareList")
-	public String shareListPage(Model theModel, Authentication authentication) {
-		theModel.addAttribute("allLists", userService.getUser(1).getLists());
+	public String shareListPage(Model theModel, HttpServletRequest req,Authentication authentication) {
+		theModel.addAttribute("allLists", userService.getUser(req.getUserPrincipal().getName()).getLists());
 		theModel.addAttribute("allUsers", userService.getAllUsers());
 		theModel.addAttribute("theSharedList",new SharedLists());
 		
 		/*
 		 * For testing ---------------------
 		 */
-			Users loginedUser = userService.getUser(authentication.getName());
+			Users loginedUser = userService.getUser(req.getUserPrincipal().getName());
 			
 			System.out.println("Role of user: "+loginedUser.getRoles().getRole());
 			
@@ -209,6 +254,5 @@ public class HomeController {
 		return "login";
 
 	}
-	
 
 }
