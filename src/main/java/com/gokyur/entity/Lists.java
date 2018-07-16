@@ -5,6 +5,7 @@ import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -15,6 +16,8 @@ import javax.persistence.Table;
 
 import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 @Table(name="lists")
@@ -28,19 +31,16 @@ public class Lists {
 	@Column(length=75, nullable=false, name="listName")
 	private String listName;
 	
-	@ManyToOne(cascade={CascadeType.DETACH,CascadeType.MERGE,CascadeType.PERSIST,CascadeType.REFRESH})
+//	@ManyToOne(cascade={CascadeType.DETACH,CascadeType.MERGE,CascadeType.PERSIST,CascadeType.REFRESH})
+	@ManyToOne(cascade={CascadeType.DETACH,CascadeType.MERGE,CascadeType.PERSIST,CascadeType.REFRESH}, fetch=FetchType.LAZY)
 	@JoinColumn(nullable=false, name="userId")
 	private Users owner;
 	
 	@LazyCollection(LazyCollectionOption.FALSE)
 	@OneToMany(mappedBy="list", cascade=CascadeType.ALL)
+	@JsonIgnore
 	private List<Tasks> tasks;
-	
-	/*
-	@LazyCollection(LazyCollectionOption.FALSE)
-	@OneToMany(mappedBy="sharedWith", cascade=CascadeType.ALL)
-	private List<SharedLists> sharedUsers;
-	*/	
+		
 	public Lists() {
 		
 	}
@@ -86,15 +86,5 @@ public class Lists {
 		this.tasks = tasks;
 	}
 
-	/*
-	public List<SharedLists> getSharedUsers() {
-		return sharedUsers;
-	}
-
-	public void setSharedUsers(List<SharedLists> sharedUsers) {
-		this.sharedUsers = sharedUsers;
-	}
-	*/
-	
 	
 }

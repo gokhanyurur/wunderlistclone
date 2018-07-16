@@ -2,18 +2,19 @@ package com.gokyur.entity;
 
 import javax.persistence.*;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 @Table(name="roles")
 public class Roles {
   
-
 	@Id
     @GeneratedValue(strategy = GenerationType.AUTO)
 	@Column(name="id")
     private int id;
     
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="userId")
+	@OneToOne
+    @JoinColumn(name="userId")	
     private Users roledUser; 
  
     @Column(name="role")
@@ -40,10 +41,12 @@ public class Roles {
 		this.id = id;
 	}
 
+	@JsonIgnore
 	public Users getUser() {
 		return roledUser;
 	}
 
+	@JsonIgnore
 	public void setUser(Users roledUser) {
 		this.roledUser = roledUser;
 	}
@@ -55,6 +58,5 @@ public class Roles {
 	public void setRole(String role) {
 		this.role = role;
 	}
-  
-    
+   
 }

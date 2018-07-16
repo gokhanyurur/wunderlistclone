@@ -19,7 +19,6 @@ public class Comments {
 	@Column(name="id")
 	private int id;
 	
-	//OneToOne
 	@ManyToOne(cascade={CascadeType.DETACH,CascadeType.MERGE,CascadeType.PERSIST,CascadeType.REFRESH})
 	@JoinColumn(nullable=false, name="taskId")
 	private Tasks commentedForTask;

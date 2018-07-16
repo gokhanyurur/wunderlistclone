@@ -20,7 +20,6 @@ public class SharedLists {
 	@Column(name="id")
 	private int id;
 		
-	
 	@Column(name="sharedListId")
 	private int sharedList;
 	
@@ -75,7 +74,6 @@ public class SharedLists {
 	public void setSharedUser_ID(int sharedUser_ID) {
 		this.sharedUser_ID = sharedUser_ID;
 	}
-
 	
 	
 }

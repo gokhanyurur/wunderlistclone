@@ -12,9 +12,10 @@
 <!-- 		<intercept-url pattern="/resources**" access="permitAll" /> -->
 		<intercept-url pattern="/admin**" access="ROLE_ADMIN" />
 		<intercept-url pattern="/lists**" access="ROLE_USER" />
+		<intercept-url pattern="/shareList**" access="ROLE_USER" />
 		<form-login 
 		    login-page="/login" 
-		    default-target-url="/lists" 
+		    default-target-url="/shareList" 
 			authentication-failure-url="/login?error" 
 			username-parameter="username"
 			password-parameter="password" />

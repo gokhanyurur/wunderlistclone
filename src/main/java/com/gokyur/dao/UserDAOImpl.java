@@ -2,7 +2,8 @@ package com.gokyur.dao;
 
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -12,7 +13,8 @@ import org.hibernate.Session;
 import com.gokyur.entity.SharedLists;
 import com.gokyur.entity.Users;
 
-@Service
+@Repository
+@Transactional
 public class UserDAOImpl implements UserDAO{
 
 	@Autowired

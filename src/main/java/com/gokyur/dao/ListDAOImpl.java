@@ -4,7 +4,8 @@ package com.gokyur.dao;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.gokyur.entity.Comments;
 import com.gokyur.entity.Lists;
@@ -12,7 +13,8 @@ import com.gokyur.entity.SharedLists;
 import com.gokyur.entity.SubTasks;
 import com.gokyur.entity.Tasks;
 
-@Service
+@Repository
+@Transactional
 public class ListDAOImpl implements ListDAO{
 
 	@Autowired

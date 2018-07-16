@@ -1,5 +1,6 @@
 package com.gokyur.entity;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -8,6 +9,8 @@ import javax.persistence.*;
 import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
 import org.springframework.format.annotation.DateTimeFormat;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 
 @Entity
@@ -35,15 +38,16 @@ public class Users {
 	@DateTimeFormat(pattern = "yyyy/MM/dd HH:mm:ss")
 	protected Date createdAt;
 	
-	@LazyCollection(LazyCollectionOption.FALSE)
-	@OneToMany(mappedBy="owner", cascade=CascadeType.ALL)
-	private List<Lists> lists;
+	@OneToMany(mappedBy="owner", cascade=CascadeType.ALL, fetch=FetchType.EAGER)
+	@JsonIgnore
+	private List<Lists> lists = new ArrayList<Lists>(0);
 	
 	@LazyCollection(LazyCollectionOption.FALSE) //True
 	@OneToMany(mappedBy="sharedWith", cascade=CascadeType.ALL)
+	@JsonIgnore
 	private List<SharedLists> sharedUsers;
 	
-	@OneToOne(mappedBy="roledUser", cascade=CascadeType.ALL)
+	@OneToOne(mappedBy="roledUser")
 	private Roles role = new Roles();
 			
 	public Users() {

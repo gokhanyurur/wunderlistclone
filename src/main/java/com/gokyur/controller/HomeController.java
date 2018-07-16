@@ -2,7 +2,6 @@ package com.gokyur.controller;
 
 
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -14,7 +13,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -31,10 +29,6 @@ import com.gokyur.entity.Users;
 import com.gokyur.service.ListService;
 import com.gokyur.service.UserService;
 import com.gokyur.utilities.GokyurUtilities;
-import com.google.gson.Gson;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonParser;
-import com.google.gson.reflect.TypeToken;
 
 
 @Controller
@@ -76,28 +70,36 @@ public class HomeController {
 		
 		//List<Lists> userLists = loginedUser.getLists();
 		
-		String username = req.getUserPrincipal().getName();
-		theModel.addAttribute("username", username);
+		/*String username = req.getUserPrincipal().getName();
+		theModel.addAttribute("username", username);*/
 		return "lists";
 	}
 	
-	@RequestMapping(value = "/showLists", method = RequestMethod.GET)
-	public @ResponseBody Map<String, Object> test(HttpServletRequest req, HttpServletResponse resp) {
-		//@RequestParam("name") String name, 
+	@RequestMapping(value = "/getLists", method = RequestMethod.GET)
+	public @ResponseBody  List<Lists> getListsList(HttpServletRequest req, HttpServletResponse resp) {
 		List<Lists> userLists = userService.getUser(req.getUserPrincipal().getName()).getLists();
 	
+		/*return Map<String, Object> type
+		
 		Map<String, Object> map = new HashMap<String, Object>();
 		
-		/*boolean status = true;
+		boolean status = true;
 		map.put("status", status);
 		map.put("message", "Basarili");
-		map.put("data", name);*/
+		map.put("data", name);
 		
 		for(Lists list:userLists) {
 			map.put(String.valueOf(list.getId()), list.getListName());
-		}
+		}*/
 			
-		return map;
+		return userLists;
+	}
+	
+	@RequestMapping(value = "/getTasksList", method = RequestMethod.GET)
+	public @ResponseBody  List<Tasks> test(@RequestParam("listId") int id,HttpServletRequest req, HttpServletResponse resp) {
+		List<Tasks> listTasks = listService.getList(id).getTasks();
+	
+		return listTasks;
 	}
 	
 	@RequestMapping("/createList")

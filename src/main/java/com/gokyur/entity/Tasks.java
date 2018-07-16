@@ -20,6 +20,8 @@ import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
 import org.springframework.format.annotation.DateTimeFormat;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 @Table(name="tasks")
 public class Tasks {
@@ -44,14 +46,17 @@ public class Tasks {
 	
 	@ManyToOne(cascade={CascadeType.DETACH,CascadeType.MERGE,CascadeType.PERSIST,CascadeType.REFRESH})
 	@JoinColumn(nullable=false, name="listId")
+	@JsonIgnore
 	private Lists list;
 	
 	@LazyCollection(LazyCollectionOption.FALSE)
 	@OneToMany(mappedBy="commentedForTask", cascade=CascadeType.ALL)
+	@JsonIgnore
 	private List<Comments> comments;
 	
 	@LazyCollection(LazyCollectionOption.FALSE)
 	@OneToMany(mappedBy="belongsToTask", cascade=CascadeType.ALL)
+	@JsonIgnore
 	private List<SubTasks> subTasks;
 	
 	
