@@ -19,12 +19,18 @@
 <script type="text/javascript">
 
 	$(document).ready(function() {
+		getAllLists();
+		$("#addTaskBtn").hide();
+		$("#addTaskText").hide();
+	});
 
+	function getAllLists(){
 		$.ajax({
 			url: "getLists",
 			success : function(result){
 				console.log("success");
-				//debugger;
+				$('#createListText').val("");
+				$("#listsDiv").html("");
 				jQuery.each(result, function(index, value){
  					$("#listsDiv").append("<a href='#' onclick='getTasks(\""+ result[index].id +"\")'>"+result[index].listName+"</a><br>");
  		        });
@@ -33,12 +39,10 @@
 				console.log("error");
 			}
 		});
-		
-	});
-
+	}
+	
+	
 	function getTasks(id){
-		debugger;
-
 		var data = {
 				listId: id
 		}
@@ -47,10 +51,15 @@
 			url:"getTasksList",
 			data: data,
 			success : function(result){
+				$("#tasksDiv").html("");
+				$("#addTaskBtn").show();
+				$("#addTaskBtn").click(function(){
+					addTaskToList(data.listId);
+				});
+				$("#addTaskText").show();
 				console.log("success");
 				jQuery.each(result, function(index, value){
-					//returns undefined ----------------------------------------------------------------------------------------------------------
- 					$("#tasksDiv").append("<a href='#' onclick='getTaskDetails(\""+ result[index].id +"\")'>"+result[index].listName+"</a><br>");
+ 					$("#tasksDiv").html("<a href='#' onclick='getTaskDetails(\""+ result[index].id +"\")'>"+result[index].task+"</a><br>");
  		        });
 			}, 
 			error : function(){
@@ -58,6 +67,42 @@
 			}
 		});
 	}
+	
+	function addTaskToList(listid){
+		var data = {
+				listId : listid,
+				taskName: $("#addTaskText").val()
+		}
+		
+		$.ajax({
+			url:"addTaskProcess",
+			type: "POST",
+			data: data,
+			success : function(){
+				$('#addTaskText').val("");
+				console.log("Task added to the list.");
+				getTasks(data.listId);			
+			}
+		});
+	}
+	
+	function createList(){
+		var data = {
+				listname: $("#createListText").val()
+		}
+		
+		$.ajax({
+			url:"createListProcess",
+			type: "POST",
+			data: data,
+			success : function(){
+				console.log("List created.")
+				getAllLists();
+			}
+		});
+		
+	}
+	
  </script>
 
 
@@ -70,13 +115,17 @@
 			<div class="col-md-4">
 				<div class="col-md-12">
 					<h4>Lists</h4>
-				</div>
-				<div id="listsDiv" style="">
+					<input type="text" id="createListText" placeholder="Create a list"/>
+					<input type="button" value="Create" onclick="createList()">
+					<div id="listsDiv" style="">
 
+					</div>
 				</div>
 			</div>
 			<div class="col-md-5">
-				List content
+				<h4>List content</h4>
+				<input type="text" id="addTaskText" placeholder="Add a task"/>
+				<input type="button" id="addTaskBtn" value="Create">
 				<div id="tasksDiv" style="">
 
 				</div>

@@ -27,6 +27,7 @@ import com.gokyur.entity.SubTasks;
 import com.gokyur.entity.Tasks;
 import com.gokyur.entity.Users;
 import com.gokyur.service.ListService;
+import com.gokyur.service.RoleService;
 import com.gokyur.service.UserService;
 import com.gokyur.utilities.GokyurUtilities;
 
@@ -40,8 +41,8 @@ public class HomeController {
 	@Autowired
 	private ListService listService;
 	
-	/*@Autowired
-    private RoleService roleService;*/
+	@Autowired
+    private RoleService roleService;
 		
 	@RequestMapping("/register")
 	public String indexPage(Model theModel) {
@@ -60,6 +61,7 @@ public class HomeController {
         theUser.setPassword(encodedPass);
         theUser.setRole(userRole);
 		userService.saveUser(theUser);
+        roleService.saveRole(userRole);
 		return "redirect:/login";
 		
 	}
@@ -109,12 +111,20 @@ public class HomeController {
 		return "createList";
 	}
 	
-	@RequestMapping(value="/createListProcess", method=RequestMethod.POST)
+	/*@RequestMapping(value="/createListProcess", method=RequestMethod.POST)
 	public String createList(@ModelAttribute("theList") Lists theList, Model theModel, HttpServletRequest req) {
 		Users theUser = userService.getUser(req.getUserPrincipal().getName());
 		theList.setOwner(theUser);
 		listService.createList(theList);
 		return "redirect:/addTask";
+	}*/
+	
+	@RequestMapping(value="/createListProcess", method=RequestMethod.POST)
+	public @ResponseBody void createList(@RequestParam("listname") String listname, Model theModel, HttpServletRequest req) {
+		Users theUser = userService.getUser(req.getUserPrincipal().getName());
+		Lists theList = new Lists(listname);
+		theList.setOwner(theUser);
+		listService.createList(theList);
 	}
 	
 	@RequestMapping("/addTask")
@@ -125,12 +135,12 @@ public class HomeController {
 	}
 	
 	@RequestMapping(value="/addTaskProcess", method=RequestMethod.POST)
-	public String addTask(@ModelAttribute("theTask") Tasks theTask,
+	public @ResponseBody void addTask(@RequestParam("listId") int listId, @RequestParam("taskName") String taskName,
 						  Model theModel, HttpServletRequest req) {
-		Lists theList = listService.getList(1);
+		Lists theList = listService.getList(listId);
+		Tasks theTask = new Tasks(taskName);
 		theTask.setList(theList);
 		listService.addTask(theTask);
-		return "redirect:/taskComment";
 	}
 	
 	@RequestMapping("/taskComment")
