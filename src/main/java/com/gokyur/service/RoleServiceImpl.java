@@ -23,4 +23,9 @@ public class RoleServiceImpl implements RoleService {
 		roleDAO.saveRole(role);
 	}
 
+	@Transactional
+	public boolean isRolesConfigured() {
+		return roleDAO.isRolesConfigured();
+	}
+
 }

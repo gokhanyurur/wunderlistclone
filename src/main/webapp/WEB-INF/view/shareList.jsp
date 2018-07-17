@@ -28,14 +28,5 @@
 		<br>
 		<button type="submit">Share List</button>
 	</form:form>
-<%-- 	<form action="shareListProcess" method="POST"> --%>
-<!-- 		<label>Lists to be shared: </label> -->
-<!-- 		<input name = "listid" id="listid" > -->
-<!-- 		<br> -->
-<!-- 		<label>User to be shared: </label> -->
-<!-- 		<input name = "userid" id ="userid"> -->
-<!-- 		<br> -->
-<!-- 		<button type="submit">Share List</button> -->
-<%-- 	</form> --%>
 </body>
 </html>

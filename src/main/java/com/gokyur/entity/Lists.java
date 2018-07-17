@@ -31,7 +31,6 @@ public class Lists {
 	@Column(length=75, nullable=false, name="listName")
 	private String listName;
 	
-//	@ManyToOne(cascade={CascadeType.DETACH,CascadeType.MERGE,CascadeType.PERSIST,CascadeType.REFRESH})
 	@ManyToOne(cascade={CascadeType.DETACH,CascadeType.MERGE,CascadeType.PERSIST,CascadeType.REFRESH}, fetch=FetchType.LAZY)
 	@JoinColumn(nullable=false, name="userId")
 	private Users owner;

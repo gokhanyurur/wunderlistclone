@@ -40,42 +40,8 @@
 </style>
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-<script type="text/javascript">
-/*
-	function ajaxtest(){
-	
-		$.ajax({
-			url: "ajaxtest",
-			data: {
-				name: "ahmet"
-			},
-			beforeSend: function(){
-				//debugger;
-				console.log("beforeSend");
-			},
-			success : function(result){
-				//debugger;
-				console.log("success");
-				console.log(result);
-				$("#username").val(result.data);
-			}, 
-			error : function(){
-				//debugger;
-				console.log("error");
-			},
-			complete: function(){
-				//debugger;
-				console.log("complete");
-			}
-		});
-		
-	} 
-*/
- </script>
-
 </head>
 <body>
-	<button onclick="ajaxtest();">Ajax Test</button>
 	<div id="login-box">
 		<h2>Register!</h2>
 		
@@ -90,7 +56,6 @@
 			<table>
 				<tr>
 					<td>Username:</td>
-<!-- 					 id="username"  -->
 					<td> <form:input path="username"/><td>
 				</tr>
 				<tr>

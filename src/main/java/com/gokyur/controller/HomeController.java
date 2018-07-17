@@ -3,7 +3,6 @@ package com.gokyur.controller;
 
 
 import java.util.List;
-import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -13,7 +12,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -53,15 +51,20 @@ public class HomeController {
 	
 	@RequestMapping(value="/registerUser", method = RequestMethod.POST)
 	public String registerUser(@ModelAttribute("user") Users theUser,Model theModel) {
-		
-		//String roleAdmin = "ROLE_ADMIN";
+		String roleAdmin = "ROLE_ADMIN";
         String roleUser = "ROLE_USER";
-        Roles userRole = new Roles(theUser,roleUser);
+		if(!roleService.isRolesConfigured()) {
+
+	        roleService.saveRole(new Roles(roleAdmin));
+	        roleService.saveRole(new Roles(roleUser));
+		}
+
+        Roles userRole = roleService.findByName(roleUser);
         String encodedPass = GokyurUtilities.MD5(theUser.getPassword());
         theUser.setPassword(encodedPass);
         theUser.setRole(userRole);
 		userService.saveUser(theUser);
-        roleService.saveRole(userRole);
+        //roleService.saveRole(userRole);
 		return "redirect:/login";
 		
 	}
@@ -104,20 +107,7 @@ public class HomeController {
 		return listTasks;
 	}
 	
-	@RequestMapping("/createList")
-	public String createListPage(Model theModel) {
-		Lists theList = new Lists();
-		theModel.addAttribute("theList",theList);
-		return "createList";
-	}
 	
-	/*@RequestMapping(value="/createListProcess", method=RequestMethod.POST)
-	public String createList(@ModelAttribute("theList") Lists theList, Model theModel, HttpServletRequest req) {
-		Users theUser = userService.getUser(req.getUserPrincipal().getName());
-		theList.setOwner(theUser);
-		listService.createList(theList);
-		return "redirect:/addTask";
-	}*/
 	
 	@RequestMapping(value="/createListProcess", method=RequestMethod.POST)
 	public @ResponseBody void createList(@RequestParam("listname") String listname, Model theModel, HttpServletRequest req) {
@@ -135,8 +125,9 @@ public class HomeController {
 	}
 	
 	@RequestMapping(value="/addTaskProcess", method=RequestMethod.POST)
-	public @ResponseBody void addTask(@RequestParam("listId") int listId, @RequestParam("taskName") String taskName,
-						  Model theModel, HttpServletRequest req) {
+	public @ResponseBody void addTask(@RequestParam("listId") int listId,
+									  @RequestParam("taskName") String taskName,
+									  Model theModel, HttpServletRequest req) {
 		Lists theList = listService.getList(listId);
 		Tasks theTask = new Tasks(taskName);
 		theTask.setList(theList);
@@ -179,43 +170,7 @@ public class HomeController {
 		theModel.addAttribute("allLists", userService.getUser(req.getUserPrincipal().getName()).getLists());
 		theModel.addAttribute("allUsers", userService.getAllUsers());
 		theModel.addAttribute("theSharedList",new SharedLists());
-		
-		/*
-		 * For testing ---------------------
-		 */
-			Users loginedUser = userService.getUser(req.getUserPrincipal().getName());
-			
-			System.out.println("Role of user: "+loginedUser.getRoles().getRole());
-			
-			System.out.println("Logined User: "+loginedUser.getUsername());
-			System.out.println("\tLists:");
-			for(Lists list:loginedUser.getLists()) {
-				System.out.println("\t"+list.getListName());
-				System.out.println("\t\tTasks:");
-				for(Tasks task:list.getTasks()) {
-					System.out.println("\t\t"+task.getTask());
-					System.out.println("\t\t\tComments of this task:");
-					for(Comments comment:task.getComments()) {
-						System.out.println("\t\t\t"+comment.getComment());
-					}
-					System.out.println("\t\t\t\tSubtasks:");
-					for(SubTasks subtask: task.getSubTasks()) {
-						System.out.println("\t\t\t\t"+subtask.getSubTask());
-					}
-				}
-				System.out.print("This list shared with: ");
-				List<SharedLists> sharedList = userService.getAllSharedLists();
-				for(SharedLists sl: sharedList) {
-					if(sl.getSharedList() == list.getId()) {
-						System.out.println(sl.getSharedWith().getUsername());
-					}
-				}
-			}
-			
-		/*
-		 * For Testing ---------------------
-		 */
-		
+				
 		return "shareList";
 	}
 

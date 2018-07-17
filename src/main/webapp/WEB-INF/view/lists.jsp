@@ -6,6 +6,10 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>Lists</title>
+<link type="text/css" rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/searchbar.css">
+<link type="text/css" rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/dropdown.css">
+<link type="text/css" rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/listsNavigation.css">
+
 <!-- Latest compiled and minified CSS -->
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 
@@ -13,9 +17,10 @@
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css">
 
 <!-- Latest compiled and minified JavaScript -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
 <script type="text/javascript">
 
 	$(document).ready(function() {
@@ -30,9 +35,9 @@
 			success : function(result){
 				console.log("success");
 				$('#createListText').val("");
-				$("#listsDiv").html("");
+				$("#listsUL").html("");
 				jQuery.each(result, function(index, value){
- 					$("#listsDiv").append("<a href='#' onclick='getTasks(\""+ result[index].id +"\")'>"+result[index].listName+"</a><br>");
+ 					$("#listsUL").append("<a href='#' class='list-group-item' onclick='getTasks(\""+ result[index].id +"\")'>"+result[index].listName+"</a><br>");
  		        });
 			}, 
 			error : function(){
@@ -53,13 +58,12 @@
 			success : function(result){
 				$("#tasksDiv").html("");
 				$("#addTaskBtn").show();
-				$("#addTaskBtn").click(function(){
-					addTaskToList(data.listId);
-				});
+				$('#addTaskBtn').attr('onClick', 'addTaskToList('+data.listId+');');
+
 				$("#addTaskText").show();
 				console.log("success");
 				jQuery.each(result, function(index, value){
- 					$("#tasksDiv").html("<a href='#' onclick='getTaskDetails(\""+ result[index].id +"\")'>"+result[index].task+"</a><br>");
+ 					$("#tasksDiv").append("<a href='#' onclick='getTaskDetails(\""+ result[index].id +"\")'>"+result[index].task+"</a><br>");
  		        });
 			}, 
 			error : function(){
@@ -108,31 +112,65 @@
 
 </head>
 <body>
-	<h2 align="center">This page is protected. It is available only for users.</h2>
-	
-	<div class="container">
-		<div class="row">
-			<div class="col-md-4">
-				<div class="col-md-12">
-					<h4>Lists</h4>
-					<input type="text" id="createListText" placeholder="Create a list"/>
-					<input type="button" value="Create" onclick="createList()">
-					<div id="listsDiv" style="">
+	<div class="row" style="">
+		<div class="col-md-3">
+			<div id="custom-search-input">
+				<div class="input-group col-md-12">
+					<input type="text" class="form-control input-lg" placeholder="Search" />
+					<span class="input-group-btn">
+						<button class="btn btn-info btn-lg" type="button">
+							<i class="glyphicon glyphicon-search"></i>
+						</button>
+	                </span>
+	            </div>
+			</div>
+			<div class="col-md-12">
+				<ul class="nav navbar-nav">
+		        	<li class="dropdown">
+		          		<a href="#" class="dropdown-toggle" data-toggle="dropdown">${pageContext.request.userPrincipal.name} <span class="glyphicon glyphicon-user pull-right"></span></a>
+		          		<ul class="dropdown-menu">
+			            	<li><a href="#">Profile <span class="glyphicon glyphicon-cog pull-right"></span></a></li>
+			            	<li class="divider"></li>
+			            	<li><a href="#">User stats <span class="glyphicon glyphicon-stats pull-right"></span></a></li>
+			            	<li class="divider"></li>
+			            	<li><a href="#">Messages <span class="badge pull-right"> 42 </span></a></li>
+			            	<li class="divider"></li>
+			            	<li><a href="#">Favourites Snippets <span class="glyphicon glyphicon-heart pull-right"></span></a></li>
+			            	<li class="divider"></li>
+			            	<li><a href="login?logout">Sign Out <span class="glyphicon glyphicon-log-out pull-right"></span></a></li>
+			          	</ul>
+		        	</li>
+				</ul>
+			</div>
+			<div id="custom-search-input">
+				<div class="input-group col-md-12">
+					<input id="createListText" type="text" class="form-control input-lg" placeholder="Create a list" />
+					<span class="input-group-btn">
+						<button class="btn btn-info btn-lg" type="button" onclick="createList()" >
+							<i class="glyphicon glyphicon-plus-sign"></i>
+						</button>
+		           	</span>
+		       	</div>
+			</div>
+		  	<div class="panel panel-default">
+<!-- 				<div class="panel-heading"> -->
+<!-- 					<h3 class="panel-title">Lists</h3> -->
+<!-- 		    	</div> -->
+		     	<ul class="list-group" id="listsUL">
 
-					</div>
-				</div>
+		       	</ul>
 			</div>
-			<div class="col-md-5">
-				<h4>List content</h4>
-				<input type="text" id="addTaskText" placeholder="Add a task"/>
-				<input type="button" id="addTaskBtn" value="Create">
-				<div id="tasksDiv" style="">
+		</div>
+		<div class="col-md-6">
+			<h1>List Name</h1>
+			<input type="text" id="addTaskText" placeholder="Add a task"/>
+			<input type="button" id="addTaskBtn" value="Create">
+			<div id="tasksDiv" style="">
 
-				</div>
 			</div>
-			<div class="col-md-3">
-				Subtasks-Comments-Shared People
-			</div>
+		</div>
+		<div class="col-md-3">
+			<h4>SubTasks</h4>
 		</div>
 	</div>
 </body>

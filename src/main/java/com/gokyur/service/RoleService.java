@@ -7,4 +7,6 @@ public interface RoleService {
 	public Roles findByName(String name);
 
 	public void saveRole(Roles role);
+
+	public boolean isRolesConfigured();
 }

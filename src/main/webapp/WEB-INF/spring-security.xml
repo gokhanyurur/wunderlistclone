@@ -8,14 +8,14 @@
 
 	<beans:import resource = "spring-mvc-servlet.xml"></beans:import>
 	
-	<http auto-config="true">
-<!-- 		<intercept-url pattern="/resources**" access="permitAll" /> -->
-		<intercept-url pattern="/admin**" access="ROLE_ADMIN" />
-		<intercept-url pattern="/lists**" access="ROLE_USER" />
-		<intercept-url pattern="/shareList**" access="ROLE_USER" />
+	<http auto-config="true" use-expressions="true">
+		<intercept-url pattern="/resources**" access="permitAll" />
+		<intercept-url pattern="/admin**" access="hasRole('ROLE_ADMIN')" />
+		<intercept-url pattern="/lists**" access="hasRole('ROLE_USER')" />
+		<intercept-url pattern="/shareList**" access="hasRole('ROLE_USER')" />
 		<form-login 
 		    login-page="/login" 
-		    default-target-url="/shareList" 
+		    default-target-url="/lists" 
 			authentication-failure-url="/login?error" 
 			username-parameter="username"
 			password-parameter="password" />

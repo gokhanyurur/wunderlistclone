@@ -8,4 +8,6 @@ public interface RoleDAO {
 
 	public void saveRole(Roles role);
 
+	public boolean isRolesConfigured();
+
 }

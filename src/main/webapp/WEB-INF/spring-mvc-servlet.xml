@@ -25,6 +25,8 @@
 
 	<!-- Add support for conversion, formatting and validation support -->
 	<mvc:annotation-driven />
+	<!-- Add support for reading web resources: css, images, js, etc ... -->
+	<mvc:resources mapping="/resources/**" location="/WEB-INF/resources/"></mvc:resources>
 
 	<!-- Define Spring MVC view resolver -->
 	<bean
@@ -60,7 +62,7 @@
 				<prop key="hibernate.connection.CharSet">utf8</prop>
 				<prop key="hibernate.connection.characterEncoding">utf8</prop>
 				<prop key="hibernate.connection.useUnicode">true</prop>
-				<prop key="hibernate.hbm2ddl.auto">update</prop>
+				<prop key="hibernate.hbm2ddl.auto">validate</prop>
 			</props>
 		</property>
 	</bean>
@@ -72,6 +74,7 @@
 		class="org.springframework.orm.hibernate4.HibernateTransactionManager">
 		<property name="sessionFactory" ref="sessionFactory" />
 	</bean>
+	
 	
 </beans>
 

@@ -46,9 +46,10 @@ public class Users {
 	@OneToMany(mappedBy="sharedWith", cascade=CascadeType.ALL)
 	@JsonIgnore
 	private List<SharedLists> sharedUsers;
-	
-	@OneToOne(mappedBy="roledUser")
-	private Roles role = new Roles();
+		
+	@ManyToOne
+	@JoinColumn(nullable=false, name="role_id")
+	private Roles role;
 			
 	public Users() {
 		
