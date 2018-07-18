@@ -9,6 +9,9 @@
 <link type="text/css" rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/searchbar.css">
 <link type="text/css" rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/dropdown.css">
 <link type="text/css" rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/listsNavigation.css">
+<link type="text/css" rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/texts.css">
+<link type="text/css" rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/divs.css">
+
 
 <!-- Latest compiled and minified CSS -->
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
@@ -37,7 +40,7 @@
 				$('#createListText').val("");
 				$("#listsUL").html("");
 				jQuery.each(result, function(index, value){
- 					$("#listsUL").append("<a href='#' class='list-group-item' onclick='getTasks(\""+ result[index].id +"\")'>"+result[index].listName+"</a><br>");
+ 					$("#listsUL").append("<a href='#' class='list-group-item' onclick='getTasks(\""+ result[index].id +"\",\""+result[index].listName+"\")'>"+result[index].listName+"</a>");
  		        });
 			}, 
 			error : function(){
@@ -47,9 +50,10 @@
 	}
 	
 	
-	function getTasks(id){
+	function getTasks(id,name){
 		var data = {
-				listId: id
+				listId: id,
+				listName: name 
 		}
 		
 		$.ajax({
@@ -65,6 +69,7 @@
 				jQuery.each(result, function(index, value){
  					$("#tasksDiv").append("<a href='#' onclick='getTaskDetails(\""+ result[index].id +"\")'>"+result[index].task+"</a><br>");
  		        });
+				$("#listTitleLabel").text(data.listName);
 			}, 
 			error : function(){
 				console.log("error");
@@ -112,8 +117,8 @@
 
 </head>
 <body>
-	<div class="row" style="">
-		<div class="col-md-3">
+	<div class="row" style="padding: 0;">
+		<div class="col-md-3 listsNavDiv" style="padding-right: 0;">
 			<div id="custom-search-input">
 				<div class="input-group col-md-12">
 					<input type="text" class="form-control input-lg" placeholder="Search" />
@@ -124,11 +129,11 @@
 	                </span>
 	            </div>
 			</div>
-			<div class="col-md-12">
+			<div class="col-md-12" style="padding: 0; margin: 0;">
 				<ul class="nav navbar-nav">
-		        	<li class="dropdown">
+		        	<li class="dropdown" style="">
 		          		<a href="#" class="dropdown-toggle" data-toggle="dropdown">${pageContext.request.userPrincipal.name} <span class="glyphicon glyphicon-user pull-right"></span></a>
-		          		<ul class="dropdown-menu">
+		          		<ul class="dropdown-menu" style="width: 100%;">
 			            	<li><a href="#">Profile <span class="glyphicon glyphicon-cog pull-right"></span></a></li>
 			            	<li class="divider"></li>
 			            	<li><a href="#">User stats <span class="glyphicon glyphicon-stats pull-right"></span></a></li>
@@ -161,12 +166,24 @@
 		       	</ul>
 			</div>
 		</div>
-		<div class="col-md-6">
-			<h1>List Name</h1>
-			<input type="text" id="addTaskText" placeholder="Add a task"/>
-			<input type="button" id="addTaskBtn" value="Create">
-			<div id="tasksDiv" style="">
+		<div class="col-md-6" style="padding: 0;">
+			<div class="col-md-12" style="padding-top: 10px; padding-bottom: 6px; background-color: #2D71B2;">
+				<label class="listTitleText" id="listTitleLabel">No list selected</label>
+			</div>
+			<div class="col-md-12" style="padding: 0; background-color: #9ebdef;">
+				<div id="custom-search-input">
+					<div class="input-group col-md-12">
+						<input id="addTaskText" type="text" class="form-control input-lg" placeholder="Add a task for this list" />
+						<span class="input-group-btn">
+							<button class="btn btn-info btn-lg" type="button" id="addTaskBtn">
+								<i class="glyphicon glyphicon-plus-sign"></i>
+							</button>
+			           	</span>
+			       	</div>
+				</div>
+				<div id="tasksDiv" style="">
 
+				</div>
 			</div>
 		</div>
 		<div class="col-md-3">

@@ -4,21 +4,19 @@
 .nav {
     position: relative;
 }
-.navbar-nav{
-	width: 100%;
-	margin: 0;
-	padding: 0;
-}
+
 .nav>li>a:hover, .nav>li>a:focus, .nav .open>a, .nav .open>a:hover, .nav .open>a:focus {
     background:#fff;
 }
 .dropdown {
-	margin-left: -15px;
+	width: 100%;
+	margin: 0;
     background:#fff;
     border:1px solid #ccc;
     border-radius:0px;
-    padding: 0;
+
 }
+
 .dropdown-menu>li>a {
     color:#428bca;
 }
