@@ -11,7 +11,10 @@
 <link type="text/css" rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/listsNavigation.css">
 <link type="text/css" rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/texts.css">
 <link type="text/css" rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/divs.css">
+<link type="text/css" rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/tasks.css">
+<link type="text/css" rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/star.css">
 
+<%-- <script src="${pageContext.request.contextPath}/resources/js/tasks.js"></script> --%>
 
 <!-- Latest compiled and minified CSS -->
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
@@ -67,8 +70,16 @@
 				$("#addTaskText").show();
 				console.log("success");
 				jQuery.each(result, function(index, value){
- 					$("#tasksDiv").append("<a href='#' onclick='getTaskDetails(\""+ result[index].id +"\")'>"+result[index].task+"</a><br>");
- 		        });
+ 					/*$("#tasksDiv").append("<div class='task'>"+
+ 							"<a href='#' class='btn btn-default btn-block' onclick='getTaskDetails(\""+ result[index].id +"\")'>"+result[index].task+"</a></div>");*/
+ 		        	
+ 					$("#tasksDiv").append("<div class='task'><input type='checkbox' name='checkbox' id=\""+ result[index].id +"\"/><label style='width: 92%;' for=\""+ result[index].id +"\">"+result[index].task+"</label>"+
+ 							"<div class='btn-group starButton' data-toggle='buttons'>"+			
+ 								"<label class='btn btn-warning'>"+
+ 							    	"<input type='checkbox' autocomplete='off'>"+
+ 								"<span class='glyphicon glyphicon-star'></span></label>"+		
+ 							"</div><div>");
+				});
 				$("#listTitleLabel").text(data.listName);
 			}, 
 			error : function(){
@@ -130,8 +141,8 @@
 	            </div>
 			</div>
 			<div class="col-md-12" style="padding: 0; margin: 0;">
-				<ul class="nav navbar-nav">
-		        	<li class="dropdown" style="">
+				<ul class="nav navbar-nav" style="width: 100%; margin: 0;">
+		        	<li class="dropdown" style="width: 100%;">
 		          		<a href="#" class="dropdown-toggle" data-toggle="dropdown">${pageContext.request.userPrincipal.name} <span class="glyphicon glyphicon-user pull-right"></span></a>
 		          		<ul class="dropdown-menu" style="width: 100%;">
 			            	<li><a href="#">Profile <span class="glyphicon glyphicon-cog pull-right"></span></a></li>
@@ -162,15 +173,22 @@
 <!-- 					<h3 class="panel-title">Lists</h3> -->
 <!-- 		    	</div> -->
 		     	<ul class="list-group" id="listsUL">
-
+					
 		       	</ul>
-			</div>
+		       	<div class="panel-heading">
+					<h3 class="panel-title">Shared Lists</h3>
+				    </div>
+				     <ul class="list-group" id="sharedlistsUL">
+						<li>There is no shared list.</li>
+				     </ul>
+				</div>
 		</div>
 		<div class="col-md-6" style="padding: 0;">
 			<div class="col-md-12" style="padding-top: 10px; padding-bottom: 6px; background-color: #2D71B2;">
 				<label class="listTitleText" id="listTitleLabel">No list selected</label>
 			</div>
-			<div class="col-md-12" style="padding: 0; background-color: #9ebdef;">
+			<div class="col-md-12" style="padding: 0;">
+<!-- 			 background-color: #9ebdef; -->
 				<div id="custom-search-input">
 					<div class="input-group col-md-12">
 						<input id="addTaskText" type="text" class="form-control input-lg" placeholder="Add a task for this list" />
@@ -181,9 +199,17 @@
 			           	</span>
 			       	</div>
 				</div>
-				<div id="tasksDiv" style="">
-
+				<div class="funkyradio">
+					<div id="tasksDiv">
+						
+					</div>
 				</div>
+<!-- 					<div class="funkyradio"> -->
+<!-- 				        <div class="funkyradio-info"> -->
+<!-- 				            <input type="checkbox" name="checkbox" id="checkbox6"/> -->
+<!-- 				            <label for="checkbox6">Sixth Option info</label> -->
+<!-- 				        </div> -->
+<!-- 				    </div> -->
 			</div>
 		</div>
 		<div class="col-md-3">

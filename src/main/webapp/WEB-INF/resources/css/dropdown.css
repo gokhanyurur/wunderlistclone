@@ -1,6 +1,3 @@
-/* body { */
-/*     background:#f0f0f0; */
-/* } */
 .nav {
     position: relative;
 }
@@ -9,8 +6,6 @@
     background:#fff;
 }
 .dropdown {
-	width: 100%;
-	margin: 0;
     background:#fff;
     border:1px solid #ccc;
     border-radius:0px;
