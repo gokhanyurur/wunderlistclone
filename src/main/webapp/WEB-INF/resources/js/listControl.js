@@ -28,8 +28,7 @@ var isSubTaskPgOpen;
 				}
 			});
 		}
-		
-		
+			
 		function getTasks(id,name){
 			var data = {
 					listId: id,
@@ -47,7 +46,11 @@ var isSubTaskPgOpen;
 					$("#allTaskDiv").css("width","100%");
 					$("#taskDetailsMainDiv").hide();
 					isSubTaskPgOpen = false;
-					debugger;
+					//debugger;
+					$("#refreshButtonDiv").html("");
+					$("#refreshButtonDiv").append("<button onclick='getTasks(\""+data.listId+"\",\""+data.listName+"\")' class='btn btn-danger'>"+
+													"<i class='la la-refresh'></i>"+
+ 												  "</button>");
 					jQuery.each(result, function(index, value){
 						$("#tasksDiv").append("<tr>"+
 	 		        							"<td>"+
@@ -87,33 +90,39 @@ var isSubTaskPgOpen;
 					listId : listid,
 					taskName: $("#addTaskText").val()
 			}
-			
-			$.ajax({
-				url:"addTaskProcess",
-				type: "POST",
-				data: data,
-				success : function(){
-					$('#addTaskText').val("");
-					console.log("Task added to the list.");
-					getTasks(data.listId);			
-				}
-			});
+			if ( $.trim( $('#addTaskText').val() ) != '' ){
+				$.ajax({
+					url:"addTask",
+					type: "POST",
+					data: data,
+					success : function(){
+						$('#addTaskText').val("");
+						console.log("Task added to the list.");
+						getTasks(data.listId);			
+					}
+				});
+			}else{
+				alert('You have to write a task.');
+			}
 		}
 		
 		function createList(){
 			var data = {
 					listname: $("#createListText").val()
 			}
-			
-			$.ajax({
-				url:"createListProcess",
-				type: "POST",
-				data: data,
-				success : function(){
-					console.log("List created.")
-					getAllLists();
-				}
-			});
+			if ( $.trim( $('#createListText').val() ) != '' ){
+				$.ajax({
+					url:"createList",
+					type: "POST",
+					data: data,
+					success : function(){
+						console.log("List created.")
+						getAllLists();
+					}
+				});
+			}else{
+				alert('You have to write the name of the list.');
+			}
 			
 		}
 		
@@ -125,22 +134,119 @@ var isSubTaskPgOpen;
 			if(!isSubTaskPgOpen){
 				$("#allTaskDiv").css("width","60%");
 				$("#taskDetailsMainDiv").show();
+				$("#updateTaskNameDiv").html("");
+				$("#updateTaskNameDiv").append("<input type='text' class='form-control form-control-lg' id='taskDetailsTaskText' onblur='updateTaskName(\""+data.taskId+"\")' placeholder='Selected Task'>");
 	 			isSubTaskPgOpen = true;
+	 			$('#addSubTaskBtn').attr('onClick', 'addSubTaskToTask('+data.taskId+');');	
+				$.ajax({
+					url:"getTaskDetails",
+					type: "POST",
+					data: data,
+					success : function(result){
+						console.log("Tasks Details 1");
+						$('#taskDetailsTaskText').val(result.task);
+						//debugger;
+						getSubTasksFromTaskId(result.id);
+					}
+				});
 			}else{
 				$("#allTaskDiv").css("width","100%");
 				$("#taskDetailsMainDiv").hide();
 				isSubTaskPgOpen = false;
 			}
-			
+						
+		}
+		
+		function addSubTaskToTask(task){
+			var data = {
+					taskId : task,
+					subTaskName: $("#addSubTaskText").val()
+			}
+			if ( $.trim( $('#addSubTaskText').val() ) != '' ){
+				$('#addSubTaskText').val("");
+				$.ajax({
+					url:"addSubTask",
+					type: "POST",
+					data: data,
+					success : function(){
+						$('#addSubTaskText').val("");
+						console.log("SubTask added to the task.");	
+					},
+					complete : function(){
+						getSubTasksFromTaskId(data.taskId);	
+					}	
+				});
+			}else{
+				alert('You have to write a task.');
+			}
+		}
+		
+		function getSubTasksFromTaskId(task){
+			var data = {
+					taskId: task
+			}
 			
 			$.ajax({
-				url:"getTaskDetailsProcess",
+				url:"getSubTasks",
 				type: "POST",
 				data: data,
-				success : function(){
-					console.log("Tasks.")
-
+				success : function(result){
+					
+					var sizeOfArrray = Array.isArray(result) ? result.length : Object.keys(result).length;
+					debugger;
+					if(sizeOfArrray > 0){
+						$('#addSubTaskText').val("");
+						$("#subTasksDiv").html("");
+						
+						jQuery.each(result, function(index, value){
+							$("#subTasksDiv").append("<tr>"+
+					        							"<td>"+
+					        								"<div class='form-check'>"+
+					        									"<label class='form-check-label'>"+
+					        										"<input class='form-check-input subtask-select' type='checkbox'>"+
+					        											"<span class='form-check-sign'></span>"+
+					        									"</label>"+
+					        								"</div>"+
+					        							"</td>"+
+					        							"<td>"+result[index].subTask+"</td>"+
+					        							"<td class='td-actions text-right'>"+
+					        								"<div class='form-button-action'>"+
+					        									"<button type='button' data-toggle='tooltip' title='Remove' class='btn btn-link btn-simple-danger'>"+
+																"<i class='la la-times'></i>"+
+															"</button>"+
+														"</div>"+
+													"</td>"+
+												"</tr>");
+						});
+					}		
 				}
 			});
+
+		}
+		
+		function updateTaskName(task){
+			
+			var data = {
+					taskId : task,
+					taskName : $("#taskDetailsTaskText").val()
+			}
+			
+			if ( $.trim( $('#taskDetailsTaskText').val() ) != '' ){
+				debugger;
+				$.ajax({
+					url:"updateTask",
+					type: "POST",
+					data: data,
+					success : function(){
+						//$('#addTaskText').val("");
+						
+						console.log("Task is updated.");		
+					}
+				});
+			}else{
+				alert('Task name can not be empty.');
+			}
 			
 		}
+		
+		

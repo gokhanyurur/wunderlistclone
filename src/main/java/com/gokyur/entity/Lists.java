@@ -85,5 +85,4 @@ public class Lists {
 		this.tasks = tasks;
 	}
 
-	
 }

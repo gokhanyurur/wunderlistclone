@@ -8,7 +8,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -17,10 +16,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.gokyur.entity.Comments;
 import com.gokyur.entity.Lists;
 import com.gokyur.entity.Roles;
-import com.gokyur.entity.SharedLists;
 import com.gokyur.entity.SubTasks;
 import com.gokyur.entity.Tasks;
 import com.gokyur.entity.Users;
@@ -71,12 +68,6 @@ public class HomeController {
 	
 	@RequestMapping(value="/lists**", method = RequestMethod.GET)
 	public String listsPage(Model theModel, HttpServletRequest req) {
-		//Users loginedUser = userService.getUser(req.getUserPrincipal().getName());
-		
-		//List<Lists> userLists = loginedUser.getLists();
-		
-		/*String username = req.getUserPrincipal().getName();
-		theModel.addAttribute("username", username);*/
 		return "lists";
 	}
 	
@@ -101,30 +92,26 @@ public class HomeController {
 	}
 	
 	@RequestMapping(value = "/getTasksList", method = RequestMethod.GET)
-	public @ResponseBody  List<Tasks> test(@RequestParam("listId") int id,HttpServletRequest req, HttpServletResponse resp) {
+	public @ResponseBody  List<Tasks> getTasksList(@RequestParam("listId") int id, HttpServletRequest req, HttpServletResponse resp) {
 		List<Tasks> listTasks = listService.getList(id).getTasks();
-	
 		return listTasks;
 	}
 	
+	@RequestMapping(value="getTaskDetails")
+	public @ResponseBody Tasks getTaskDetails(@RequestParam("taskId") int id, HttpServletRequest req, HttpServletResponse resp){
+		Tasks tempTask = listService.getTask(id);
+		return tempTask;
+	}
 	
-	
-	@RequestMapping(value="/createListProcess", method=RequestMethod.POST)
+	@RequestMapping(value="/createList", method=RequestMethod.POST)
 	public @ResponseBody void createList(@RequestParam("listname") String listname, Model theModel, HttpServletRequest req) {
 		Users theUser = userService.getUser(req.getUserPrincipal().getName());
 		Lists theList = new Lists(listname);
 		theList.setOwner(theUser);
 		listService.createList(theList);
 	}
-	
-	@RequestMapping("/addTask")
-	public String addTaskPage(Model theModel) {
-		Tasks theTask = new Tasks();
-		theModel.addAttribute("theTask",theTask);
-		return "addTask";
-	}
-	
-	@RequestMapping(value="/addTaskProcess", method=RequestMethod.POST)
+		
+	@RequestMapping(value="/addTask", method=RequestMethod.POST)
 	public @ResponseBody void addTask(@RequestParam("listId") int listId,
 									  @RequestParam("taskName") String taskName,
 									  Model theModel, HttpServletRequest req) {
@@ -134,47 +121,40 @@ public class HomeController {
 		listService.addTask(theTask);
 	}
 	
-	@RequestMapping("/taskComment")
-	public String taskComment(Model theModel) {
-		Comments theComment = new Comments();
-		theModel.addAttribute("theComment",theComment);
-		return "taskComment";
+	@RequestMapping(value="/updateTask", method=RequestMethod.POST)
+	public @ResponseBody void updateTask(@RequestParam("taskId") int taskId,
+									  @RequestParam("taskName") String taskName,
+									  Model theModel, HttpServletRequest req) {
+		Tasks theTask = listService.getTask(taskId);
+		theTask.setTask(taskName);
+		listService.addTask(theTask);
 	}
 	
-	@RequestMapping(value="/taskCommentProcess", method=RequestMethod.POST)
+	@RequestMapping(value="getSubTasks")
+	public @ResponseBody List<SubTasks> getSubTasks(@RequestParam("taskId") int id, HttpServletRequest req, HttpServletResponse resp){
+		List<SubTasks> tempSubTasks = listService.getTask(id).getSubTasks();
+		return tempSubTasks;
+	}
+	
+	@RequestMapping(value="/addSubTask", method=RequestMethod.POST)
+	public @ResponseBody void addSubTask(@RequestParam("taskId") int taskId,
+											  @RequestParam("subTaskName") String subTaskName,
+											  Model theModel, HttpServletRequest req) {
+		Tasks theTask = listService.getTask(taskId);
+		SubTasks theSubTask = new SubTasks(subTaskName);
+		theSubTask.setBelongsToTask(theTask);
+		listService.addSubTask(theSubTask);
+	}
+		
+	/*@RequestMapping(value="/taskCommentProcess", method=RequestMethod.POST)
 	public String addComment(@ModelAttribute("theComment") Comments theComment, Model theModel) {
 		Tasks theTask = listService.getTask(1);
 		theComment.setTask(theTask);
 		listService.addComment(theComment);
 		return "redirect:/addSubTask";
-	}
-	
-	@RequestMapping("/addSubTask")
-	public String addSubTaskPage(Model theModel) {
-		SubTasks theSubTask = new SubTasks();
-		theModel.addAttribute("theSubTask", theSubTask);
-		return "addSubTask";
-	}
-	
-	
-	@RequestMapping(value="/addSubTaskProcess", method=RequestMethod.POST)
-	public String addSubTaskProcess(@ModelAttribute("theSubTask") SubTasks theSubTask, Model theModel) {
-		Tasks theTask = listService.getTask(1);
-		theSubTask.setBelongsToTask(theTask);
-		listService.addSubTask(theSubTask);
-		return "redirect:/";
-	}
-	
-	@RequestMapping("/shareList")
-	public String shareListPage(Model theModel, HttpServletRequest req,Authentication authentication) {
-		theModel.addAttribute("allLists", userService.getUser(req.getUserPrincipal().getName()).getLists());
-		theModel.addAttribute("allUsers", userService.getAllUsers());
-		theModel.addAttribute("theSharedList",new SharedLists());
-				
-		return "shareList";
-	}
-
-	@RequestMapping(value="/shareListProcess", method=RequestMethod.POST)
+	}*/
+		
+	/*@RequestMapping(value="/shareList", method=RequestMethod.POST)
 	public String shareListProcess(@ModelAttribute("theSharedList") SharedLists theSharedList,
 									Model theModel) {
 		Users tempUser = userService.getUser(theSharedList.getSharedUser_ID());
@@ -182,26 +162,13 @@ public class HomeController {
 		SharedLists sharedList = new SharedLists(tempList.getId(), tempUser);
 		listService.shareList(sharedList);
 		return "redirect:/";
-	}
+	}*/
 	
-	@RequestMapping(value = "/welcome**", method = RequestMethod.GET)
-	public String welcomePage(Model theModel) {
-
-		theModel.addAttribute("title", "Spring Security Custom Login Form");
-		theModel.addAttribute("message", "This is welcome page!");
-		
-		return "hello";
-
-	}
-
 	@RequestMapping(value = "/admin**", method = RequestMethod.GET)
 	public String adminPage(Model theModel) {
-
 		theModel.addAttribute("title", "Spring Security Custom Login Form");
 		theModel.addAttribute("message", "This is protected page!");
-
 		return "admin";
-
 	}
 
 	@RequestMapping(value = "/login", method = RequestMethod.GET)

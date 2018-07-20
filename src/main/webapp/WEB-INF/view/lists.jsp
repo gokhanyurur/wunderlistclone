@@ -12,6 +12,7 @@
 	<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/ready.css">
 	<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/demo.css">
 	<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/userp.css">
+	<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/buttons.css">
 	
 	<!-- Latest compiled and minified JavaScript -->
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
@@ -134,7 +135,7 @@
 								<div class="dropdown-divider"></div>
 								<a class="dropdown-item" href="#"><i class="ti-settings"></i> Account Setting</a>
 								<div class="dropdown-divider"></div>
-								<a class="dropdown-item" href="#"><i class="fa fa-power-off"></i> Logout</a>
+								<a class="dropdown-item" href="login?logout"><i class="fa fa-power-off"></i> Logout</a>
 							</ul>
 								<!-- /.dropdown-user -->
 						</li>
@@ -238,126 +239,37 @@
 						</li>
 					</ul>
 					<!-- Create list form go here -->
-					<div class="form-group form-inline">
-						<div class="col-md-9 p-0">
-							<input type="text" class="form-control input-full" id="createListText" placeholder="Create a list">
-						</div>
-						<label for="inlineinput" class="col-md-3 col-form-label">
+					<div class="input-group" style="margin-left: 5px; margin-top: 5px;">
+						<input type="text" class="form-control" id="createListText" placeholder="Create a list">
+						<span class="input-group-btn">
 							<button onclick="createList()" class="btn btn-danger" style="height: 38px; margin-right: 10px;">
 								<i class="la la-plus"></i>	
 							</button>
-						</label>	
-					</div>
-					
+						</span>
+					</div>	
 				</div>
 			</div>
 			<div class="main-panel">
 				<div class="content">
 					<div class="container-fluid">
-						<h4 class="page-title" id="listTitleLabel">No List Selected</h4>		
-						<!-- <div class="row">
-							<div style="width: 100%;">
-								Hide
-								<div class="card card-tasks" id="tasksOfList">
-									<div class="card-header ">
-										<h4 class="card-title">Tasks</h4>
-										<p class="card-category">To Do List</p>
-									</div>
-									<div class="card-body ">
-										<div class="table-full-width">
-											<table class="table">
-												<thead>
-													<tr>
-														<th>
-															<div class="form-check">
-																<label class="form-check-label">
-																	<input class="form-check-input  select-all-checkbox" type="checkbox" data-select="checkbox" data-target=".task-select">
-																	<span class="form-check-sign"></span>
-																</label>
-															</div>
-														</th>
-														<th>Task</th>
-														<th>Action</th>
-													</tr>
-												</thead>
-												<tbody id="tasksDiv">
-													
-												</tbody>
-											</table>
-										</div>
-									</div>
-									<div class="card-footer ">
-										<div class="stats">
-											<i class="now-ui-icons loader_refresh spin"></i>
-											<div class="form-group form-inline">
-												<div class="col-md-11 p-0">
-													<input style="width: 100%;" class="form-control input-full" id="addTaskText" placeholder="Add a task to this list">
-												</div>
-												<label for="inlineinput" class="col-md-1 col-form-label">
-													<button id="addTaskBtn" class="btn btn-danger" style="height: 38px; margin-right: 0px;">
-														<i class="la la-plus"></i>	
-													</button>
-												</label>	
-											</div>
-										</div>
-									</div>
-								</div>	
-							</div>
-							<div class="col-md-4" id="taskDetailsMainDiv">
-								Hide
-								<div class="card card-tasks" id="tasksOfList">
-									<div class="card-header ">
-										<h4 class="card-title">Tasks</h4>
-										<p class="card-category">To Do List</p>
-									</div>
-									<div class="card-body ">
-										<div class="table-full-width">
-											<table class="table">
-												<thead>
-													<tr>
-														<th>
-															<div class="form-check">
-																<label class="form-check-label">
-																	<input class="form-check-input  select-all-checkbox" type="checkbox" data-select="checkbox" data-target=".task-select">
-																	<span class="form-check-sign"></span>
-																</label>
-															</div>
-														</th>
-														<th>Task</th>
-														<th>Action</th>
-													</tr>
-												</thead>
-												<tbody id="tasksDiv">
-													
-												</tbody>
-											</table>
-										</div>
-									</div>
-									<div class="card-footer ">
-										<div class="stats">
-											<i class="now-ui-icons loader_refresh spin"></i>
-											<div class="form-group form-inline">
-												<div class="col-md-11 p-0">
-													<input style="width: 100%;" class="form-control input-full" id="addTaskText" placeholder="Add a task to this list">
-												</div>
-												<label for="inlineinput" class="col-md-1 col-form-label">
-													<button id="addTaskBtn" class="btn btn-danger" style="height: 38px; margin-right: 0px;">
-														<i class="la la-plus"></i>	
-													</button>
-												</label>	
-											</div>
-										</div>
-									</div>
-								</div>	
-							</div>
-						</div> -->
+						<div>
+							<h4 class="page-title" id="listTitleLabel">No List Selected</h4>
+						</div>		
 						<div class="col-md-12">
 							<div  id="allTaskDiv" style="float:left; width:100%">
-								<!-- Hide -->
+								<!-- Tasks -->
 								<div class="card card-tasks" id="tasksOfList">
 									<div class="card-header ">
-										<h4 class="card-title">Tasks</h4>
-										<p class="card-category">To Do List</p>
+										<div style="float:left">
+											<h4 class="card-title">Tasks</h4>
+											<p class="card-category">To Do List</p>
+										</div>
+										<div style="float:right;" id="refreshButtonDiv">
+											<!-- Refresh Button -->
+<!-- 											<button class="btn btn-danger"> -->
+<!-- 												<i class="la la-refresh"></i> -->
+<!--  											</button> -->
+										</div>
 									</div>
 									<div class="card-body ">
 										<div class="table-full-width">
@@ -385,26 +297,30 @@
 									<div class="card-footer ">
 										<div class="stats">
 											<i class="now-ui-icons loader_refresh spin"></i>
-											<div class="form-group form-inline">
-												<div class="col-md-11 p-0">
-													<input style="width: 100%;" class="form-control input-full" id="addTaskText" placeholder="Add a task to this list">
-												</div>
-												<label for="inlineinput" class="col-md-1 col-form-label">
-													<button id="addTaskBtn" class="btn btn-danger" style="height: 38px; margin-right: 0px;">
-														<i class="la la-plus"></i>	
+											<div class="input-group">
+												<input class="form-control" id="addTaskText" placeholder="Add a task to this list">
+												<span class="input-group-btn">
+													<button id="addTaskBtn" class="btn btn-danger" style="height: 38px; margin-right: 10px;">
+														<i class="la la-plus"></i>
 													</button>
-												</label>	
+												</span>
 											</div>
 										</div>
 									</div>
 								</div>	
 							</div>
 							<div style="float: right;" id="taskDetailsMainDiv">
-								<!-- Hide -->
+								<!-- SubTasks -->
 								<div class="card card-tasks" id="tasksOfList">
 									<div class="card-header ">
-										<h4 class="card-title">Tasks</h4>
-										<p class="card-category">To Do List</p>
+										<div class="input-group" id="updateTaskNameDiv">
+<!-- 											<input type="text" class="form-control form-control-lg" id="taskDetailsTaskText" onblur="updateTaskName()" placeholder="Selected Task"> -->
+<!-- 											<span class="input-group-btn"> -->
+<!-- 												<button id="updateTaskBtn" class="btn btn-danger" style="height: 50px; margin-right: 0px;"> -->
+<!-- 													<i class="la la-save"></i> -->
+<!-- 												</button> -->
+<!-- 											</span> -->
+										</div>
 									</div>
 									<div class="card-body ">
 										<div class="table-full-width">
@@ -414,16 +330,16 @@
 														<th>
 															<div class="form-check">
 																<label class="form-check-label">
-																	<input class="form-check-input  select-all-checkbox" type="checkbox" data-select="checkbox" data-target=".task-select">
+																	<input class="form-check-input  select-all-checkbox" type="checkbox" data-select="checkbox" data-target=".subtask-select">
 																	<span class="form-check-sign"></span>
 																</label>
 															</div>
 														</th>
-														<th>Task</th>
+														<th>Sub-task</th>
 														<th><!-- Action --></th>
 													</tr>
 												</thead>
-												<tbody id="tasksDiv">
+												<tbody id="subTasksDiv">
 													
 												</tbody>
 											</table>
@@ -432,15 +348,13 @@
 									<div class="card-footer ">
 										<div class="stats">
 											<i class="now-ui-icons loader_refresh spin"></i>
-											<div class="form-group form-inline">
-												<div class="col-md-11 p-0">
-													<input style="width: 100%;" class="form-control input-full" id="addTaskText" placeholder="Add a task to this list">
-												</div>
-												<label for="inlineinput" class="col-md-1 col-form-label">
-													<button id="addTaskBtn" class="btn btn-danger" style="height: 38px; margin-right: 0px;">
-														<i class="la la-plus"></i>	
+											<div class="input-group" style="">
+												<input class="form-control" id="addSubTaskText" placeholder="Add a subtask to this task">
+												<span class="input-group-btn">
+													<button id="addSubTaskBtn" class="btn btn-danger" style="height: 38px; margin-right: 0px;">
+														<i class="la la-plus"></i>
 													</button>
-												</label>	
+												</span>
 											</div>
 										</div>
 									</div>
