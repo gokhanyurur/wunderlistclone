@@ -12,13 +12,17 @@ public interface ListDAO {
 	public Lists getList(int id);
 	
 	public void addTask(Tasks theTask);
+	public void removeTask(Tasks tempTask);
 	public Tasks getTask(int id);
 	
 	public void addSubTask(SubTasks theSubTask);
 	public SubTasks getSubTask(int id);
+	public void removeSubTask(SubTasks theSubTask);
 	
 	public void addComment(Comments theComment);
 	
 	public void shareList(SharedLists theSharedList);
+
+
 		
 }

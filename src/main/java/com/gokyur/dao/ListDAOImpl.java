@@ -63,4 +63,14 @@ public class ListDAOImpl implements ListDAO{
 		currentSession.saveOrUpdate(theSharedList);
 	}
 
+	public void removeSubTask(SubTasks theSubTask) {
+		Session currentSession = sessionFactory.getCurrentSession();
+		currentSession.delete(theSubTask);
+	}
+
+	public void removeTask(Tasks tempTask) {
+		Session currentSession = sessionFactory.getCurrentSession();
+		currentSession.delete(tempTask);
+	}
+
 }

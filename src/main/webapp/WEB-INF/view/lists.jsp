@@ -343,12 +343,7 @@
 													
 												</tbody>
 											</table>
-										</div>
-									</div>
-									<div class="card-footer ">
-										<div class="stats">
-											<i class="now-ui-icons loader_refresh spin"></i>
-											<div class="input-group" style="">
+											<div class="input-group" style="padding-left: 20px; padding-right: 20px;">
 												<input class="form-control" id="addSubTaskText" placeholder="Add a subtask to this task">
 												<span class="input-group-btn">
 													<button id="addSubTaskBtn" class="btn btn-danger" style="height: 38px; margin-right: 0px;">
@@ -356,6 +351,39 @@
 													</button>
 												</span>
 											</div>
+										</div>
+										<div class="form-group" id="taskNotesDiv">
+											
+										</div>
+									</div>
+									<div class="card-footer ">
+										<!-- COMMENT TEST -->
+										<div class="card">
+										    <div class="card-body">
+										        <div class="row">
+									        	    <div class="col-md-3 photo">
+														<p data-letters="U"></p>
+													</div>
+									        	    <div class="col-md-9">
+									        	    	<p>
+									        	       		<a class="float-left" href="#"><strong>Username</strong></a>
+									        	       	</p>
+									        	       	<div class="clearfix"></div>
+									        	       	<p class="text-secondary" style="font-size: 12px;">15 Minutes Ago</p>
+									        	        <p>Comment.</p>
+									        	    </div>
+										        </div>
+										    </div>
+										</div>
+										<div class="stats">
+											<div class="input-group">
+												<input class="form-control" id="writeCommentTask" placeholder="Write a comment for this task">
+												<span class="input-group-btn">
+													<button id="writeCommentBtn" class="btn btn-danger" style="height: 38px; margin-right: 0px;">
+														<i class="la la-comment"></i>
+													</button>
+												</span>
+											</div>											
 										</div>
 									</div>
 								</div>	

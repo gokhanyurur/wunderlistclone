@@ -97,12 +97,29 @@ public class HomeController {
 		return listTasks;
 	}
 	
-	@RequestMapping(value="getTaskDetails")
+	@RequestMapping(value="/removeTask", method=RequestMethod.POST)
+	public @ResponseBody void removeTask(@RequestParam("taskId") int id, HttpServletRequest req, HttpServletResponse resp) {
+		Tasks tempTask = listService.getTask(id);
+		listService.removeTask(tempTask);
+	}
+	
+	@RequestMapping(value="/starTheTask", method=RequestMethod.POST)
+	public @ResponseBody void starTask(@RequestParam("taskId") int id, HttpServletRequest req, HttpServletResponse resp) {
+		Tasks tempTask = listService.getTask(id);
+		if(!tempTask.isStared()) {
+			tempTask.setStared(true);
+		}else {
+			tempTask.setStared(false);
+		}
+		listService.addTask(tempTask);
+	}
+	
+	@RequestMapping(value="getTaskDetails", method=RequestMethod.POST)
 	public @ResponseBody Tasks getTaskDetails(@RequestParam("taskId") int id, HttpServletRequest req, HttpServletResponse resp){
 		Tasks tempTask = listService.getTask(id);
 		return tempTask;
 	}
-	
+		
 	@RequestMapping(value="/createList", method=RequestMethod.POST)
 	public @ResponseBody void createList(@RequestParam("listname") String listname, Model theModel, HttpServletRequest req) {
 		Users theUser = userService.getUser(req.getUserPrincipal().getName());
@@ -130,10 +147,16 @@ public class HomeController {
 		listService.addTask(theTask);
 	}
 	
-	@RequestMapping(value="getSubTasks")
+	@RequestMapping(value="getSubTasks", method=RequestMethod.POST)
 	public @ResponseBody List<SubTasks> getSubTasks(@RequestParam("taskId") int id, HttpServletRequest req, HttpServletResponse resp){
 		List<SubTasks> tempSubTasks = listService.getTask(id).getSubTasks();
 		return tempSubTasks;
+	}
+	
+	@RequestMapping(value="removeSubTask", method=RequestMethod.POST)
+	public @ResponseBody void removeSubTask(@RequestParam("subTaskId") int id, HttpServletRequest req, HttpServletResponse resp) {
+		SubTasks tempSubTask = listService.getSubTask(id);
+		listService.removeSubTask(tempSubTask);
 	}
 	
 	@RequestMapping(value="/addSubTask", method=RequestMethod.POST)
@@ -145,7 +168,16 @@ public class HomeController {
 		theSubTask.setBelongsToTask(theTask);
 		listService.addSubTask(theSubTask);
 	}
-		
+	
+	@RequestMapping(value="/saveTaskNotes", method=RequestMethod.POST)
+	public @ResponseBody void saveNotesOfTask(@RequestParam("taskId") int taskId, @RequestParam("taskNotes") String taskNotes, HttpServletRequest req, HttpServletResponse resp) {
+		Tasks theTask = listService.getTask(taskId);
+		theTask.setNotes(taskNotes);
+		listService.addTask(theTask);
+	}
+	
+	
+	
 	/*@RequestMapping(value="/taskCommentProcess", method=RequestMethod.POST)
 	public String addComment(@ModelAttribute("theComment") Comments theComment, Model theModel) {
 		Tasks theTask = listService.getTask(1);

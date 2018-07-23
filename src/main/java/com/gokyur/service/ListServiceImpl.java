@@ -58,4 +58,15 @@ public class ListServiceImpl implements ListService{
 		listDAO.shareList(theSharedList);
 	}
 
+	@Transactional
+	public void removeSubTask(SubTasks theSubTask) {
+		listDAO.removeSubTask(theSubTask);
+	}
+
+	@Transactional
+	public void removeTask(Tasks tempTask) {
+		listDAO.removeTask(tempTask);
+	}
+
+
 }

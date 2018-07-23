@@ -9,17 +9,22 @@ import com.gokyur.entity.Tasks;
 public interface ListService {
 
 	public void addTask(Tasks theTask);
+	public void removeTask(Tasks tempTask);
 	public Tasks getTask(int id);
 	
 	public void createList(Lists theList);
 	public Lists getList(int id);
 	
 	public void addSubTask(SubTasks theSubTask);
+	public void removeSubTask(SubTasks theSubTask);
 	public SubTasks getSubTask(int id);
+
 	
 	public void addComment(Comments theComment);
 	
 	public void shareList(SharedLists theSharedList);
+
+
 	
 	
 	
