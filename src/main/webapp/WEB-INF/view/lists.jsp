@@ -13,10 +13,16 @@
 	<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/demo.css">
 	<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/userp.css">
 	<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/buttons.css">
-	
+	<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/modal.css">
+		
 	<!-- Latest compiled and minified JavaScript -->
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 
+	<!-- SELECT2 -->
+	<link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/css/select2.min.css" rel="stylesheet" />
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/js/select2.min.js"></script>
+	<!-- SELECT2 -->
+	
 </head>
 <body>
 	<div class="wrapper">
@@ -44,9 +50,6 @@
 					</form>
 					<ul class="navbar-nav topbar-nav ml-md-auto align-items-center">
 						<li class="nav-item dropdown hidden-caret">
-							<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-								<i class="la la-envelope"></i>
-							</a>
 							<div class="dropdown-menu" aria-labelledby="navbarDropdown">
 								<a class="dropdown-item" href="#">Action</a>
 								<a class="dropdown-item" href="#">Another action</a>
@@ -314,12 +317,7 @@
 								<div class="card card-tasks" id="tasksOfList">
 									<div class="card-header ">
 										<div class="input-group" id="updateTaskNameDiv">
-<!-- 											<input type="text" class="form-control form-control-lg" id="taskDetailsTaskText" onblur="updateTaskName()" placeholder="Selected Task"> -->
-<!-- 											<span class="input-group-btn"> -->
-<!-- 												<button id="updateTaskBtn" class="btn btn-danger" style="height: 50px; margin-right: 0px;"> -->
-<!-- 													<i class="la la-save"></i> -->
-<!-- 												</button> -->
-<!-- 											</span> -->
+
 										</div>
 									</div>
 									<div class="card-body ">
@@ -356,28 +354,14 @@
 											
 										</div>
 									</div>
-									<div class="card-footer ">
+									<div class="card-footer">
 										<!-- COMMENT TEST -->
-										<div class="card">
-										    <div class="card-body">
-										        <div class="row">
-									        	    <div class="col-md-3 photo">
-														<p data-letters="U"></p>
-													</div>
-									        	    <div class="col-md-9">
-									        	    	<p>
-									        	       		<a class="float-left" href="#"><strong>Username</strong></a>
-									        	       	</p>
-									        	       	<div class="clearfix"></div>
-									        	       	<p class="text-secondary" style="font-size: 12px;">15 Minutes Ago</p>
-									        	        <p>Comment.</p>
-									        	    </div>
-										        </div>
-										    </div>
+										<div id="commentsDiv">
+											<!-- Comments go here -->
 										</div>
 										<div class="stats">
 											<div class="input-group">
-												<input class="form-control" id="writeCommentTask" placeholder="Write a comment for this task">
+												<input class="form-control" id="writeCommentText" placeholder="Write a comment for this task">
 												<span class="input-group-btn">
 													<button id="writeCommentBtn" class="btn btn-danger" style="height: 38px; margin-right: 0px;">
 														<i class="la la-comment"></i>
@@ -441,6 +425,37 @@
 			</div>
 		</div>
 	</div>
+	
+	<div class="modal fade" id="shareListModal" tabindex="-1" role="dialog" aria-hidden="true">
+	  <div class="modal-dialog" role="document">
+	    <div class="modal-content">
+	      <div class="modal-header">
+	        <div class="col-md-12">
+	        	<h5 style="font-size: 15px; font-weight: bold; text-align: center;" class="modal-title" id="exampleModalLabel">Edit the List</h5>
+	        </div>
+	      </div>
+	      <div class="modal-body">
+	      	<input type="text" class="form-control" id="listTitleText"/>
+	      	<h6 style="padding: 10px 0 0 3px;">Share</h6>
+	      	<div class="input-group">
+	      		<select id="mySelect" class="js-example-basic-multiple" name="states[]" multiple="multiple">
+				  <option value="AL">Alabama</option>
+				  <option value="WY">Wyoming</option>
+				</select>
+	      		<button class="btn btn-danger">Search</button>
+	      	</div>
+	      </div>
+	      <div class="modal-footer">
+	        asdasd
+	      </div>
+	      <div class="modal-footer">
+	        <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+	        <button type="button" class="btn btn-primary">Save changes</button>
+	      </div>
+	    </div>
+	  </div>
+	</div>
+	
 </body>
 <script src="${pageContext.request.contextPath}/resources/js/core/jquery.3.2.1.min.js"></script>
 <script src="${pageContext.request.contextPath}/resources/js/plugin/jquery-ui-1.12.1.custom/jquery-ui.min.js"></script>

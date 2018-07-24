@@ -5,6 +5,9 @@
 	<meta name="_csrf_header" content="X-CSRF-TOKEN" />
 	<meta name="_csrf" content="e62835df-f1a0-49ea-bce7-bf96f998119c" />
 <title>Login Page</title>
+	<link href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+	<script src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+	<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 <style>
 .error {
 	padding: 15px;
@@ -39,40 +42,34 @@
 </head>
 <body onload='document.loginForm.username.focus();'>
 
-	<div id="login-box">
-
-		<h2>Login with Username and Password</h2>
-
-		<c:if test="${not empty error}">
-			<div class="error">${error}</div>
-		</c:if>
-		<c:if test="${not empty msg}">
-			<div class="msg">${msg}</div>
-		</c:if>
-
-		<form name='loginForm'
-		  action="<c:url value='j_spring_security_check' />" method='POST'>
-
-		  <table>
-			<tr>
-				<td>User:</td>
-				<td><input type='text' name='username' value=''></td>
-			</tr>
-			<tr>
-				<td>Password:</td>
-				<td><input type='password' name='password' /></td>
-			</tr>
-			<tr>
-				<td colspan='2'><input name="submit" type="submit"
-					value="submit" /></td>
-			</tr>
-		  </table>
-
-		  <input type="hidden" name="${_csrf.parameterName}"
-			value="${_csrf.token}" />
-
-		</form>
-	</div>
+<div class="container" style="margin-top: 150px;">
+    <div class="row">
+        <div class="col-md-4 offset-md-4">
+            <div class="card text-center card  bg-default mb-3">
+              <div class="card-header">
+                LOGIN
+              </div>
+              	<c:if test="${not empty error}"> 
+					<div class="error">${error}</div>
+				</c:if>
+				<c:if test="${not empty msg}">
+					<div class="msg">${msg}</div>
+				</c:if>
+               	<form name='loginForm' action="<c:url value='j_spring_security_check' />" method='POST'>
+	               	<div class="card-body">
+						<input class="form-control input-sm chat-input" type='text' name='username' value='' placeholder="Username">
+	                	</br>
+						<input class="form-control input-sm chat-input" type='password' name='password' placeholder="Password"/>
+	              	</div>
+		            <div class="card-footer text-muted">
+		           		<input class="btn btn-danger" name="submit" type="submit" value="Login" />
+		            </div>
+               		<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
+               </form>
+            </div>
+        </div>
+    </div>
+</div>
 
 </body>
 </html>

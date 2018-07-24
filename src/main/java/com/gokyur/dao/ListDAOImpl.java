@@ -1,6 +1,9 @@
 package com.gokyur.dao;
 
 
+import java.util.List;
+
+import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -71,6 +74,23 @@ public class ListDAOImpl implements ListDAO{
 	public void removeTask(Tasks tempTask) {
 		Session currentSession = sessionFactory.getCurrentSession();
 		currentSession.delete(tempTask);
+	}
+
+	public List<Comments> getAllCommentsOf(int taskId) {
+		
+		Session currentSession = sessionFactory.getCurrentSession();
+		Query theQuery=currentSession.createQuery("FROM Comments WHERE taskId=:taskid");
+		theQuery.setParameter("taskid", taskId);
+		
+		@SuppressWarnings("unchecked")
+		List<Comments> tempList = theQuery.list();
+		
+		return tempList;
+	}
+
+	public void removeList(Lists theList) {
+		Session currentSession = sessionFactory.getCurrentSession();
+		currentSession.delete(theList);
 	}
 
 }

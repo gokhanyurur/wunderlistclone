@@ -1,5 +1,7 @@
 package com.gokyur.service;
 
+import java.util.List;
+
 import com.gokyur.entity.Comments;
 import com.gokyur.entity.Lists;
 import com.gokyur.entity.SharedLists;
@@ -14,6 +16,7 @@ public interface ListService {
 	
 	public void createList(Lists theList);
 	public Lists getList(int id);
+	public void removeList(Lists theList);
 	
 	public void addSubTask(SubTasks theSubTask);
 	public void removeSubTask(SubTasks theSubTask);
@@ -23,6 +26,9 @@ public interface ListService {
 	public void addComment(Comments theComment);
 	
 	public void shareList(SharedLists theSharedList);
+	
+	public List<Comments> getAllCommentsOf(int taskId);
+
 
 
 	

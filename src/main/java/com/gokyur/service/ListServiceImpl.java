@@ -1,6 +1,8 @@
 package com.gokyur.service;
 
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -66,6 +68,16 @@ public class ListServiceImpl implements ListService{
 	@Transactional
 	public void removeTask(Tasks tempTask) {
 		listDAO.removeTask(tempTask);
+	}
+
+	@Transactional
+	public List<Comments> getAllCommentsOf(int taskId) {
+		return listDAO.getAllCommentsOf(taskId);
+	}
+
+	@Transactional
+	public void removeList(Lists theList) {
+		listDAO.removeList(theList);
 	}
 
 

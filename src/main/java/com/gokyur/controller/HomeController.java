@@ -2,11 +2,16 @@ package com.gokyur.controller;
 
 
 
+import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.codehaus.jackson.JsonProcessingException;
+import org.codehaus.jackson.map.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -16,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.gokyur.entity.Comments;
 import com.gokyur.entity.Lists;
 import com.gokyur.entity.Roles;
 import com.gokyur.entity.SubTasks;
@@ -127,6 +133,12 @@ public class HomeController {
 		theList.setOwner(theUser);
 		listService.createList(theList);
 	}
+	
+	@RequestMapping(value="/removeList", method=RequestMethod.POST)
+	public @ResponseBody void removeList(@RequestParam("listId") int listId, Model theModel, HttpServletRequest req) {
+		Lists theList = listService.getList(listId);
+		listService.removeList(theList);
+	}
 		
 	@RequestMapping(value="/addTask", method=RequestMethod.POST)
 	public @ResponseBody void addTask(@RequestParam("listId") int listId,
@@ -167,6 +179,27 @@ public class HomeController {
 		SubTasks theSubTask = new SubTasks(subTaskName);
 		theSubTask.setBelongsToTask(theTask);
 		listService.addSubTask(theSubTask);
+	}
+	
+	@RequestMapping(value="/writeComment", method=RequestMethod.POST)
+	public @ResponseBody List<Comments> writeComment(@RequestParam("taskId") int taskId,
+											  @RequestParam("commentContent") String commentContent,
+											  Model theModel, HttpServletRequest req) {
+		Users theUser = userService.getUser(req.getUserPrincipal().getName());
+		Tasks theTask = listService.getTask(taskId);
+		Comments comment = new Comments();
+		comment.setComment(commentContent);
+		comment.setTask(theTask);
+		comment.setWrittenBy(theUser.getUsername());
+		listService.addComment(comment);
+		
+		return listService.getAllCommentsOf(taskId);
+	}
+	
+	@RequestMapping(value="getAllComments", method=RequestMethod.POST)
+	public @ResponseBody List<Comments> getAllComments(@RequestParam("taskId") int id, HttpServletRequest req, HttpServletResponse resp) throws IOException{
+		List<Comments> tempComments = listService.getTask(id).getComments();
+		return tempComments;
 	}
 	
 	@RequestMapping(value="/saveTaskNotes", method=RequestMethod.POST)

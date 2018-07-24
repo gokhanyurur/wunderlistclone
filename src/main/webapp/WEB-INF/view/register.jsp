@@ -7,6 +7,9 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>Register</title>
+	<link href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+	<script src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+	<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 <style>
 .error {
 	padding: 15px;
@@ -42,35 +45,67 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 </head>
 <body>
-	<div id="login-box">
-		<h2>Register!</h2>
+<!-- 	<div id="login-box"> -->
+<!-- 		<h2>Register!</h2> -->
 		
-		<c:if test="${not empty error}">
-			<div class="error">${error}</div>
-		</c:if>
-		<c:if test="${not empty msg}">
-			<div class="msg">${msg}</div>
-		</c:if>
+<%-- 		<c:if test="${not empty error}"> --%>
+<%-- 			<div class="error">${error}</div> --%>
+<%-- 		</c:if> --%>
+<%-- 		<c:if test="${not empty msg}"> --%>
+<%-- 			<div class="msg">${msg}</div> --%>
+<%-- 		</c:if> --%>
 		
-		<form:form action="registerUser" modelAttribute = "user" method="POST">
-			<table>
-				<tr>
-					<td>Username:</td>
-					<td> <form:input path="username"/><td>
-				</tr>
-				<tr>
-					<td>Email:</td>
-					<td><form:input path="email"/></td>
-				</tr>
-				<tr>
-					<td>Password:</td>
-					<td><form:password path="password"/></td>
-				</tr>
-				<tr>
-					<td><button type="submit">Register</button></td>
-				</tr>
-			</table>
-		</form:form>
-	</div>
+<%-- 		<form:form action="registerUser" modelAttribute = "user" method="POST"> --%>
+<!-- 			<table> -->
+<!-- 				<tr> -->
+<!-- 					<td>Username:</td> -->
+<%-- 					<td> <form:input path="username"/><td> --%>
+<!-- 				</tr> -->
+<!-- 				<tr> -->
+<!-- 					<td>Email:</td> -->
+<%-- 					<td><form:input path="email"/></td> --%>
+<!-- 				</tr> -->
+<!-- 				<tr> -->
+<!-- 					<td>Password:</td> -->
+<%-- 					<td><form:password path="password"/></td> --%>
+<!-- 				</tr> -->
+<!-- 				<tr> -->
+<!-- 					<td><button type="submit">Register</button></td> -->
+<!-- 				</tr> -->
+<!-- 			</table> -->
+<%-- 		</form:form> --%>
+<!-- 	</div> -->
+<div class="container" style="margin-top: 150px;">
+    <div class="row">
+        <div class="col-md-4 offset-md-4">
+            <div class="card text-center card  bg-default mb-3">
+              <div class="card-header">
+                REGISTER
+              </div>
+              	<c:if test="${not empty error}"> 
+					<div class="error">${error}</div>
+				</c:if>
+				<c:if test="${not empty msg}">
+					<div class="msg">${msg}</div>
+				</c:if>
+               	<form:form action="registerUser" modelAttribute = "user" method="POST">
+	               	<div class="card-body">
+<!-- 						<input class="form-control input-sm chat-input" type='text' name='username' value='' placeholder="Username"> -->
+						<form:input path="username" cssClass="form-control input-sm chat-input" placeholder="Username"/>
+	                	</br>
+<!-- 						<input class="form-control input-sm chat-input" type='password' name='password' placeholder="Password"/> -->
+						<form:input path="email" cssClass="form-control input-sm chat-input" placeholder="Email"/>
+						</br>
+						<form:password path="password" cssClass="form-control input-sm chat-input" placeholder="Password"/>
+	              	</div>
+		            <div class="card-footer text-muted">
+		           		<input class="btn btn-danger" name="submit" type="submit" value="Register" />
+		            </div>
+               		<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
+               </form:form>
+            </div>
+        </div>
+    </div>
+</div>
 </body>
 </html>

@@ -25,7 +25,10 @@ public class Comments {
 	
 	@Column(length=250, nullable=false, name="comment")
 	private String comment;
-
+	
+	@Column(nullable=false, name="writtenBy")
+	private String writtenBy;
+	
 	public Comments() {
 		
 	}
@@ -33,6 +36,22 @@ public class Comments {
 	public Comments(Tasks commentedForTask, String comment) {
 		this.commentedForTask = commentedForTask;
 		this.comment = comment;
+	}
+	
+	public Tasks getCommentedForTask() {
+		return commentedForTask;
+	}
+
+	public void setCommentedForTask(Tasks commentedForTask) {
+		this.commentedForTask = commentedForTask;
+	}
+
+	public String getWrittenBy() {
+		return writtenBy;
+	}
+
+	public void setWrittenBy(String writtenBy) {
+		this.writtenBy = writtenBy;
 	}
 
 	public int getId() {
@@ -58,7 +77,5 @@ public class Comments {
 	public void setComment(String comment) {
 		this.comment = comment;
 	}
-	
-	
 
 }

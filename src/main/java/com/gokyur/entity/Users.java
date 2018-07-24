@@ -46,7 +46,7 @@ public class Users {
 	@OneToMany(mappedBy="sharedWith", cascade=CascadeType.ALL)
 	@JsonIgnore
 	private List<SharedLists> sharedUsers;
-		
+			
 	@ManyToOne
 	@JoinColumn(nullable=false, name="role_id")
 	private Roles role;
@@ -126,13 +126,14 @@ public class Users {
 		this.sharedUsers = sharedUsers;
 	}
 
-	public Roles getRoles() {
+	public Roles getRole() {
 		return role;
 	}
 
 	public void setRole(Roles role) {
 		this.role = role;
 	}
+
 	
 	
 				

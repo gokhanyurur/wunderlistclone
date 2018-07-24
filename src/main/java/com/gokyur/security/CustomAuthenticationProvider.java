@@ -35,7 +35,7 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
         	throw new BadCredentialsException("Wrong password.");
         }
 
-        List<GrantedAuthority> role =AuthorityUtils.commaSeparatedStringToAuthorityList(theUser.getRoles().getRole());
+        List<GrantedAuthority> role =AuthorityUtils.commaSeparatedStringToAuthorityList(theUser.getRole().getRole());
         
         return new UsernamePasswordAuthenticationToken(theUser.getUsername(), theUser.getPassword(), role);
 	}
