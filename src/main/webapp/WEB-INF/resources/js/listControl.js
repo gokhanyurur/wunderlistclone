@@ -1,10 +1,10 @@
 var isSubTaskPgOpen;
 		$(document).ready(function() {
 			getAllLists();
+			getAllSharedLists();
 			$("#tasksOfList").hide();
  			$("#taskDetailsMainDiv").hide();
  			isSubTaskPgOpen = false;
-			$("#mySelect").select2();
 		});
 
 		
@@ -50,6 +50,60 @@ var isSubTaskPgOpen;
 				}
 			});
 		}
+		
+		function getAllSharedLists(){
+			$.ajax({
+				url: "getSharedLists",
+				success : function(result){
+					$("#sharedListsUL").html("");
+					
+					var sizeOfArrray = Array.isArray(result) ? result.length : Object.keys(result).length;
+					if(sizeOfArrray > 0){
+						jQuery.each(result, function(index, value){
+	 						$("#sharedListsUL").append("<li>"+
+	 												"<a href='#' onclick='getTasks(\""+ result[index].id +"\",\""+result[index].listName+"\")'>"+
+	 													"<span class='link-collapse'>"+result[index].listName+"</span>"+
+	 												"</a>"+
+	 											"</li>");
+	 		            });
+					}else{
+						$("#sharedListsUL").append("<li>"+
+									"<a href='#'>"+
+										"<span class='link-collapse'>There is no list shared with you.</span>"+
+									"</a>"+
+								"</li>");
+					}
+	 		        
+	 		        
+				}, 
+				error : function(){
+					console.log("error");
+				}
+			});
+		}
+		function isLoginedUserOwnerOf(lid){
+
+			var bool = false;
+			data = {
+					listId: lid
+			}
+			
+			$.ajax({
+				url:"isLoginedUserOwnerOf",
+				data: data,
+				async :false,
+				success : function(result){
+
+					if(result){
+						bool = true;
+					}
+				}
+			});
+			debugger;
+			return bool;
+		}
+		
+		
 			
 		function getTasks(id,name){
 			var data = {
@@ -64,20 +118,41 @@ var isSubTaskPgOpen;
 					$("#tasksOfList").show();
 					$("#tasksDiv").html("");
 					$('#addTaskBtn').attr('onClick', 'addTaskToList('+data.listId+');');	
-					//console.log("success");
+					$('#shareListBtn').attr('onClick', 'shareList('+data.listId+',\''+data.listName+'\');');
 					$("#taskDetailsMainDiv").hide();
 					isSubTaskPgOpen = false;
 					//debugger;
 					$("#refreshButtonDiv").html("");
+//					$("#refreshButtonDiv").append("<button alt='Refresh the list' onclick='refreshTasks(\""+data.listId+"\",\""+data.listName+"\")' class='btn btn-danger btn-round' style='margin-right: 10px;'>"+
+//													"<i class='la la-refresh'></i>"+
+// 												  "</button>"+
+// 												  (isLoginedUserOwnerOf(data.listId) ? '<button alt="Share the list" data-toggle="modal" data-target="#shareListModal" onclick=\'fillSharedListModal(\''+data.listId+'\',\''+data.listName+'\')\' class="btn btn-primary btn-round" style="margin-right: 10px;"><i class="la la-share-alt"></i></button>' : '')+
+//// 												  "<button alt='Share the list' data-toggle='modal' data-target='#shareListModal' onclick='fillSharedListModal(\""+data.listId+"\",\""+data.listName+"\")' class='btn btn-primary btn-round' style='margin-right: 10px;'>"+
+////													"<i class='la la-share-alt'></i>"+
+////												  "</button>"+
+//												  "<button alt='Delete the list' onclick='removeList(\""+data.listId+"\",\""+data.listName+"\")' class='btn btn-danger btn-round' style='margin-right: 10px;'>"+
+//													"<i class='la la-remove'></i>"+
+//												  "</button>");
+					
 					$("#refreshButtonDiv").append("<button alt='Refresh the list' onclick='refreshTasks(\""+data.listId+"\",\""+data.listName+"\")' class='btn btn-danger btn-round' style='margin-right: 10px;'>"+
-													"<i class='la la-refresh'></i>"+
- 												  "</button>"+
- 												  "<button alt='Share the list' data-toggle='modal' data-target='#shareListModal' onclick='shareList(\""+data.listId+"\",\""+data.listName+"\")' class='btn btn-primary btn-round' style='margin-right: 10px;'>"+
-													"<i class='la la-share-alt'></i>"+
-												  "</button>"+
-												  "<button alt='Delete the list' onclick='removeList(\""+data.listId+"\",\""+data.listName+"\")' class='btn btn-danger btn-round' style='margin-right: 10px;'>"+
-													"<i class='la la-remove'></i>"+
-												  "</button>");
+							"<i class='la la-refresh'></i>"+
+							  "</button>");
+							debugger;
+							var check=isLoginedUserOwnerOf(data.listId);
+							  if(check){
+								  console.log("true geldi");
+								  debugger;
+								  $("#refreshButtonDiv").append("<button alt='Share the list' data-toggle='modal' data-target='#shareListModal' onclick='fillSharedListModal(\""+data.listId+"\",\""+data.listName+"\")' class='btn btn-primary btn-round' style='margin-right: 10px;'>"+
+											"<i class='la la-share-alt'></i>"+
+											  "</button>"+
+											  "<button alt='Delete the list' onclick='removeList(\""+data.listId+"\",\""+data.listName+"\")' class='btn btn-danger btn-round' style='margin-right: 10px;'>"+
+												"<i class='la la-remove'></i>"+
+											  "</button>");
+							  }else{
+								  console.log(isLoginedUserOwnerOf(data.listId));
+							  }
+
+						  
 					jQuery.each(result, function(index, value){
 						$("#tasksDiv").append("<tr>"+
 	 		        							"<td>"+
@@ -110,6 +185,27 @@ var isSubTaskPgOpen;
 				}
 			});
 		}
+		
+//		function isLoginedUserOwnerOf(lid){
+//			var bool = false;
+//			data = {
+//					listId: lid
+//			}
+//			
+//			$.ajax({
+//				url:"isLoginedUserOwnerOf",
+//				data: data,
+//				success : function(result){
+//					debugger;
+//					if(result){
+//						bool = true;
+//					}
+//					return bool;
+//				}
+//			});
+//		}
+		
+		
 		
 		function refreshTasks(id,name){
 			var data = {
@@ -499,14 +595,102 @@ var isSubTaskPgOpen;
 			}
 		}
 		
-		function shareList(id,name){
+		function fillSharedListModal(id,name){
 			data = {
 					listId: id,
 					listName: name
 			}
 			
 			$("#listTitleText").val(data.listName);
+			$("#userSelect").html("");
+			$.ajax({
+				url:"getAllUsers",
+				type: "POST",
+				data: data,
+				success : function(result){
+					//debugger;
+					jQuery.each(result, function(index, value){
+						var option = document.createElement("option");
+						option.text = result[index].username;
+						option.value = result[index].id;
+						var select = document.getElementById("userSelect");
+						select.appendChild(option);
+					});
+					fillSharedListUserTable(data.listId, data.listName);
+				}
+			});
 			
+		}
+		
+		function fillSharedListUserTable(id,name){
+			data = {
+					listId: id,
+					listName: name
+			}
+			$.ajax({
+				url: "getSharedUsers",
+				type: "POST",
+				data: data,
+				success: function(result){
+					$("#sharedListUserTable").html("");
+					var sizeOfArrray = Array.isArray(result) ? result.length : Object.keys(result).length;
+					if(sizeOfArrray > 0){
+						jQuery.each(result, function(index, value){
+							$("#sharedListUserTable").append("<tr>"+
+																"<td>"+result[index].username+"</td>"+
+																	"<td align='right'>"+
+																		"<button onclick='removeSharedUser(\""+data.listId+"\",\""+data.listName+"\",\""+result[index].username+"\")' class='btn btn-danger' style='padding: 4px;'>Remove</button>"+
+																	"</td>"+
+															"</tr>");
+						});
+					}else{
+						$("#sharedListUserTable").append("<tr>"+
+								"<td>You are not sharing this list with anyone</td>"+
+									"<td align='right'></td>"+
+							"</tr>");
+					}				
+				}
+			});
+		}
+		
+		
+		function shareList(id,name){
+			var Array = $("#userSelect").val();
+			data = {
+					listId: id,
+					listName: name,
+					userIdList: JSON.stringify(Array)
+			}
+			console.log(data.listId+" will be shared");
+			debugger;
+			$.ajax({
+				url: "shareList",
+				type: "POST",
+				data: data,
+				success: function(){
+					$("#userSelect").empty();
+					fillSharedListUserTable(data.listId, data.listName);
+					fillSharedListModal(data.listId, data.listName);
+				}
+			});
+		}
+		
+		function removeSharedUser(lid,lname,uname){
+			data = {
+					listId: lid,
+					listName: lname,
+					userName: uname
+			}
+			
+			$.ajax({
+				url: "removeSharedUser",
+				type: "POST",
+				data: data,
+				success: function(){
+					fillSharedListUserTable(data.listId, data.listName);
+					fillSharedListModal(data.listId, data.listName);
+				}
+			});
 		}
 		
 		

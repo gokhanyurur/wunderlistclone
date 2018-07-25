@@ -3,15 +3,13 @@ package com.gokyur.controller;
 
 
 import java.io.IOException;
-import java.util.HashMap;
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.codehaus.jackson.JsonProcessingException;
-import org.codehaus.jackson.map.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -24,6 +22,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.gokyur.entity.Comments;
 import com.gokyur.entity.Lists;
 import com.gokyur.entity.Roles;
+import com.gokyur.entity.SharedLists;
 import com.gokyur.entity.SubTasks;
 import com.gokyur.entity.Tasks;
 import com.gokyur.entity.Users;
@@ -46,7 +45,7 @@ public class HomeController {
     private RoleService roleService;
 		
 	@RequestMapping("/register")
-	public String indexPage(Model theModel) {
+	public String registerPage(Model theModel) {
 		Users theUser = new Users();
 		theModel.addAttribute("user",theUser);
 		return "register";
@@ -97,10 +96,74 @@ public class HomeController {
 		return userLists;
 	}
 	
+	@RequestMapping(value = "/getSharedLists", method = RequestMethod.GET)
+	public @ResponseBody  List<Lists> getSharedLists(HttpServletRequest req, HttpServletResponse resp) {
+		Users loginedUser = userService.getUser(req.getUserPrincipal().getName());
+		List<SharedLists> allSharedLists = userService.getAllSharedLists();
+		List<Lists> sharedLists = new ArrayList<Lists>();
+		for(SharedLists sharedList: allSharedLists) {
+			if(sharedList.getSharedWith().getId() == loginedUser.getId()) {
+				Lists tempList = listService.getList(sharedList.getSharedList());
+				tempList.setOwner(null); //test
+				sharedLists.add(tempList);
+			}
+		}
+		return sharedLists;
+	}
+	
+	@RequestMapping(value = "/isLoginedUserOwnerOf", method = RequestMethod.GET)
+	public @ResponseBody  boolean isLoginedUserOwnerOf(@RequestParam("listId") int id, HttpServletRequest req, HttpServletResponse resp) {
+		Users loginedUser = userService.getUser(req.getUserPrincipal().getName());
+		List<Lists> loginedUserList = loginedUser.getLists();
+		for(Lists list: loginedUserList) {
+			if(list.getId() == id) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
 	@RequestMapping(value = "/getTasksList", method = RequestMethod.GET)
 	public @ResponseBody  List<Tasks> getTasksList(@RequestParam("listId") int id, HttpServletRequest req, HttpServletResponse resp) {
 		List<Tasks> listTasks = listService.getList(id).getTasks();
 		return listTasks;
+	}
+	
+	@RequestMapping(value = "/getAllUsers", method = RequestMethod.POST)
+	public @ResponseBody  List<Users> getAllUsers(@RequestParam("listId") int id, HttpServletRequest req, HttpServletResponse resp) {
+		Users loginedUser = userService.getUser(req.getUserPrincipal().getName());
+		List<Users> listUsers = userService.getAllUsers();
+
+		List<SharedLists> sharedLists = userService.getAllSharedLists();
+		
+		//Remove the owner of the list from users list
+		for (Iterator<Users> iter = listUsers.iterator(); iter.hasNext(); ) {
+		   Users element = iter.next();
+		   if (element.getId() == loginedUser.getId()) {
+		      iter.remove();
+		   }
+		   
+		   //Check and remove from user list if already shared
+		   for(SharedLists sharedList: sharedLists) {
+			   if(sharedList.getSharedList() == id && sharedList.getSharedWith().getId() == element.getId()) {
+				   iter.remove();
+			   }
+		   }
+		}
+		
+		return listUsers;
+	}
+	
+	@RequestMapping(value = "/getSharedUsers", method = RequestMethod.POST)
+	public @ResponseBody List<Users> getSharedUsers(@RequestParam("listId") int id, HttpServletRequest req, HttpServletResponse resp){
+		List<Users> tempUsers = new ArrayList<Users>();
+		List<SharedLists> sharedLists = userService.getAllSharedLists();
+		for(SharedLists sharedList: sharedLists) {
+			if(sharedList.getSharedList() == id) {
+				tempUsers.add(userService.getUser(sharedList.getSharedWith().getId()));
+			}
+		}
+		return tempUsers;
 	}
 	
 	@RequestMapping(value="/removeTask", method=RequestMethod.POST)
@@ -208,26 +271,25 @@ public class HomeController {
 		theTask.setNotes(taskNotes);
 		listService.addTask(theTask);
 	}
-	
-	
-	
-	/*@RequestMapping(value="/taskCommentProcess", method=RequestMethod.POST)
-	public String addComment(@ModelAttribute("theComment") Comments theComment, Model theModel) {
-		Tasks theTask = listService.getTask(1);
-		theComment.setTask(theTask);
-		listService.addComment(theComment);
-		return "redirect:/addSubTask";
-	}*/
 		
-	/*@RequestMapping(value="/shareList", method=RequestMethod.POST)
-	public String shareListProcess(@ModelAttribute("theSharedList") SharedLists theSharedList,
-									Model theModel) {
-		Users tempUser = userService.getUser(theSharedList.getSharedUser_ID());
-		Lists tempList = listService.getList(theSharedList.getSharedList());
-		SharedLists sharedList = new SharedLists(tempList.getId(), tempUser);
-		listService.shareList(sharedList);
-		return "redirect:/";
-	}*/
+	@RequestMapping(value="/shareList", method=RequestMethod.POST)
+	public @ResponseBody void shareList(@RequestParam("listId") int id, @RequestParam("userIdList") String[] userIdList, HttpServletRequest req, HttpServletResponse resp) {
+		Lists theList = listService.getList(id);
+		System.out.print(theList.getListName()+" will be shared with: ");
+		for(String u_id: userIdList) {
+			Users theUser = userService.getUser(Integer.parseInt(u_id.replaceAll("\\D+","")));
+			SharedLists sharedList = new SharedLists(theList.getId(), theUser);
+			listService.shareList(sharedList);
+		}
+	}
+	
+	@RequestMapping(value="/removeSharedUser", method=RequestMethod.POST)
+	public @ResponseBody void removeSharedUser(@RequestParam("listId") int id, @RequestParam("userName") String userName, HttpServletRequest req, HttpServletResponse resp) {
+		SharedLists sharedList = listService.getSharedList(id,userService.getUser(userName).getId());
+		listService.removeSharedList(sharedList);
+	}
+	
+	
 	
 	@RequestMapping(value = "/admin**", method = RequestMethod.GET)
 	public String adminPage(Model theModel) {

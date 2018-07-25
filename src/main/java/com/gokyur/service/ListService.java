@@ -26,8 +26,13 @@ public interface ListService {
 	public void addComment(Comments theComment);
 	
 	public void shareList(SharedLists theSharedList);
+	public SharedLists getSharedList(int lid, int uid);
+	public void removeSharedList(SharedLists sharedList);
+	
 	
 	public List<Comments> getAllCommentsOf(int taskId);
+
+
 
 
 

@@ -93,4 +93,22 @@ public class ListDAOImpl implements ListDAO{
 		currentSession.delete(theList);
 	}
 
+	
+	public void removeSharedList(SharedLists sharedList) {
+		Session currentSession = sessionFactory.getCurrentSession();
+		currentSession.delete(sharedList);
+	}
+
+	public SharedLists getSharedList(int lid, int uid) {
+		
+		Session currentSession = sessionFactory.getCurrentSession();
+		Query theQuery=currentSession.createQuery("FROM SharedLists WHERE sharedlistid=:listid AND shareduserid=:userid");
+		theQuery.setParameter("listid", lid);
+		theQuery.setParameter("userid", uid);
+		
+		SharedLists tempSharedList = (SharedLists) theQuery.uniqueResult();
+		
+		return tempSharedList;
+	}
+
 }

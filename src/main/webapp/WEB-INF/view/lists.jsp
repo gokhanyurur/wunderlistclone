@@ -220,22 +220,8 @@
 								<div class="clearfix"></div>
 
 								<div class="collapse in" id="collapseExample3" aria-expanded="true" style="">
-									<ul class="nav">
-										<li>
-											<a href="#profile">
-												<span class="link-collapse">My Profile</span>
-											</a>
-										</li>
-										<li>
-											<a href="#edit">
-												<span class="link-collapse">Edit Profile</span>
-											</a>
-										</li>
-										<li>
-											<a href="#settings">
-												<span class="link-collapse">Settings</span>
-											</a>
-										</li>
+									<ul class="nav" id="sharedListsUL">
+										<!-- Shared Lists for logined user go here -->
 									</ul>
 								</div>
 							</div>
@@ -438,15 +424,26 @@
 	      	<input type="text" class="form-control" id="listTitleText"/>
 	      	<h6 style="padding: 10px 0 0 3px;">Share</h6>
 	      	<div class="input-group">
-	      		<select id="mySelect" class="js-example-basic-multiple" name="states[]" multiple="multiple">
-				  <option value="AL">Alabama</option>
-				  <option value="WY">Wyoming</option>
+	      		<select id="userSelect" class="shareListSelect" name="states[]" multiple="multiple" style="width: 90%;">
+<!-- 				  <option value="AL">Alabama</option> -->
+<!-- 				  <option value="WY">Wyoming</option> -->
 				</select>
-	      		<button class="btn btn-danger">Search</button>
+ 	      		<button id="shareListBtn" class="btn btn-danger" style="padding: 4px;">Share</button>
 	      	</div>
 	      </div>
-	      <div class="modal-footer">
-	        asdasd
+	      <div class="modal-body" style="padding-top: 0;">
+	      	<h6 style="padding: 0 0 0 3px;">Shared With</h6>
+	      	<table class="table table-head-bg-primary mt-4">
+				<thead>
+					<tr>
+						<th scope="col">Username</th>
+						<th scope="col" style="text-align: right;">Action</th>
+					</tr>
+				</thead>
+				<tbody id="sharedListUserTable">
+					
+				</tbody>
+			</table>
 	      </div>
 	      <div class="modal-footer">
 	        <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
@@ -455,7 +452,12 @@
 	    </div>
 	  </div>
 	</div>
-	
+	<script type="text/javascript">
+		$(".shareListSelect").select2({
+		    placeholder: "Select a user"
+		});
+
+	</script>
 </body>
 <script src="${pageContext.request.contextPath}/resources/js/core/jquery.3.2.1.min.js"></script>
 <script src="${pageContext.request.contextPath}/resources/js/plugin/jquery-ui-1.12.1.custom/jquery-ui.min.js"></script>

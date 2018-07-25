@@ -80,5 +80,15 @@ public class ListServiceImpl implements ListService{
 		listDAO.removeList(theList);
 	}
 
+	@Transactional
+	public SharedLists getSharedList(int lid, int uid) {
+		return listDAO.getSharedList(lid,uid);
+	}
+
+	@Transactional
+	public void removeSharedList(SharedLists sharedList) {
+		listDAO.removeSharedList(sharedList);
+	}
+
 
 }
