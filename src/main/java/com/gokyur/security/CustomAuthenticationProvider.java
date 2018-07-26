@@ -28,6 +28,7 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
         
         Users theUser = userService.getUser(username);
         
+        
         if(theUser == null) {
         	throw new BadCredentialsException("Username not found.");
         }

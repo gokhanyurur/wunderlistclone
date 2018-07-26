@@ -34,8 +34,9 @@ public class Users {
 	@Column(length=30, nullable=false, name="email")
 	private String email;
 			
-	@Temporal(TemporalType.DATE)
+	@Temporal(TemporalType.TIMESTAMP)
 	@DateTimeFormat(pattern = "yyyy/MM/dd HH:mm:ss")
+	@Column(nullable=false, name="createdat")
 	protected Date createdAt;
 	
 	@OneToMany(mappedBy="owner", cascade=CascadeType.ALL, fetch=FetchType.EAGER)

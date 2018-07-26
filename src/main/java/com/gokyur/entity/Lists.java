@@ -1,5 +1,6 @@
 package com.gokyur.entity;
 
+import java.util.Date;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -13,9 +14,12 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -39,6 +43,11 @@ public class Lists {
 	@OneToMany(mappedBy="list", cascade=CascadeType.ALL)
 	@JsonIgnore
 	private List<Tasks> tasks;
+	
+	@Temporal(TemporalType.TIMESTAMP)
+	@DateTimeFormat(pattern = "yyyy/MM/dd HH:mm:ss")
+	@Column(nullable=false, name="createdat")
+	private Date createdat;
 		
 	public Lists() {
 		
@@ -85,4 +94,13 @@ public class Lists {
 		this.tasks = tasks;
 	}
 
+	public Date getCreatedat() {
+		return createdat;
+	}
+
+	public void setCreatedat(Date createdat) {
+		this.createdat = createdat;
+	}
+
+	
 }

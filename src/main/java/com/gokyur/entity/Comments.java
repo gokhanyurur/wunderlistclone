@@ -1,5 +1,7 @@
 package com.gokyur.entity;
 
+import java.util.Date;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -9,6 +11,10 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+
+import org.springframework.format.annotation.DateTimeFormat;
 
 @Entity
 @Table(name="comments")
@@ -28,6 +34,11 @@ public class Comments {
 	
 	@Column(nullable=false, name="writtenBy")
 	private String writtenBy;
+	
+	@Temporal(TemporalType.TIMESTAMP)
+	@DateTimeFormat(pattern = "yyyy/MM/dd HH:mm:ss")
+	@Column(nullable=false, name="commentedat")
+	protected Date commentedat;
 	
 	public Comments() {
 		
@@ -77,5 +88,15 @@ public class Comments {
 	public void setComment(String comment) {
 		this.comment = comment;
 	}
+
+	public Date getCommentedat() {
+		return commentedat;
+	}
+
+	public void setCommentedat(Date commentedat) {
+		this.commentedat = commentedat;
+	}
+	
+	
 
 }

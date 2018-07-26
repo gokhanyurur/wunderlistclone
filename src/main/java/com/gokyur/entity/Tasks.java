@@ -37,9 +37,18 @@ public class Tasks {
 	@Column(name="stared")
 	private boolean stared;
 	
-	@Temporal(TemporalType.DATE)
+	@Column(name="completed")
+	private boolean completed;
+	
+	@Temporal(TemporalType.TIMESTAMP)
 	@DateTimeFormat(pattern = "yyyy/MM/dd HH:mm:ss")
-	private Date date;
+	@Column(nullable=false, name="createdat")
+	private Date createdat;
+	
+	@Temporal(TemporalType.TIMESTAMP)
+	@DateTimeFormat(pattern = "yyyy/MM/dd HH:mm:ss")
+	@Column(name="lastdate")
+	private Date lastdate;
 	
 	@Column(length=250, name="notes")
 	private String notes;
@@ -91,13 +100,29 @@ public class Tasks {
 	public void setStared(boolean stared) {
 		this.stared = stared;
 	}
-
-	public Date getDate() {
-		return date;
+	
+	public boolean isCompleted() {
+		return completed;
 	}
 
-	public void setDate(Date date) {
-		this.date = date;
+	public void setCompleted(boolean completed) {
+		this.completed = completed;
+	}
+
+	public Date getCreatedat() {
+		return createdat;
+	}
+
+	public void setCreatedat(Date createdat) {
+		this.createdat = createdat;
+	}
+
+	public Date getLastdate() {
+		return lastdate;
+	}
+
+	public void setLastdate(Date lastdate) {
+		this.lastdate = lastdate;
 	}
 
 	public String getNotes() {

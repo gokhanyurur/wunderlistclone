@@ -3,7 +3,10 @@ package com.gokyur.controller;
 
 
 import java.io.IOException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Iterator;
 import java.util.List;
 
@@ -52,11 +55,11 @@ public class HomeController {
 	}
 	
 	@RequestMapping(value="/registerUser", method = RequestMethod.POST)
-	public String registerUser(@ModelAttribute("user") Users theUser,Model theModel) {
+	public String registerUser(@ModelAttribute("user") Users theUser,Model theModel) throws ParseException {
 		String roleAdmin = "ROLE_ADMIN";
         String roleUser = "ROLE_USER";
+        
 		if(!roleService.isRolesConfigured()) {
-
 	        roleService.saveRole(new Roles(roleAdmin));
 	        roleService.saveRole(new Roles(roleUser));
 		}
@@ -65,8 +68,11 @@ public class HomeController {
         String encodedPass = GokyurUtilities.MD5(theUser.getPassword());
         theUser.setPassword(encodedPass);
         theUser.setRole(userRole);
+        
+        String timeStamp = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss").format(Calendar.getInstance().getTime());
+        theUser.setCreatedAt(new SimpleDateFormat("yyyy/MM/dd HH:mm:ss").parse(timeStamp));
+        
 		userService.saveUser(theUser);
-        //roleService.saveRole(userRole);
 		return "redirect:/login";
 		
 	}
@@ -125,8 +131,34 @@ public class HomeController {
 	
 	@RequestMapping(value = "/getTasksList", method = RequestMethod.GET)
 	public @ResponseBody  List<Tasks> getTasksList(@RequestParam("listId") int id, HttpServletRequest req, HttpServletResponse resp) {
-		List<Tasks> listTasks = listService.getList(id).getTasks();
-		return listTasks;
+		List<Tasks> allTasks = listService.getList(id).getTasks();
+		List<Tasks> tempTasks = new ArrayList<Tasks>();
+		for(Tasks theTask: allTasks) {
+			if(!theTask.isCompleted()) {
+				tempTasks.add(theTask);
+			}
+		}
+		return tempTasks;
+	}
+	
+	@RequestMapping(value = "/getOwnerOfTheList", method = RequestMethod.POST)
+	public @ResponseBody  String getOwnerOfTheList(@RequestParam("listId") int id, HttpServletRequest req, HttpServletResponse resp) {
+		List<Users> allUsers = userService.getAllUsers();
+		for(Users user: allUsers) {
+			for(Lists list: user.getLists()) {
+				if(list.getId() == id) {
+					return user.getUsername();
+				}
+			}
+		}
+		return "$#unknown";
+	}
+	
+	@RequestMapping(value = "/editListName", method = RequestMethod.POST)
+	public @ResponseBody void editListName(@RequestParam("listId") int id, @RequestParam("listName") String name, HttpServletRequest req, HttpServletResponse resp) {
+		Lists theList = listService.getList(id);
+		theList.setListName(name);
+		listService.createList(theList);
 	}
 	
 	@RequestMapping(value = "/getAllUsers", method = RequestMethod.POST)
@@ -190,10 +222,14 @@ public class HomeController {
 	}
 		
 	@RequestMapping(value="/createList", method=RequestMethod.POST)
-	public @ResponseBody void createList(@RequestParam("listname") String listname, Model theModel, HttpServletRequest req) {
+	public @ResponseBody void createList(@RequestParam("listname") String listname, Model theModel, HttpServletRequest req) throws ParseException {
 		Users theUser = userService.getUser(req.getUserPrincipal().getName());
 		Lists theList = new Lists(listname);
 		theList.setOwner(theUser);
+		
+		String timeStamp = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss").format(Calendar.getInstance().getTime());
+        theList.setCreatedat(new SimpleDateFormat("yyyy/MM/dd HH:mm:ss").parse(timeStamp));
+        
 		listService.createList(theList);
 	}
 	
@@ -206,11 +242,35 @@ public class HomeController {
 	@RequestMapping(value="/addTask", method=RequestMethod.POST)
 	public @ResponseBody void addTask(@RequestParam("listId") int listId,
 									  @RequestParam("taskName") String taskName,
-									  Model theModel, HttpServletRequest req) {
+									  Model theModel, HttpServletRequest req) throws ParseException {
 		Lists theList = listService.getList(listId);
 		Tasks theTask = new Tasks(taskName);
 		theTask.setList(theList);
+		
+		String timeStamp = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss").format(Calendar.getInstance().getTime());
+        theTask.setCreatedat(new SimpleDateFormat("yyyy/MM/dd HH:mm:ss").parse(timeStamp));
+		
 		listService.addTask(theTask);
+	}
+	
+	@RequestMapping(value="/completeTask", method=RequestMethod.POST)
+	public @ResponseBody void completeTask(@RequestParam("taskId") int id, HttpServletRequest req, HttpServletResponse resp) {
+		Tasks theTask = listService.getTask(id);
+		if(theTask.isCompleted()) {
+			theTask.setCompleted(false);
+		}else {
+			theTask.setCompleted(true);
+		}
+		listService.addTask(theTask);
+
+	}
+	
+	@RequestMapping(value="/isTaskCompleted", method=RequestMethod.POST)
+	public @ResponseBody boolean isTaskCompleted(@RequestParam("taskId") int id, HttpServletRequest req, HttpServletResponse resp) {
+		Tasks theTask = listService.getTask(id);
+		
+		return theTask.isCompleted();
+
 	}
 	
 	@RequestMapping(value="/updateTask", method=RequestMethod.POST)
@@ -247,13 +307,17 @@ public class HomeController {
 	@RequestMapping(value="/writeComment", method=RequestMethod.POST)
 	public @ResponseBody List<Comments> writeComment(@RequestParam("taskId") int taskId,
 											  @RequestParam("commentContent") String commentContent,
-											  Model theModel, HttpServletRequest req) {
+											  Model theModel, HttpServletRequest req) throws ParseException {
 		Users theUser = userService.getUser(req.getUserPrincipal().getName());
 		Tasks theTask = listService.getTask(taskId);
 		Comments comment = new Comments();
 		comment.setComment(commentContent);
 		comment.setTask(theTask);
 		comment.setWrittenBy(theUser.getUsername());
+		
+		String timeStamp = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss").format(Calendar.getInstance().getTime());
+		comment.setCommentedat(new SimpleDateFormat("yyyy/MM/dd HH:mm:ss").parse(timeStamp));
+		
 		listService.addComment(comment);
 		
 		return listService.getAllCommentsOf(taskId);

@@ -36,7 +36,7 @@
 				</button>
 				<button class="topbar-toggler more"><i class="la la-ellipsis-v"></i></button>
 			</div>
-			<nav class="navbar navbar-header navbar-expand-lg">
+			<nav class="navbar navbar-header navbar-expand-lg" style="padding-top:10px;">
 				<div class="container-fluid">
 					<form class="navbar-left navbar-form nav-search mr-md-3" action="">
 						<div class="input-group">
@@ -113,35 +113,32 @@
 								</li>
 							</ul>
 						</li>
-						<li class="nav-item dropdown">
-							<a class="dropdown-toggle profile-pic" data-toggle="dropdown" href="#" aria-expanded="false">
-								<img src="${pageContext.request.contextPath}/resources/img/profile.jpg" alt="user-img" width="36" class="img-circle">
+<!-- 						<li class="nav-item dropdown"> -->
+<!-- 							<a class="dropdown-toggle profile-pic" data-toggle="dropdown" href="#" aria-expanded="false"> -->
 <%-- 								<p data-letters="${fn:toUpperCase(fn:substring(pageContext.request.userPrincipal.name, 0, 1))}"></p> --%>
-								<span>${pageContext.request.userPrincipal.name}</span>
-							</a>
-							<ul class="dropdown-menu dropdown-user">
-								<li>
-									<div class="user-box">
-										<div class="u-img">
-											<img src="${pageContext.request.contextPath}/resources/img/profile.jpg" alt="user">
-										</div>
-										<div class="u-text">
-											<h4>${pageContext.request.userPrincipal.name}</h4>
-											<p class="text-muted">hello@themekita.com</p><a href="profile.html" class="btn btn-rounded btn-danger btn-sm">View Profile</a>
-										</div>
-									</div>
-								</li>
-								<div class="dropdown-divider"></div>
-								<a class="dropdown-item" href="#"><i class="ti-user"></i> My Profile</a>
-								<a class="dropdown-item" href="#"></i> My Balance</a>
-								<a class="dropdown-item" href="#"><i class="ti-email"></i> Inbox</a>
-								<div class="dropdown-divider"></div>
-								<a class="dropdown-item" href="#"><i class="ti-settings"></i> Account Setting</a>
-								<div class="dropdown-divider"></div>
-								<a class="dropdown-item" href="login?logout"><i class="fa fa-power-off"></i> Logout</a>
-							</ul>
-								<!-- /.dropdown-user -->
-						</li>
+<!-- 							</a> -->
+<!-- 							<ul class="dropdown-menu dropdown-user"> -->
+<!-- 								<li> -->
+<!-- 									<div class="user-box"> -->
+<!-- 										<div class="u-img"> -->
+<%-- 											<img src="${pageContext.request.contextPath}/resources/img/profile.jpg" alt="user"> --%>
+<!-- 										</div> -->
+<!-- 										<div class="u-text"> -->
+<%-- 											<h4>${pageContext.request.userPrincipal.name}</h4> --%>
+<!-- 											<p class="text-muted">hello@themekita.com</p><a href="profile.html" class="btn btn-rounded btn-danger btn-sm">View Profile</a> -->
+<!-- 										</div> -->
+<!-- 									</div> -->
+<!-- 								</li> -->
+<!-- 								<div class="dropdown-divider"></div> -->
+<!-- 								<a class="dropdown-item" href="#"><i class="ti-user"></i> My Profile</a> -->
+<!-- 								<a class="dropdown-item" href="#"></i> My Balance</a> -->
+<!-- 								<a class="dropdown-item" href="#"><i class="ti-email"></i> Inbox</a> -->
+<!-- 								<div class="dropdown-divider"></div> -->
+<!-- 								<a class="dropdown-item" href="#"><i class="ti-settings"></i> Account Setting</a> -->
+<!-- 								<div class="dropdown-divider"></div> -->
+<!-- 								<a class="dropdown-item" href="login?logout"><i class="fa fa-power-off"></i> Logout</a> -->
+<!-- 							</ul> -->
+<!-- 						</li> -->
 					</ul>
 				</div>
 				</nav>
@@ -177,6 +174,11 @@
 									<li>
 										<a href="#settings">
 											<span class="link-collapse">Settings</span>
+										</a>
+									</li>
+									<li>
+										<a href="login?logout">
+											<span class="link-collapse">Logout</span>
 										</a>
 									</li>
 								</ul>
@@ -421,7 +423,9 @@
 	        </div>
 	      </div>
 	      <div class="modal-body">
-	      	<input type="text" class="form-control" id="listTitleText"/>
+	      	<div id="editListNameDiv">
+	      		
+	      	</div>
 	      	<h6 style="padding: 10px 0 0 3px;">Share</h6>
 	      	<div class="input-group">
 	      		<select id="userSelect" class="shareListSelect" name="states[]" multiple="multiple" style="width: 90%;">
@@ -447,7 +451,6 @@
 	      </div>
 	      <div class="modal-footer">
 	        <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
-	        <button type="button" class="btn btn-primary">Save changes</button>
 	      </div>
 	    </div>
 	  </div>
