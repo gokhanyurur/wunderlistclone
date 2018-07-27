@@ -35,7 +35,7 @@ public class Users {
 	private String email;
 			
 	@Temporal(TemporalType.TIMESTAMP)
-	@DateTimeFormat(pattern = "yyyy/MM/dd HH:mm:ss")
+	@DateTimeFormat(pattern = "MM/dd/yyyy HH:mm:ss")
 	@Column(nullable=false, name="createdat")
 	protected Date createdAt;
 	

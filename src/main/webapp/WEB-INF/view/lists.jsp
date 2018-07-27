@@ -8,13 +8,17 @@
 	<title>Wunderlist Clone</title>
 	<meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, shrink-to-fit=no' name='viewport' />
 	<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/bootstrap.min.css">
+	
+	<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/jquery-ui-timepicker-addon.css">
 	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i">
 	<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/ready.css">
 	<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/demo.css">
 	<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/userp.css">
 	<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/buttons.css">
 	<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/modal.css">
-		
+<%-- 	<link type="text/css" rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/jquery-ui.css"> --%>
+	<link href="https://code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css" rel="stylesheet" type="text/css">
+	
 	<!-- Latest compiled and minified JavaScript -->
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 
@@ -23,6 +27,9 @@
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/js/select2.min.js"></script>
 	<!-- SELECT2 -->
 	
+  		<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+<!--   		<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-ui-timepicker-addon/1.6.3/jquery-ui-timepicker-addon.min.js"></script> -->
+	<script src="${pageContext.request.contextPath}/resources/js/jquery-ui-timepicker-addon.js"></script>
 </head>
 <body>
 	<div class="wrapper">
@@ -113,32 +120,6 @@
 								</li>
 							</ul>
 						</li>
-<!-- 						<li class="nav-item dropdown"> -->
-<!-- 							<a class="dropdown-toggle profile-pic" data-toggle="dropdown" href="#" aria-expanded="false"> -->
-<%-- 								<p data-letters="${fn:toUpperCase(fn:substring(pageContext.request.userPrincipal.name, 0, 1))}"></p> --%>
-<!-- 							</a> -->
-<!-- 							<ul class="dropdown-menu dropdown-user"> -->
-<!-- 								<li> -->
-<!-- 									<div class="user-box"> -->
-<!-- 										<div class="u-img"> -->
-<%-- 											<img src="${pageContext.request.contextPath}/resources/img/profile.jpg" alt="user"> --%>
-<!-- 										</div> -->
-<!-- 										<div class="u-text"> -->
-<%-- 											<h4>${pageContext.request.userPrincipal.name}</h4> --%>
-<!-- 											<p class="text-muted">hello@themekita.com</p><a href="profile.html" class="btn btn-rounded btn-danger btn-sm">View Profile</a> -->
-<!-- 										</div> -->
-<!-- 									</div> -->
-<!-- 								</li> -->
-<!-- 								<div class="dropdown-divider"></div> -->
-<!-- 								<a class="dropdown-item" href="#"><i class="ti-user"></i> My Profile</a> -->
-<!-- 								<a class="dropdown-item" href="#"></i> My Balance</a> -->
-<!-- 								<a class="dropdown-item" href="#"><i class="ti-email"></i> Inbox</a> -->
-<!-- 								<div class="dropdown-divider"></div> -->
-<!-- 								<a class="dropdown-item" href="#"><i class="ti-settings"></i> Account Setting</a> -->
-<!-- 								<div class="dropdown-divider"></div> -->
-<!-- 								<a class="dropdown-item" href="login?logout"><i class="fa fa-power-off"></i> Logout</a> -->
-<!-- 							</ul> -->
-<!-- 						</li> -->
 					</ul>
 				</div>
 				</nav>
@@ -257,9 +238,6 @@
 										</div>
 										<div style="float:right;" id="refreshButtonDiv">
 											<!-- Refresh Button -->
-<!-- 											<button class="btn btn-danger"> -->
-<!-- 												<i class="la la-refresh"></i> -->
-<!--  											</button> -->
 										</div>
 									</div>
 									<div class="card-body ">
@@ -268,12 +246,12 @@
 												<thead>
 													<tr>
 														<th>
-															<div class="form-check">
-																<label class="form-check-label">
-																	<input class="form-check-input  select-all-checkbox" type="checkbox" data-select="checkbox" data-target=".task-select">
-																	<span class="form-check-sign"></span>
-																</label>
-															</div>
+<!-- 															<div class="form-check"> -->
+<!-- 																<label class="form-check-label"> -->
+<!-- 																	<input class="form-check-input  select-all-checkbox" type="checkbox" data-select="checkbox" data-target=".task-select"> -->
+<!-- 																	<span class="form-check-sign"></span> -->
+<!-- 																</label> -->
+<!-- 															</div> -->
 														</th>
 														<th>Task</th>
 														<th><!-- Action --></th>
@@ -308,18 +286,24 @@
 
 										</div>
 									</div>
+									<div class="input-group" style="padding: 15px 15px 0 15px;">
+										<input type="text" class="form-control" id="myDateTimePicker"  placeholder="Select the last date"/>
+										<div  id="setTimeTaskDiv">
+										
+										</div>
+									</div>
 									<div class="card-body ">
 										<div class="table-full-width">
 											<table class="table">
 												<thead>
 													<tr>
 														<th>
-															<div class="form-check">
-																<label class="form-check-label">
-																	<input class="form-check-input  select-all-checkbox" type="checkbox" data-select="checkbox" data-target=".subtask-select">
-																	<span class="form-check-sign"></span>
-																</label>
-															</div>
+<!-- 															<div class="form-check"> -->
+<!-- 																<label class="form-check-label"> -->
+<!-- 																	<input class="form-check-input  select-all-checkbox" type="checkbox" data-select="checkbox" data-target=".subtask-select"> -->
+<!-- 																	<span class="form-check-sign"></span> -->
+<!-- 																</label> -->
+<!-- 															</div> -->
 														</th>
 														<th>Sub-task</th>
 														<th><!-- Action --></th>
@@ -429,8 +413,7 @@
 	      	<h6 style="padding: 10px 0 0 3px;">Share</h6>
 	      	<div class="input-group">
 	      		<select id="userSelect" class="shareListSelect" name="states[]" multiple="multiple" style="width: 90%;">
-<!-- 				  <option value="AL">Alabama</option> -->
-<!-- 				  <option value="WY">Wyoming</option> -->
+	      			<!-- List of all users for sharing a list -->
 				</select>
  	      		<button id="shareListBtn" class="btn btn-danger" style="padding: 4px;">Share</button>
 	      	</div>
@@ -456,14 +439,18 @@
 	  </div>
 	</div>
 	<script type="text/javascript">
-		$(".shareListSelect").select2({
+	   $(document).ready(function(){
+
+			$('#myDateTimePicker').datetimepicker();
+	   });
+	$(".shareListSelect").select2({
 		    placeholder: "Select a user"
 		});
 
 	</script>
 </body>
-<script src="${pageContext.request.contextPath}/resources/js/core/jquery.3.2.1.min.js"></script>
-<script src="${pageContext.request.contextPath}/resources/js/plugin/jquery-ui-1.12.1.custom/jquery-ui.min.js"></script>
+<%-- <script src="${pageContext.request.contextPath}/resources/js/core/jquery.3.2.1.min.js"></script> --%>
+<%-- <script src="${pageContext.request.contextPath}/resources/js/plugin/jquery-ui-1.12.1.custom/jquery-ui.min.js"></script> --%>
 <script src="${pageContext.request.contextPath}/resources/js/core/popper.min.js"></script>
 <script src="${pageContext.request.contextPath}/resources/js/core/bootstrap.min.js"></script>
 <script src="${pageContext.request.contextPath}/resources/js/plugin/chartist/chartist.min.js"></script>

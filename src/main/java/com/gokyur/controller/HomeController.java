@@ -7,6 +7,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
@@ -132,13 +133,14 @@ public class HomeController {
 	@RequestMapping(value = "/getTasksList", method = RequestMethod.GET)
 	public @ResponseBody  List<Tasks> getTasksList(@RequestParam("listId") int id, HttpServletRequest req, HttpServletResponse resp) {
 		List<Tasks> allTasks = listService.getList(id).getTasks();
-		List<Tasks> tempTasks = new ArrayList<Tasks>();
+		/*List<Tasks> tempTasks = new ArrayList<Tasks>();
 		for(Tasks theTask: allTasks) {
 			if(!theTask.isCompleted()) {
 				tempTasks.add(theTask);
 			}
 		}
-		return tempTasks;
+		return tempTasks;*/
+		return allTasks;
 	}
 	
 	@RequestMapping(value = "/getOwnerOfTheList", method = RequestMethod.POST)
@@ -265,11 +267,31 @@ public class HomeController {
 
 	}
 	
+	@RequestMapping(value="/completeSubTask", method=RequestMethod.POST)
+	public @ResponseBody void completeSubTask(@RequestParam("subTaskId") int sid, HttpServletRequest req, HttpServletResponse resp) {
+		SubTasks theSubTask = listService.getSubTask(sid);
+		if(theSubTask.isCompleted()) {
+			theSubTask.setCompleted(false);
+		}else {
+			theSubTask.setCompleted(true);
+		}
+		listService.addSubTask(theSubTask);
+
+	}
+	
 	@RequestMapping(value="/isTaskCompleted", method=RequestMethod.POST)
 	public @ResponseBody boolean isTaskCompleted(@RequestParam("taskId") int id, HttpServletRequest req, HttpServletResponse resp) {
 		Tasks theTask = listService.getTask(id);
 		
 		return theTask.isCompleted();
+
+	}
+	
+	@RequestMapping(value="/isSubTaskCompleted", method=RequestMethod.POST)
+	public @ResponseBody boolean isSubTaskCompleted(@RequestParam("subTaskId") int sid, HttpServletRequest req, HttpServletResponse resp) {
+		SubTasks theSubTask = listService.getSubTask(sid);
+		
+		return theSubTask.isCompleted();
 
 	}
 	
@@ -280,6 +302,16 @@ public class HomeController {
 		Tasks theTask = listService.getTask(taskId);
 		theTask.setTask(taskName);
 		listService.addTask(theTask);
+	}
+	
+	@RequestMapping(value="/setTimeForTask", method=RequestMethod.POST)
+	public @ResponseBody void setTimeForTask(@RequestParam("lastDate") String dateString, @RequestParam("taskId") int tid, HttpServletRequest req, HttpServletResponse resp) throws ParseException {
+		dateString+=":00";
+		Tasks theTask = listService.getTask(tid);
+		Date tempDate = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss").parse(dateString);
+		theTask.setLastdate(tempDate);
+		listService.addTask(theTask);
+
 	}
 	
 	@RequestMapping(value="getSubTasks", method=RequestMethod.POST)

@@ -36,7 +36,6 @@ var isSubTaskPgOpen;
 					$("#listsUL").html("");
 		        
 					var sizeOfArrray = Array.isArray(result) ? result.length : Object.keys(result).length;
-					//debugger;
 					if(sizeOfArrray > 0){
 						jQuery.each(result, function(index, value){
 	 						$("#listsUL").append("<li>"+
@@ -110,7 +109,6 @@ var isSubTaskPgOpen;
 					}
 				}
 			});
-			//debugger;
 			return bool;
 		}
 					
@@ -131,32 +129,19 @@ var isSubTaskPgOpen;
 					$('#shareListBtn').attr('onClick', 'shareList('+data.listId+',\''+data.listName+'\');');
 					$("#taskDetailsMainDiv").hide();
 					isSubTaskPgOpen = false;
-					//debugger;
-					$("#refreshButtonDiv").html("");
-//					$("#refreshButtonDiv").append("<button alt='Refresh the list' onclick='refreshTasks(\""+data.listId+"\",\""+data.listName+"\")' class='btn btn-danger btn-round' style='margin-right: 10px;'>"+
-//													"<i class='la la-refresh'></i>"+
-// 												  "</button>"+
-// 												  (isLoginedUserOwnerOf(data.listId) ? '<button alt="Share the list" data-toggle="modal" data-target="#shareListModal" onclick=\'fillSharedListModal(\''+data.listId+'\',\''+data.listName+'\')\' class="btn btn-primary btn-round" style="margin-right: 10px;"><i class="la la-share-alt"></i></button>' : '')+
-//// 												  "<button alt='Share the list' data-toggle='modal' data-target='#shareListModal' onclick='fillSharedListModal(\""+data.listId+"\",\""+data.listName+"\")' class='btn btn-primary btn-round' style='margin-right: 10px;'>"+
-////													"<i class='la la-share-alt'></i>"+
-////												  "</button>"+
-//												  "<button alt='Delete the list' onclick='removeList(\""+data.listId+"\",\""+data.listName+"\")' class='btn btn-danger btn-round' style='margin-right: 10px;'>"+
-//													"<i class='la la-remove'></i>"+
-//												  "</button>");
-					
+					$("#refreshButtonDiv").html("");					
 					$("#refreshButtonDiv").append("<button alt='Refresh the list' onclick='refreshTasks(\""+data.listId+"\",\""+data.listName+"\")' class='btn btn-danger btn-round' style='margin-right: 10px;'>"+
 							"<i class='la la-refresh'></i>"+
 							  "</button>");
 							var isOwner=isLoginedUserOwnerOf(data.listId);
 							  if(isOwner){
 								  $("#refreshButtonDiv").append("<button alt='Share the list' data-toggle='modal' data-target='#shareListModal' onclick='fillSharedListModal(\""+data.listId+"\",\""+data.listName+"\")' class='btn btn-primary btn-round' style='margin-right: 10px;'>"+
-											"<i class='la la-share-alt'></i>"+
+											"<i class='la la-user-plus'></i>"+
 											  "</button>"+
 											  "<button alt='Delete the list' onclick='removeList(\""+data.listId+"\",\""+data.listName+"\")' class='btn btn-danger btn-round' style='margin-right: 10px;'>"+
 												"<i class='la la-remove'></i>"+
 											  "</button>");
 							  }else{
-								  //debugger;
 								  var owner = getOwnerOfTheList(data.listId);
 								  tempListTitle += " (Owner of this list: "+owner+")";						  
 							  }
@@ -168,7 +153,7 @@ var isSubTaskPgOpen;
 	 		        							"<td>"+
 	 		        								"<div class='form-check'>"+
 	 		        									"<label class='form-check-label'>"+
-	 		        										"<input onchange='taskCheckboxChange("+data.listId+","+result[index].id+",\""+data.listName+"\")' class='form-check-input task-select' type='checkbox' id='"+result[index].id+"'>"+
+			        									(isTaskCompleted(result[index].id) ? '<input onchange="taskCheckboxChange(\''+result[index].id+'\')" class="form-check-input task-select" type="checkbox" checked>' : '<input onchange="taskCheckboxChange(\''+result[index].id+'\')" class="form-check-input task-select" type="checkbox">')+
 	 		        											"<span class='form-check-sign'></span>"+
 	 		        									"</label>"+
 	 		        								"</div>"+
@@ -196,11 +181,9 @@ var isSubTaskPgOpen;
 			});
 		}
 		
-		function taskCheckboxChange(lid,tid,lname){
+		function taskCheckboxChange(tid){
 			data = {
-					listId: lid,
 					taskId: tid,
-					listName: lname
 			}
 			
 			$.ajax({
@@ -209,12 +192,12 @@ var isSubTaskPgOpen;
 				data: data,
 				async :false,
 				success: function(){
-					getTasks(data.listId,data.listName);
+					//getTasks(data.listId,data.listName);
 				}
 			});
 		}
 		
-		/*function isTaskCompleted(id){
+		function isTaskCompleted(id){
 			var isCompleted = false;
 			data = {
 					taskId: id
@@ -228,13 +211,8 @@ var isSubTaskPgOpen;
 					isCompleted = result;
 				}
 			});
-			var idText = "#"+data.taskId;
-			if(isCompleted){		
-				$(idText).prop( "checked", true );
-			}else{
-				$(idText).prop( "checked", false );
-			}
-		}*/
+			return isCompleted;
+		}
 					
 		function getOwnerOfTheList(lid){
 			var tempOwner = "#unknown";
@@ -268,7 +246,7 @@ var isSubTaskPgOpen;
 	 		        							"<td>"+
 	 		        								"<div class='form-check'>"+
 	 		        									"<label class='form-check-label'>"+
-	 		        										"<input onchange='taskCheckboxChange("+data.listId+","+result[index].id+",\""+data.listName+"\")' class='form-check-input task-select' type='checkbox' id='"+result[index].id+"'>"+
+			        									(isTaskCompleted(result[index].id) ? '<input onchange="taskCheckboxChange(\''+result[index].id+'\')" class="form-check-input task-select" type="checkbox" checked>' : '<input onchange="taskCheckboxChange(\''+result[index].id+'\')" class="form-check-input task-select" type="checkbox">')+
 	 		        											"<span class='form-check-sign'></span>"+
 	 		        									"</label>"+
 	 		        								"</div>"+
@@ -358,12 +336,19 @@ var isSubTaskPgOpen;
 	 			isSubTaskPgOpen = true;
 	 			$('#addSubTaskBtn').attr('onClick', 'addSubTaskToTask('+data.taskId+');');
 	 			$('#writeCommentBtn').attr('onClick', 'addCommentToTask('+data.taskId+');');
+	 			$('#setTimeTaskDiv').html("");
+	 			$('#setTimeTaskDiv').append("<input type='button' class='btn btn-danger' value='Set' onclick='setTimeForTask("+data.taskId+")'/>")
 				$.ajax({
 					url:"getTaskDetails",
 					type: "POST",
 					data: data,
 					success : function(result){
 						$('#taskDetailsTaskText').val(result.task);
+						debugger;
+						var lastDateString = timeConverter(result.lastdate);
+						$('#myDateTimePicker').val(lastDateString);
+						console.log(lastDateString);
+						
 						getSubTasksFromTaskId(result.id);
 						getCommentsFromTaskId(result.id);
 						
@@ -380,6 +365,18 @@ var isSubTaskPgOpen;
 				isSubTaskPgOpen = false;
 			}
 						
+		}
+		
+		function timeConverter(UNIX_timestamp){
+			  var a = new Date(UNIX_timestamp);
+			  var year = a.getFullYear();
+			  var month = a.getMonth()+1;
+			  var date = a.getDate();
+			  var hour = a.getHours();
+			  var min = a.getMinutes();
+			  var sec = a.getSeconds();
+			  var time = month + '/' + date + '/' + year + ' ' + hour + ':' + min + ':' + sec ;
+			  return time;
 		}
 		
 		function addSubTaskToTask(task){
@@ -443,7 +440,6 @@ var isSubTaskPgOpen;
 				success : function(result){
 					
 					var sizeOfArrray = Array.isArray(result) ? result.length : Object.keys(result).length;
-					//debugger;
 					if(sizeOfArrray > 0){
 						$('#addSubTaskText').val("");
 						$("#subTasksDiv").html("");	
@@ -452,7 +448,7 @@ var isSubTaskPgOpen;
 					        							"<td>"+
 					        								"<div class='form-check'>"+
 					        									"<label class='form-check-label'>"+
-					        										"<input class='form-check-input subtask-select' type='checkbox'>"+
+					        									(isSubTaskCompleted(result[index].id) ? '<input onchange="subTaskCheckboxChange(\''+result[index].id+'\')" class="form-check-input subtask-select" type="checkbox" checked>' : '<input onchange="subTaskCheckboxChange(\''+result[index].id+'\')" class="form-check-input subtask-select" type="checkbox">')+
 					        											"<span class='form-check-sign'></span>"+
 					        									"</label>"+
 					        								"</div>"+
@@ -466,11 +462,46 @@ var isSubTaskPgOpen;
 															"</div>"+
 														"</td>"+
 													"</tr>");
+							//console.log(result[index].subTask+" -> completed: "+ isSubTaskCompleted(result[index].id));
 						});
 					}		
 				}
 			});
 
+		}
+		
+		function subTaskCheckboxChange(sid){
+			data = {
+					subTaskId: sid
+			}
+			
+			$.ajax({
+				url:"completeSubTask",
+				type: "POST",
+				data: data,
+				async :false,
+				success : function(){
+					
+				}
+			});
+			//getSubTasksFromTaskId(data.subTaskId);
+		}
+		
+		function isSubTaskCompleted(sid){
+			var isCompleted = false;
+			data = {
+					subTaskId: sid
+			}
+			$.ajax({
+				url:"isSubTaskCompleted",
+				type: "POST",
+				data: data,
+				async :false,
+				success: function(result){
+					isCompleted = result;
+				}
+			});
+			return isCompleted;
 		}
 		
 		function updateTaskName(list,task,listN){
@@ -483,7 +514,6 @@ var isSubTaskPgOpen;
 			}
 			
 			if ( $.trim( $('#taskDetailsTaskText').val() ) != '' ){
-				//debugger;
 				$.ajax({
 					url:"updateTask",
 					type: "POST",
@@ -544,11 +574,11 @@ var isSubTaskPgOpen;
 			
 		}
 		
-		function starTheTask(task,list,name){
+		function starTheTask(task,lid,lname){
 			data = {
 				taskId: task,
-				listId: list,
-				taskName: name
+				listId: lid,
+				listName: lname
 			}
 			
 			$.ajax({
@@ -592,15 +622,10 @@ var isSubTaskPgOpen;
 					var sizeOfArrray = Array.isArray(result) ? result.length : Object.keys(result).length;
 					if(sizeOfArrray > 0){
 						$("#commentsDiv").html("");	
-						//debugger;
-//						var date1 = new Date("07/2/2018");
-//						var date2 = new Date();
-//						var timeDiff = Math.abs(date2.getTime() - date1.getTime());
-//						var diffDays = Math.ceil(timeDiff / (1000 * 3600 * 24)); 
 						jQuery.each(result, function(index, value){
 							var dateHuman = new Date(result[index].commentedat);
-							//yyyy/MM/dd HH:mm:ss
-							
+							var dateString = dateHuman.toUTCString();
+							dateString = dateString.split(' ').slice(0, 5).join(' ');
 							$("#commentsDiv").append("<div class='card'>"+
 														"<div class='card-body'>"+
 															"<div class='row'>"+
@@ -612,7 +637,7 @@ var isSubTaskPgOpen;
 																		"<a class='float-left' href='#'><strong>"+result[index].writtenBy+"</strong></a>"+
 																	"</p>"+
 																	"<div class='clearfix'></div>"+
-																	"<p class='text-secondary' style='font-size: 12px;'>"+dateHuman+"</p>"+
+																	"<p class='text-secondary' style='font-size: 12px;'>"+dateString+"</p>"+
 																	"<p>"+result[index].comment+"</p>"+
 																"</div>"+
 															"</div>"+
@@ -662,7 +687,6 @@ var isSubTaskPgOpen;
 				type: "POST",
 				data: data,
 				success : function(result){
-					//debugger;
 					jQuery.each(result, function(index, value){
 						var option = document.createElement("option");
 						option.text = result[index].username;
@@ -715,7 +739,6 @@ var isSubTaskPgOpen;
 					userIdList: JSON.stringify(Array)
 			}
 			console.log(data.listId+" will be shared");
-			//debugger;
 			$.ajax({
 				url: "shareList",
 				type: "POST",
@@ -761,6 +784,23 @@ var isSubTaskPgOpen;
 				}
 			});
 			
+		}
+		
+		function setTimeForTask(tid){
+			data = {
+					taskId: tid,
+					lastDate: $('#myDateTimePicker').val()
+			}
+			
+			$.ajax({
+				url: "setTimeForTask",
+				type: "POST",
+				data: data,
+				success: function(){
+					
+				}
+			});
+			//console.log(data.lastDate+" is the last date for the taskid: "+data.taskId);
 		}
 		
 		

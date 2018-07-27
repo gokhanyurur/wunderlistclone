@@ -36,9 +36,11 @@ public class Comments {
 	private String writtenBy;
 	
 	@Temporal(TemporalType.TIMESTAMP)
-	@DateTimeFormat(pattern = "yyyy/MM/dd HH:mm:ss")
+	@DateTimeFormat(pattern = "MM/dd/yyyy HH:mm:ss")
 	@Column(nullable=false, name="commentedat")
 	protected Date commentedat;
+	
+	//07/28/2018 00:00
 	
 	public Comments() {
 		

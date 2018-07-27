@@ -63,6 +63,7 @@
 	              	</div>
 		            <div class="card-footer text-muted">
 		           		<input class="btn btn-danger" name="submit" type="submit" value="Login" />
+		           		<a href="register" class="btn btn-primary" >Register</a>
 		            </div>
                		<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
                </form>

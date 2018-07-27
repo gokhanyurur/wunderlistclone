@@ -41,12 +41,12 @@ public class Tasks {
 	private boolean completed;
 	
 	@Temporal(TemporalType.TIMESTAMP)
-	@DateTimeFormat(pattern = "yyyy/MM/dd HH:mm:ss")
+	@DateTimeFormat(pattern = "MM/dd/yyyy HH:mm:ss")
 	@Column(nullable=false, name="createdat")
 	private Date createdat;
 	
 	@Temporal(TemporalType.TIMESTAMP)
-	@DateTimeFormat(pattern = "yyyy/MM/dd HH:mm:ss")
+	@DateTimeFormat(pattern = "MM/dd/yyyy HH:mm:ss")
 	@Column(name="lastdate")
 	private Date lastdate;
 	

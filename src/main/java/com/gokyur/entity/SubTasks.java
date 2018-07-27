@@ -22,6 +22,9 @@ public class SubTasks {
 	@Column(length=250, nullable=false, name="subtask")
 	private String subTask;
 	
+	@Column(name="completed")
+	private boolean completed;
+	
 	@ManyToOne(cascade={CascadeType.DETACH,CascadeType.MERGE,CascadeType.PERSIST,CascadeType.REFRESH})
 	@JoinColumn(nullable=false, name="taskId")
 	private Tasks belongsToTask;
@@ -57,5 +60,15 @@ public class SubTasks {
 	public void setBelongsToTask(Tasks belongsToTask) {
 		this.belongsToTask = belongsToTask;
 	}
+
+	public boolean isCompleted() {
+		return completed;
+	}
+
+	public void setCompleted(boolean completed) {
+		this.completed = completed;
+	}
+	
+	
 
 }
