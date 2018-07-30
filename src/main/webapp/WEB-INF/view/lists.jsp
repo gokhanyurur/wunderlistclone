@@ -16,7 +16,6 @@
 	<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/userp.css">
 	<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/buttons.css">
 	<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/modal.css">
-<%-- 	<link type="text/css" rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/jquery-ui.css"> --%>
 	<link href="https://code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css" rel="stylesheet" type="text/css">
 	
 	<!-- Latest compiled and minified JavaScript -->
@@ -27,9 +26,25 @@
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/js/select2.min.js"></script>
 	<!-- SELECT2 -->
 	
-  		<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+  	<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 <!--   		<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-ui-timepicker-addon/1.6.3/jquery-ui-timepicker-addon.min.js"></script> -->
 	<script src="${pageContext.request.contextPath}/resources/js/jquery-ui-timepicker-addon.js"></script>
+	
+	
+	<script src="${pageContext.request.contextPath}/resources/js/core/popper.min.js"></script>
+	<script src="${pageContext.request.contextPath}/resources/js/core/bootstrap.min.js"></script>
+	<script src="${pageContext.request.contextPath}/resources/js/plugin/chartist/chartist.min.js"></script>
+	<script src="${pageContext.request.contextPath}/resources/js/plugin/chartist/plugin/chartist-plugin-tooltip.min.js"></script>
+	<script src="${pageContext.request.contextPath}/resources/js/plugin/bootstrap-notify/bootstrap-notify.min.js"></script>
+	<script src="${pageContext.request.contextPath}/resources/js/plugin/bootstrap-toggle/bootstrap-toggle.min.js"></script>
+	<script src="${pageContext.request.contextPath}/resources/js/plugin/jquery-mapael/jquery.mapael.min.js"></script>
+	<script src="${pageContext.request.contextPath}/resources/js/plugin/jquery-mapael/maps/world_countries.min.js"></script>
+	<script src="${pageContext.request.contextPath}/resources/js/plugin/chart-circle/circles.min.js"></script>
+	<script src="${pageContext.request.contextPath}/resources/js/plugin/jquery-scrollbar/jquery.scrollbar.min.js"></script>
+	<script src="${pageContext.request.contextPath}/resources/js/ready.min.js"></script>
+	<script src="${pageContext.request.contextPath}/resources/js/demo.js"></script>
+	<script src="${pageContext.request.contextPath}/resources/js/listControl.js"></script>
+
 </head>
 <body>
 	<div class="wrapper">
@@ -67,52 +82,15 @@
 						<li class="nav-item dropdown hidden-caret">
 							<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 								<i class="la la-bell"></i>
-								<span class="notification">3</span>
+								<span class="notification" id="notificationCountSpan">0</span>
 							</a>
 							<ul class="dropdown-menu notif-box" aria-labelledby="navbarDropdown">
 								<li>
-									<div class="dropdown-title">You have 4 new notification</div>
+									<div class="dropdown-title" id="notificationCountDiv">You have 0 new notification</div>
 								</li>
 								<li>
-									<div class="notif-center">
-										<a href="#">
-											<div class="notif-icon notif-primary"> <i class="la la-user-plus"></i> </div>
-											<div class="notif-content">
-												<span class="block">
-													New user registered
-												</span>
-												<span class="time">5 minutes ago</span> 
-											</div>
-										</a>
-										<a href="#">
-											<div class="notif-icon notif-success"> <i class="la la-comment"></i> </div>
-											<div class="notif-content">
-												<span class="block">
-													Rahmad commented on Admin
-												</span>
-												<span class="time">12 minutes ago</span> 
-											</div>
-										</a>
-										<a href="#">
-											<div class="notif-img"> 
-<!-- 												<img src="assets/img/profile2.jpg" alt="Img Profile"> -->
-											</div>
-											<div class="notif-content">
-												<span class="block">
-													Reza send messages to you
-												</span>
-												<span class="time">12 minutes ago</span> 
-											</div>
-										</a>
-										<a href="#">
-											<div class="notif-icon notif-danger"> <i class="la la-heart"></i> </div>
-											<div class="notif-content">
-												<span class="block">
-													Farrah liked Admin
-												</span>
-												<span class="time">17 minutes ago</span> 
-											</div>
-										</a>
+									<div class="notif-center" id="notificationsBoxDiv">
+										
 									</div>
 								</li>
 								<li>
@@ -439,29 +417,90 @@
 	  </div>
 	</div>
 	<script type="text/javascript">
-	   $(document).ready(function(){
+		
+		var wsUrl = "ws://localhost:8080/wunderlistclone/ws";
+		var webSocket;
 
+		function init() {
+			webSocket = new WebSocket(wsUrl);
+			webSocket.onopen = function(evt) {
+				onOpen(event)
+			};
+			webSocket.onclose = function(evt) {
+				onClose(event)
+			};
+			webSocket.onmessage = function(evt) {
+				onMessage(event)
+			};
+			webSocket.onerror = function(evt) {
+				onError(event)
+			};
+		}
+		
+		function onOpen(event){
+			console.log("OnOpen Event");
+		}
+
+		function onClose(event) {
+			console.log("OnClose Event");
+		}
+
+		function onError(event) {
+			console.log("OnError Event");
+		}
+
+		function sendMessage() {
+			webSocket.send(textBox.value);
+		}
+		
+		function sendCustomMessage(text) {
+			webSocket.send(text);
+		}
+
+		function onMessage(event) {
+			notify(event.data);
+		}
+
+		window.addEventListener("load", init, false);
+
+	   	$(document).ready(function(){
 			$('#myDateTimePicker').datetimepicker();
-	   });
-	$(".shareListSelect").select2({
+	   	});
+		$(".shareListSelect").select2({
 		    placeholder: "Select a user"
 		});
-
+		
+		function notify(text){
+			var notificationC = parseInt($("#notificationCountSpan").text());
+			
+			$.notify({
+				icon: 'la la-bell',
+				title: 'Reminder',
+				message: text,
+			},{
+				type: 'danger',
+				placement: {
+					from: "bottom",
+					align: "right"
+				},
+				time: 1000,
+			});
+			
+			notificationC++;
+			$("#notificationCountSpan").text(notificationC.toString());
+			$("#notificationCountDiv").text("You have "+notificationC.toString()+" notifications.");
+			$("#notificationsBoxDiv").append("<a href='#'>"+
+												"<div class='notif-icon notif-danger'> <i class='la la-bell'></i> </div>"+
+													"<div class='notif-content'>"+
+														"<span class='block'>"+text+"</span>"+
+														"<span class='time'>xx minutes ago</span>"+ 
+													"</div>"+
+													
+											"</a>");
+			
+			
+		}
+		
 	</script>
 </body>
-<%-- <script src="${pageContext.request.contextPath}/resources/js/core/jquery.3.2.1.min.js"></script> --%>
-<%-- <script src="${pageContext.request.contextPath}/resources/js/plugin/jquery-ui-1.12.1.custom/jquery-ui.min.js"></script> --%>
-<script src="${pageContext.request.contextPath}/resources/js/core/popper.min.js"></script>
-<script src="${pageContext.request.contextPath}/resources/js/core/bootstrap.min.js"></script>
-<script src="${pageContext.request.contextPath}/resources/js/plugin/chartist/chartist.min.js"></script>
-<script src="${pageContext.request.contextPath}/resources/js/plugin/chartist/plugin/chartist-plugin-tooltip.min.js"></script>
-<script src="${pageContext.request.contextPath}/resources/js/plugin/bootstrap-notify/bootstrap-notify.min.js"></script>
-<script src="${pageContext.request.contextPath}/resources/js/plugin/bootstrap-toggle/bootstrap-toggle.min.js"></script>
-<script src="${pageContext.request.contextPath}/resources/js/plugin/jquery-mapael/jquery.mapael.min.js"></script>
-<script src="${pageContext.request.contextPath}/resources/js/plugin/jquery-mapael/maps/world_countries.min.js"></script>
-<script src="${pageContext.request.contextPath}/resources/js/plugin/chart-circle/circles.min.js"></script>
-<script src="${pageContext.request.contextPath}/resources/js/plugin/jquery-scrollbar/jquery.scrollbar.min.js"></script>
-<script src="${pageContext.request.contextPath}/resources/js/ready.min.js"></script>
-<script src="${pageContext.request.contextPath}/resources/js/demo.js"></script>
-<script src="${pageContext.request.contextPath}/resources/js/listControl.js"></script>
 </html>

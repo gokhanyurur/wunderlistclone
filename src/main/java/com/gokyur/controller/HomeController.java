@@ -55,6 +55,11 @@ public class HomeController {
 		return "register";
 	}
 	
+	@RequestMapping(value="/ws", method = RequestMethod.GET)
+	public String wsPage(Model theModel, HttpServletRequest req) {
+		return "ws";
+	}
+	
 	@RequestMapping(value="/registerUser", method = RequestMethod.POST)
 	public String registerUser(@ModelAttribute("user") Users theUser,Model theModel) throws ParseException {
 		String roleAdmin = "ROLE_ADMIN";
@@ -111,7 +116,7 @@ public class HomeController {
 		for(SharedLists sharedList: allSharedLists) {
 			if(sharedList.getSharedWith().getId() == loginedUser.getId()) {
 				Lists tempList = listService.getList(sharedList.getSharedList());
-				tempList.setOwner(null); //test
+				tempList.setOwner(null);
 				sharedLists.add(tempList);
 			}
 		}
@@ -292,6 +297,19 @@ public class HomeController {
 		SubTasks theSubTask = listService.getSubTask(sid);
 		
 		return theSubTask.isCompleted();
+
+	}
+	
+	
+	@RequestMapping(value="/isLastDateOfTaskSet", method=RequestMethod.POST)
+	public @ResponseBody boolean isLastDateOfTaskSet(@RequestParam("taskId") int tid, HttpServletRequest req, HttpServletResponse resp) {
+		Tasks theTask = listService.getTask(tid);
+		
+		if(theTask.getLastdate() == null) {
+			return false;
+		}else {
+			return true;
+		}
 
 	}
 	

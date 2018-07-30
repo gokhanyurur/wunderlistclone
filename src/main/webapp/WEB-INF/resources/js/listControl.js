@@ -345,10 +345,15 @@ var isSubTaskPgOpen;
 					success : function(result){
 						$('#taskDetailsTaskText').val(result.task);
 						debugger;
-						var lastDateString = timeConverter(result.lastdate);
-						$('#myDateTimePicker').val(lastDateString);
-						console.log(lastDateString);
 						
+						if(isLastDateOfTaskSet(data.taskId)){
+							var lastDateString = timeConverter(result.lastdate);
+							$('#myDateTimePicker').val(lastDateString);
+							console.log(lastDateString);
+						}else{
+							$('#myDateTimePicker').val("");
+						}
+
 						getSubTasksFromTaskId(result.id);
 						getCommentsFromTaskId(result.id);
 						
@@ -357,6 +362,8 @@ var isSubTaskPgOpen;
 												"<textarea class='form-control' id='notes' rows='3' onblur='saveTaskNotes(\""+data.taskId+"\")'></textarea>");
 						
 						$("#notes").val(result.notes);
+						
+						$("html, body").animate({ scrollTop: $("#updateTaskNameDiv").offset().top }, 500);
 					}
 				});
 			}else{
@@ -367,6 +374,22 @@ var isSubTaskPgOpen;
 						
 		}
 		
+		function isLastDateOfTaskSet(task){
+			var isSet = false;
+			data = {
+					taskId: task
+			}
+			$.ajax({
+				url:"isLastDateOfTaskSet",
+				type: "POST",
+				data: data,
+				async :false,
+				success: function(result){
+					isSet = result;
+				}
+			});
+			return isSet;
+		}
 		function timeConverter(UNIX_timestamp){
 			  var a = new Date(UNIX_timestamp);
 			  var year = a.getFullYear();
@@ -376,7 +399,11 @@ var isSubTaskPgOpen;
 			  var min = a.getMinutes();
 			  var sec = a.getSeconds();
 			  var time = month + '/' + date + '/' + year + ' ' + hour + ':' + min + ':' + sec ;
-			  return time;
+			  if(year != 1970){
+				  return time;
+			  }else{
+				  return null;
+			  }
 		}
 		
 		function addSubTaskToTask(task){
@@ -803,7 +830,6 @@ var isSubTaskPgOpen;
 			//console.log(data.lastDate+" is the last date for the taskid: "+data.taskId);
 		}
 		
-		
-		
+	
 		
 		
