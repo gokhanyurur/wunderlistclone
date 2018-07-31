@@ -51,6 +51,11 @@ public class Users {
 	@ManyToOne
 	@JoinColumn(nullable=false, name="role_id")
 	private Roles role;
+	
+	@LazyCollection(LazyCollectionOption.FALSE)
+	@OneToMany(mappedBy="user", cascade=CascadeType.ALL)
+	@JsonIgnore
+	private List<Notifications> notifications;
 			
 	public Users() {
 		
@@ -133,6 +138,14 @@ public class Users {
 
 	public void setRole(Roles role) {
 		this.role = role;
+	}
+
+	public List<Notifications> getNotifications() {
+		return notifications;
+	}
+
+	public void setNotifications(List<Notifications> notifications) {
+		this.notifications = notifications;
 	}
 
 	

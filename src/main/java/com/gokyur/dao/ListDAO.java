@@ -23,11 +23,15 @@ public interface ListDAO {
 	public void removeSubTask(SubTasks theSubTask);
 	
 	public void addComment(Comments theComment);
+	public void removeComment(Comments theComment);
+	public Comments getComment(int id);
 	public List<Comments> getAllCommentsOf(int taskId);
 	
 	public void shareList(SharedLists theSharedList);
 	public void removeSharedList(SharedLists sharedList);
 	public SharedLists getSharedList(int lid, int uid);
+
+
 	
 
 	

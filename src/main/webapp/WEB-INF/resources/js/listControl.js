@@ -4,6 +4,7 @@ var isSubTaskPgOpen;
 			getAllSharedLists();
 			$("#tasksOfList").hide();
  			$("#taskDetailsMainDiv").hide();
+ 			$("#searchContentDiv").hide();
  			isSubTaskPgOpen = false;			
 		});
 
@@ -650,12 +651,17 @@ var isSubTaskPgOpen;
 					if(sizeOfArrray > 0){
 						$("#commentsDiv").html("");	
 						jQuery.each(result, function(index, value){
-							var dateHuman = new Date(result[index].commentedat);
-							var dateString = dateHuman.toUTCString();
+							
+//							var dateHuman = new Date(result[index].commentedat);
+//							var dateString = dateHuman.toUTCString();
+//							dateString = dateString.split(' ').slice(0, 5).join(' ');
+							
+							var dateString = new  Date(result[index].commentedat).toString();
 							dateString = dateString.split(' ').slice(0, 5).join(' ');
+							
 							$("#commentsDiv").append("<div class='card'>"+
 														"<div class='card-body'>"+
-															"<div class='row'>"+
+															"<div class='row' style='position: relative;'>"+
 																"<div class='col-md-3 photo'>"+
 																	"<p data-letters='"+result[index].writtenBy.charAt(0).toUpperCase()+"'></p>"+
 																"</div>"+
@@ -667,6 +673,9 @@ var isSubTaskPgOpen;
 																	"<p class='text-secondary' style='font-size: 12px;'>"+dateString+"</p>"+
 																	"<p>"+result[index].comment+"</p>"+
 																"</div>"+
+																"<button class='btn btn-danger' style='padding: 0; position: absolute; top: -15px; right: 0;' onclick='removeComment("+data.taskId+","+result[index].id+")'>"+
+																"<i class='la la-remove'></i>"+
+																"</button>"+
 															"</div>"+
 														"</div>"+
 													"</div>");
@@ -675,6 +684,24 @@ var isSubTaskPgOpen;
 				}
 			});
 			
+		}
+		
+		function removeComment(tid,cid){
+			data = {
+					taskId: tid,
+					commentId: cid
+			}
+			
+			if(confirm('Are you sure you want to remove this comment?')){
+				$.ajax({
+					url:"removeComment",
+					type: "POST",
+					data: data,
+					success: function(){
+						getCommentsFromTaskId(data.taskId);
+					}
+				});
+			}
 		}
 		
 		function removeList(id,name){
@@ -750,9 +777,9 @@ var isSubTaskPgOpen;
 						});
 					}else{
 						$("#sharedListUserTable").append("<tr>"+
-								"<td>You are not sharing this list with anyone</td>"+
-									"<td align='right'></td>"+
-							"</tr>");
+															"<td>You are not sharing this list with anyone</td>"+
+															"<td align='right'></td>"+
+														"</tr>");
 					}				
 				}
 			});
@@ -830,6 +857,20 @@ var isSubTaskPgOpen;
 			//console.log(data.lastDate+" is the last date for the taskid: "+data.taskId);
 		}
 		
-	
+		function searchTask(){
+			
+			var searchText = $("#searchTextBar").val();
+			var myLength = $("#searchTextBar").val().length;
+			
+			if(myLength > 0){
+				$("#mainContentDiv").hide();
+				$("#searchContentDiv").show();
+				$("#searchTitleLabel").text("Search: "+searchText);
+			}else{
+				$("#searchContentDiv").hide();
+				$("#mainContentDiv").show();
+			}
+			
+		}
 		
 		

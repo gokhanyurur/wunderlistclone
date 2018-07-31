@@ -3,7 +3,6 @@ package com.gokyur.websocket;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Timer;
@@ -19,15 +18,22 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.socket.server.standard.SpringConfigurator;
 
 import com.gokyur.entity.Lists;
+import com.gokyur.entity.NotificationTypes;
+import com.gokyur.entity.Notifications;
 import com.gokyur.entity.Tasks;
 import com.gokyur.entity.Users;
+import com.gokyur.service.NotificationService;
 import com.gokyur.service.UserService;
+import com.gokyur.utilities.GokyurUtilities;
 
 
 @ServerEndpoint(value = "/ws", configurator = SpringConfigurator.class)
 public class WebSocketServer {
 
 	private Session session;
+	
+	@Autowired
+	NotificationService notificationService;
 
 	@Autowired
 	UserService userService;
@@ -36,6 +42,11 @@ public class WebSocketServer {
 	public void connect(final Session session) {
 		this.session = session;
 				
+		if(!notificationService.isNotificationsConfigured()) {
+			notificationService.saveNotificationType(new NotificationTypes("REMINDER"));
+			notificationService.saveNotificationType(new NotificationTypes("INFO"));
+		}
+		
 		Timer timer = new Timer(); 
 		timer.schedule(new TimerTask() {
 			
@@ -53,7 +64,12 @@ public class WebSocketServer {
 				for(Lists thelist: lists) {
 					for(Tasks theTask: thelist.getTasks()) {
 						if(theTask.getLastdate() != null) {
-							if(checkTime(theTask.getLastdate()) >=-10000 && checkTime(theTask.getLastdate()) <=0) {
+							if(checkTime(theTask.getLastdate()) >=-30000 && checkTime(theTask.getLastdate()) <=0) {
+								Users user = userService.getUser(session.getUserPrincipal().getName());
+								NotificationTypes type = notificationService.getType("REMINDER");
+								Notifications notif = new Notifications(user, theTask.getTask(), type);
+								notif.setNotifiedat(GokyurUtilities.getNow());
+								notificationService.saveNotification(notif);
 								message(theTask.getTask());
 							}
 						}
@@ -63,9 +79,11 @@ public class WebSocketServer {
 
 			private long checkTime(Date lastdate) throws ParseException {
 				
-				String timeStamp = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss").format(Calendar.getInstance().getTime());
-		        Date nowDate = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss").parse(timeStamp);
+//				String timeStamp = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss").format(Calendar.getInstance().getTime());
+//		        Date nowDate = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss").parse(timeStamp);
 
+				Date nowDate = GokyurUtilities.getNow();
+				
 				SimpleDateFormat format = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
 				Date lastd = lastdate;
 				
@@ -80,12 +98,12 @@ public class WebSocketServer {
 				
 				long difference = nowDate.getTime() - lastd.getTime(); 
 				
-				System.out.println("Time difference is "+difference);
+				//System.out.println("Time difference is "+difference);
 				
 				return difference;
 			}
 			
-		}, 0, 10*(1000*1));
+		}, 0, 30*(1000*1));
 	}
 
 	@OnClose

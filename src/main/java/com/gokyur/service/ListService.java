@@ -15,8 +15,8 @@ public interface ListService {
 	public Tasks getTask(int id);
 	
 	public void createList(Lists theList);
-	public Lists getList(int id);
 	public void removeList(Lists theList);
+	public Lists getList(int id);
 	
 	public void addSubTask(SubTasks theSubTask);
 	public void removeSubTask(SubTasks theSubTask);
@@ -24,10 +24,12 @@ public interface ListService {
 
 	
 	public void addComment(Comments theComment);
+	public void removeComment(Comments theComment);
+	public Comments getComment(int id);
 	
 	public void shareList(SharedLists theSharedList);
-	public SharedLists getSharedList(int lid, int uid);
 	public void removeSharedList(SharedLists sharedList);
+	public SharedLists getSharedList(int lid, int uid);
 	
 	
 	public List<Comments> getAllCommentsOf(int taskId);

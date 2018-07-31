@@ -44,6 +44,7 @@
 	<script src="${pageContext.request.contextPath}/resources/js/ready.min.js"></script>
 	<script src="${pageContext.request.contextPath}/resources/js/demo.js"></script>
 	<script src="${pageContext.request.contextPath}/resources/js/listControl.js"></script>
+	<script src="${pageContext.request.contextPath}/resources/js/notifications.js"></script>
 
 </head>
 <body>
@@ -62,7 +63,7 @@
 				<div class="container-fluid">
 					<form class="navbar-left navbar-form nav-search mr-md-3" action="">
 						<div class="input-group">
-							<input type="text" placeholder="Search ..." class="form-control">
+							<input type="text" placeholder="Search ..." class="form-control" id="searchTextBar" onkeyup="searchTask()">
 							<div class="input-group-append">
 								<span class="input-group-text">
 									<i class="la la-search search-icon"></i>
@@ -71,14 +72,6 @@
 						</div>
 					</form>
 					<ul class="navbar-nav topbar-nav ml-md-auto align-items-center">
-						<li class="nav-item dropdown hidden-caret">
-							<div class="dropdown-menu" aria-labelledby="navbarDropdown">
-								<a class="dropdown-item" href="#">Action</a>
-								<a class="dropdown-item" href="#">Another action</a>
-								<div class="dropdown-divider"></div>
-								<a class="dropdown-item" href="#">Something else here</a>
-							</div>
-						</li>
 						<li class="nav-item dropdown hidden-caret">
 							<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 								<i class="la la-bell"></i>
@@ -94,7 +87,12 @@
 									</div>
 								</li>
 								<li>
-									<a class="see-all" href="javascript:void(0);"> <strong>See all notifications</strong> <i class="la la-angle-right"></i> </a>
+									<a class="see-all" href="#" onclick="seeAllNotifications()"> <strong>See all notifications</strong> <i id="seeAllNotifIcon" class="la la-angle-right"></i> </a>
+								</li>
+								<li>
+									<div class="notif-center" id="allNotificationsBoxDiv" style="overflow-y: scroll; max-height: 200px;">
+										<!-- See all notification box -->
+									</div>
 								</li>
 							</ul>
 						</li>
@@ -200,9 +198,9 @@
 				</div>
 			</div>
 			<div class="main-panel">
-				<div class="content">
+				<div class="content" id="mainContentDiv">
 					<div class="container-fluid">
-						<div>
+						<div style="padding-left: 15px;">
 							<h4 class="page-title" id="listTitleLabel">No List Selected</h4>
 						</div>		
 						<div class="col-md-12">
@@ -307,7 +305,7 @@
 									<div class="card-footer">
 										<!-- COMMENT TEST -->
 										<div id="commentsDiv">
-											<!-- Comments go here -->
+											<!-- Comments go here -->													
 										</div>
 										<div class="stats">
 											<div class="input-group">
@@ -318,6 +316,43 @@
 													</button>
 												</span>
 											</div>											
+										</div>
+									</div>
+								</div>	
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="content" id="searchContentDiv">
+					<div class="container-fluid">
+						<div style="padding-left: 15px;">
+							<h4 class="page-title" id="searchTitleLabel">-</h4>
+						</div>		
+						<div class="col-md-12">
+							<div  id="tasksOfListMain" style="float:left; width:100%">
+								<!-- Tasks -->
+								<div class="card card-tasks" id="tasksOfListDiv">
+									<div class="card-header ">
+										<div style="float:left">
+											<h4 class="card-title">List Name</h4>
+										</div>
+									</div>
+									<div class="card-body ">
+										<div class="table-full-width">
+											<table class="table">
+												<thead>
+													<tr>
+														<th>
+				
+														</th>
+														<th>Task</th>
+														<th><!-- Action --></th>
+													</tr>
+												</thead>
+												<tbody id="searchedTasksDiv">
+														
+												</tbody>
+											</table>
 										</div>
 									</div>
 								</div>	
@@ -418,89 +453,13 @@
 	</div>
 	<script type="text/javascript">
 		
-		var wsUrl = "ws://localhost:8080/wunderlistclone/ws";
-		var webSocket;
-
-		function init() {
-			webSocket = new WebSocket(wsUrl);
-			webSocket.onopen = function(evt) {
-				onOpen(event)
-			};
-			webSocket.onclose = function(evt) {
-				onClose(event)
-			};
-			webSocket.onmessage = function(evt) {
-				onMessage(event)
-			};
-			webSocket.onerror = function(evt) {
-				onError(event)
-			};
-		}
-		
-		function onOpen(event){
-			console.log("OnOpen Event");
-		}
-
-		function onClose(event) {
-			console.log("OnClose Event");
-		}
-
-		function onError(event) {
-			console.log("OnError Event");
-		}
-
-		function sendMessage() {
-			webSocket.send(textBox.value);
-		}
-		
-		function sendCustomMessage(text) {
-			webSocket.send(text);
-		}
-
-		function onMessage(event) {
-			notify(event.data);
-		}
-
-		window.addEventListener("load", init, false);
-
-	   	$(document).ready(function(){
+		$(document).ready(function(){
 			$('#myDateTimePicker').datetimepicker();
-	   	});
+		});
 		$(".shareListSelect").select2({
 		    placeholder: "Select a user"
 		});
-		
-		function notify(text){
-			var notificationC = parseInt($("#notificationCountSpan").text());
 			
-			$.notify({
-				icon: 'la la-bell',
-				title: 'Reminder',
-				message: text,
-			},{
-				type: 'danger',
-				placement: {
-					from: "bottom",
-					align: "right"
-				},
-				time: 1000,
-			});
-			
-			notificationC++;
-			$("#notificationCountSpan").text(notificationC.toString());
-			$("#notificationCountDiv").text("You have "+notificationC.toString()+" notifications.");
-			$("#notificationsBoxDiv").append("<a href='#'>"+
-												"<div class='notif-icon notif-danger'> <i class='la la-bell'></i> </div>"+
-													"<div class='notif-content'>"+
-														"<span class='block'>"+text+"</span>"+
-														"<span class='time'>xx minutes ago</span>"+ 
-													"</div>"+
-													
-											"</a>");
-			
-			
-		}
-		
 	</script>
 </body>
 </html>

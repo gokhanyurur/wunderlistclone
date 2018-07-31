@@ -25,12 +25,14 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.gokyur.entity.Comments;
 import com.gokyur.entity.Lists;
+import com.gokyur.entity.Notifications;
 import com.gokyur.entity.Roles;
 import com.gokyur.entity.SharedLists;
 import com.gokyur.entity.SubTasks;
 import com.gokyur.entity.Tasks;
 import com.gokyur.entity.Users;
 import com.gokyur.service.ListService;
+import com.gokyur.service.NotificationService;
 import com.gokyur.service.RoleService;
 import com.gokyur.service.UserService;
 import com.gokyur.utilities.GokyurUtilities;
@@ -47,6 +49,9 @@ public class HomeController {
 	
 	@Autowired
     private RoleService roleService;
+	
+	@Autowired
+	private NotificationService notificationService;
 		
 	@RequestMapping("/register")
 	public String registerPage(Model theModel) {
@@ -75,8 +80,9 @@ public class HomeController {
         theUser.setPassword(encodedPass);
         theUser.setRole(userRole);
         
-        String timeStamp = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss").format(Calendar.getInstance().getTime());
-        theUser.setCreatedAt(new SimpleDateFormat("yyyy/MM/dd HH:mm:ss").parse(timeStamp));
+//        String timeStamp = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss").format(Calendar.getInstance().getTime());
+//        theUser.setCreatedAt(new SimpleDateFormat("yyyy/MM/dd HH:mm:ss").parse(timeStamp));
+        theUser.setCreatedAt(GokyurUtilities.getNow());
         
 		userService.saveUser(theUser);
 		return "redirect:/login";
@@ -106,6 +112,32 @@ public class HomeController {
 		}*/
 			
 		return userLists;
+	}
+	
+	@RequestMapping(value = "/seeAllNotifications", method = RequestMethod.GET)
+	public @ResponseBody  List<Notifications> seeAllNotifications(HttpServletRequest req, HttpServletResponse resp) {
+		List<Notifications> userNotifications = userService.getUser(req.getUserPrincipal().getName()).getNotifications();
+		for(Notifications notif: userNotifications) {
+			if(!notif.isViewed()) {
+				notif.setViewed(true);
+				notificationService.saveNotification(notif);
+			}
+		}
+		return userNotifications;
+	}
+	
+	@RequestMapping(value = "/getUnviewedNotifications", method = RequestMethod.GET)
+	public @ResponseBody  List<Notifications> getUnviewedNotifications(HttpServletRequest req, HttpServletResponse resp) {
+		List<Notifications> userNotifications = userService.getUser(req.getUserPrincipal().getName()).getNotifications();
+		List<Notifications> unViewed = new ArrayList<Notifications>();
+		
+		for(Notifications notif: userNotifications) {
+			if(!notif.isViewed()) {
+				unViewed.add(notif);
+			}
+		}
+		
+		return unViewed;
 	}
 	
 	@RequestMapping(value = "/getSharedLists", method = RequestMethod.GET)
@@ -209,6 +241,12 @@ public class HomeController {
 	public @ResponseBody void removeTask(@RequestParam("taskId") int id, HttpServletRequest req, HttpServletResponse resp) {
 		Tasks tempTask = listService.getTask(id);
 		listService.removeTask(tempTask);
+	}
+	
+	@RequestMapping(value="/removeComment", method=RequestMethod.POST)
+	public @ResponseBody void removeComment(@RequestParam("commentId") int cid, HttpServletRequest req, HttpServletResponse resp) {
+		Comments theComment = listService.getComment(cid);
+		listService.removeComment(theComment);
 	}
 	
 	@RequestMapping(value="/starTheTask", method=RequestMethod.POST)
@@ -365,8 +403,9 @@ public class HomeController {
 		comment.setTask(theTask);
 		comment.setWrittenBy(theUser.getUsername());
 		
-		String timeStamp = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss").format(Calendar.getInstance().getTime());
-		comment.setCommentedat(new SimpleDateFormat("yyyy/MM/dd HH:mm:ss").parse(timeStamp));
+//		String timeStamp = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss").format(Calendar.getInstance().getTime());
+//		comment.setCommentedat(new SimpleDateFormat("yyyy/MM/dd HH:mm:ss").parse(timeStamp));
+		comment.setCommentedat(GokyurUtilities.getNow());
 		
 		listService.addComment(comment);
 		

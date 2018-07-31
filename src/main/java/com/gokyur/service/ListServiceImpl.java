@@ -90,5 +90,15 @@ public class ListServiceImpl implements ListService{
 		listDAO.removeSharedList(sharedList);
 	}
 
+	@Transactional
+	public void removeComment(Comments theComment) {
+		listDAO.removeComment(theComment);
+	}
+	
+	@Transactional
+	public Comments getComment(int id) {
+		return listDAO.getComment(id);
+	}
+
 
 }

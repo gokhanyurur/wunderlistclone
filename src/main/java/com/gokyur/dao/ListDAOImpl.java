@@ -111,4 +111,19 @@ public class ListDAOImpl implements ListDAO{
 		return tempSharedList;
 	}
 
+	public void removeComment(Comments theComment) {
+		Session currentSession = sessionFactory.getCurrentSession();
+		currentSession.delete(theComment);
+	}
+
+	public Comments getComment(int id) {
+		Session currentSession = sessionFactory.getCurrentSession();
+		Query theQuery=currentSession.createQuery("FROM Comments WHERE id=:commentid");
+		theQuery.setParameter("commentid", id);
+		
+		Comments tempComment = (Comments) theQuery.uniqueResult();
+		
+		return tempComment;
+	}
+
 }

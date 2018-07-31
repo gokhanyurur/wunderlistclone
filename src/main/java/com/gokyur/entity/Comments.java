@@ -40,8 +40,6 @@ public class Comments {
 	@Column(nullable=false, name="commentedat")
 	protected Date commentedat;
 	
-	//07/28/2018 00:00
-	
 	public Comments() {
 		
 	}

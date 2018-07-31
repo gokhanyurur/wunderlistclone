@@ -1,5 +1,10 @@
 package com.gokyur.utilities;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+
 public class GokyurUtilities {
 
 	public static String MD5(String md5) {
@@ -14,5 +19,10 @@ public class GokyurUtilities {
 		} catch (java.security.NoSuchAlgorithmException e) {
 		}
 	return null;
+	}
+	
+	public static Date getNow() throws ParseException {
+		String timeStamp = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss").format(Calendar.getInstance().getTime());	
+		return new SimpleDateFormat("yyyy/MM/dd HH:mm:ss").parse(timeStamp);
 	}
 }
