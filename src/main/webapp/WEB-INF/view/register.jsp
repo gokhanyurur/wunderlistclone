@@ -90,13 +90,15 @@
 				</c:if>
                	<form:form action="registerUser" modelAttribute = "user" method="POST">
 	               	<div class="card-body">
-<!-- 						<input class="form-control input-sm chat-input" type='text' name='username' value='' placeholder="Username"> -->
-						<form:input path="username" cssClass="form-control input-sm chat-input" placeholder="Username"/>
-	                	</br>
-<!-- 						<input class="form-control input-sm chat-input" type='password' name='password' placeholder="Password"/> -->
-						<form:input path="email" cssClass="form-control input-sm chat-input" placeholder="Email"/>
-						</br>
-						<form:password path="password" cssClass="form-control input-sm chat-input" placeholder="Password"/>
+						<form:input path="username" cssClass="form-control input-sm chat-input" placeholder="Username" required="required"/>
+	                	<br>
+						<form:input path="email" cssClass="form-control input-sm chat-input" placeholder="Email" required="required"/>
+						<br>
+						<form:input path="emailConf" cssClass="form-control input-sm chat-input" placeholder="Email Again" required="required"/>
+						<br>
+						<form:password path="password" cssClass="form-control input-sm chat-input" placeholder="Password" required="required"/>
+						<br>
+						<form:password path="passwordConf" cssClass="form-control input-sm chat-input" placeholder="Password Again" required="required"/>
 	              	</div>
 		            <div class="card-footer text-muted">
 		           		<input class="btn btn-danger" name="submit" type="submit" value="Register" />

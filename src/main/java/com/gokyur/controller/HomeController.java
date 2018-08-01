@@ -77,16 +77,30 @@ public class HomeController {
 	        roleService.saveRole(new Roles(roleUser));
 		}
 
-        Roles userRole = roleService.findByName(roleUser);
-        String encodedPass = GokyurUtilities.MD5(theUser.getPassword());
-        theUser.setPassword(encodedPass);
-        theUser.setRole(userRole);
+                
+        System.out.println("PW    : "+theUser.getPassword());
+        System.out.println("PWConf: "+theUser.getPasswordConf());
         
-//        String timeStamp = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss").format(Calendar.getInstance().getTime());
-//        theUser.setCreatedAt(new SimpleDateFormat("yyyy/MM/dd HH:mm:ss").parse(timeStamp));
-        theUser.setCreatedAt(GokyurUtilities.getNow());
-        
-		userService.saveUser(theUser);
+        Users checkUser = userService.getUser(theUser.getUsername());
+        if(checkUser != null) {
+        	System.out.println("Username is already exist!");
+        }
+        if(!theUser.getPassword().equals(theUser.getPasswordConf())) {
+        	System.out.println("Passwords do not match!");
+        }
+        if(!theUser.getEmail().equals(theUser.getEmailConf())) {
+        	System.out.println("Emails do not match!");
+        }          
+		if(theUser.getPassword().equals(theUser.getPasswordConf()) && theUser.getEmail().equals(theUser.getEmailConf()) && checkUser == null) {
+			Roles userRole = roleService.findByName(roleUser);
+	        String encodedPass = GokyurUtilities.MD5(theUser.getPassword());
+	        theUser.setPassword(encodedPass);
+	        theUser.setRole(userRole);
+	        
+	        theUser.setCreatedAt(GokyurUtilities.getNow());
+	        
+			userService.saveUser(theUser);
+		}
 		return "redirect:/login";
 		
 	}
@@ -98,21 +112,7 @@ public class HomeController {
 	
 	@RequestMapping(value = "/getLists", method = RequestMethod.GET)
 	public @ResponseBody  List<Lists> getListsList(HttpServletRequest req, HttpServletResponse resp) {
-		List<Lists> userLists = userService.getUser(req.getUserPrincipal().getName()).getLists();
-	
-		/*return Map<String, Object> type
-		
-		Map<String, Object> map = new HashMap<String, Object>();
-		
-		boolean status = true;
-		map.put("status", status);
-		map.put("message", "Basarili");
-		map.put("data", name);
-		
-		for(Lists list:userLists) {
-			map.put(String.valueOf(list.getId()), list.getListName());
-		}*/
-			
+		List<Lists> userLists = userService.getUser(req.getUserPrincipal().getName()).getLists();			
 		return userLists;
 	}
 	
@@ -149,15 +149,17 @@ public class HomeController {
 			for(SharedLists sharedList: sharedLists) {
 				Lists tempList = listService.getList(sharedList.getSharedList());
 				resultList = new ArrayList<Tasks>();
-				for(Tasks theTask: tempList.getTasks()) {
-					if(theTask.getTask().trim().toLowerCase().contains(searchText.trim().toLowerCase())) {
-						resultList.add(theTask);
+				if(sharedList.getSharedWith().getId() == loginedUser.getId()) {
+					for(Tasks theTask: tempList.getTasks()) {
+						if(theTask.getTask().trim().toLowerCase().contains(searchText.trim().toLowerCase())) {
+							resultList.add(theTask);
+						}
 					}
-				}
-				if(resultList.size()>0) {
-					names.add(tempList.getListName()+" (Shared list)");
-					lists.add(resultList);
-					ids.add(tempList.getId());
+					if(resultList.size()>0) {
+						names.add(tempList.getListName()+" (Shared list)");
+						lists.add(resultList);
+						ids.add(tempList.getId());
+					}
 				}
 
 			}

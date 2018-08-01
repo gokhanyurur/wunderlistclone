@@ -30,9 +30,15 @@ public class Users {
 	
 	@Column(nullable=false, name="password")
 	private String password;
+	
+	@Transient
+	private String passwordConf;
 		
 	@Column(length=30, nullable=false, name="email")
 	private String email;
+	
+	@Transient
+	private String emailConf;
 			
 	@Temporal(TemporalType.TIMESTAMP)
 	@DateTimeFormat(pattern = "MM/dd/yyyy HH:mm:ss")
@@ -146,6 +152,22 @@ public class Users {
 
 	public void setNotifications(List<Notifications> notifications) {
 		this.notifications = notifications;
+	}
+
+	public String getPasswordConf() {
+		return passwordConf;
+	}
+
+	public void setPasswordConf(String passwordConf) {
+		this.passwordConf = passwordConf;
+	}
+
+	public String getEmailConf() {
+		return emailConf;
+	}
+
+	public void setEmailConf(String emailConf) {
+		this.emailConf = emailConf;
 	}
 
 	
