@@ -118,7 +118,9 @@ public class HomeController {
 	
 	@RequestMapping(value = "/searchTask", method = RequestMethod.POST)
 	public @ResponseBody  Map<String, Object> searchTask(@RequestParam("searchText") String searchText, HttpServletRequest req, HttpServletResponse resp) {
-		List<Lists> userLists = userService.getUser(req.getUserPrincipal().getName()).getLists();
+		Users loginedUser = userService.getUser(req.getUserPrincipal().getName());
+		
+		List<Lists> userLists = loginedUser.getLists();
 		List<Tasks> resultList = new ArrayList<Tasks>();
 		
 		List<String> names = new ArrayList<String>();
@@ -138,6 +140,26 @@ public class HomeController {
 				names.add(theList.getListName());
 				lists.add(resultList);
 				ids.add(theList.getId());
+			}
+		}
+		
+		//CHECK SHARED LISTS
+		List<SharedLists> sharedLists = userService.getAllSharedLists();
+		if(sharedLists != null) {
+			for(SharedLists sharedList: sharedLists) {
+				Lists tempList = listService.getList(sharedList.getSharedList());
+				resultList = new ArrayList<Tasks>();
+				for(Tasks theTask: tempList.getTasks()) {
+					if(theTask.getTask().trim().toLowerCase().contains(searchText.trim().toLowerCase())) {
+						resultList.add(theTask);
+					}
+				}
+				if(resultList.size()>0) {
+					names.add(tempList.getListName()+" (Shared list)");
+					lists.add(resultList);
+					ids.add(tempList.getId());
+				}
+
 			}
 		}
 
