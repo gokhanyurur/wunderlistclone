@@ -591,9 +591,11 @@ var isSubTaskPgOpen;
 					url:"removeTask",
 					type: "POST",
 					data: data,
+					async: false,
 					success : function(result){
 						$("#allTasksDiv").html("");
 						getTasks(data.listId, data.listName);
+						searchTask(); 
 					}
 				});
 			} else {
@@ -613,9 +615,11 @@ var isSubTaskPgOpen;
 				url:"starTheTask",
 				type: "POST",
 				data: data,
+				async: false,
 				success : function(result){
 					$("#allTasksDiv").html("");
 					getTasks(data.listId, data.listName);
+					searchTask(); 
 				}
 			});
 		}
