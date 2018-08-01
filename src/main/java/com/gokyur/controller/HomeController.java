@@ -8,8 +8,10 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -113,6 +115,43 @@ public class HomeController {
 			
 		return userLists;
 	}
+	
+	@RequestMapping(value = "/searchTask", method = RequestMethod.POST)
+	public @ResponseBody  Map<String, Object> searchTask(@RequestParam("searchText") String searchText, HttpServletRequest req, HttpServletResponse resp) {
+		List<Lists> userLists = userService.getUser(req.getUserPrincipal().getName()).getLists();
+		List<Tasks> resultList = new ArrayList<Tasks>();
+		
+		List<String> names = new ArrayList<String>();
+		List<Integer> ids = new ArrayList<Integer>();
+		List<List<Tasks>> lists = new ArrayList<List<Tasks>>();
+		
+		Map<String, Object> map = new HashMap<String, Object>();
+		
+		for(Lists theList:userLists) {
+			resultList = new ArrayList<Tasks>();
+			for(Tasks theTask: theList.getTasks()) {
+				if(theTask.getTask().trim().toLowerCase().contains(searchText.trim().toLowerCase())) {
+					resultList.add(theTask);
+				}
+			}
+			if(resultList.size()>0) {
+				names.add(theList.getListName());
+				lists.add(resultList);
+				ids.add(theList.getId());
+			}
+		}
+
+		map.put("Names", names);
+		map.put("Lists", lists);
+		map.put("Ids", ids);
+		return map;
+	}
+	
+	/*@RequestMapping(value="/getListIdFromTask", method=RequestMethod.POST)
+	public @ResponseBody int getListIdFromTask(@RequestParam("taskId") int id, HttpServletRequest req, HttpServletResponse resp) {
+		Tasks tempTask = listService.getTask(id);
+		return tempTask.getList().getId();
+	}*/
 	
 	@RequestMapping(value = "/seeAllNotifications", method = RequestMethod.GET)
 	public @ResponseBody  List<Notifications> seeAllNotifications(HttpServletRequest req, HttpServletResponse resp) {

@@ -63,7 +63,7 @@
 				<div class="container-fluid">
 					<form class="navbar-left navbar-form nav-search mr-md-3" action="">
 						<div class="input-group">
-							<input type="text" placeholder="Search ..." class="form-control" id="searchTextBar" onkeyup="searchTask()">
+							<input type="text" placeholder="Search a task..." class="form-control" id="searchTextbox" onkeyup="searchTask()">
 							<div class="input-group-append">
 								<span class="input-group-text">
 									<i class="la la-search search-icon"></i>
@@ -98,8 +98,8 @@
 						</li>
 					</ul>
 				</div>
-				</nav>
-			</div>
+			</nav>
+		</div>
 			<div class="sidebar">
 				<div class="scrollbar-inner sidebar-wrapper">
 					<div class="user">
@@ -329,33 +329,8 @@
 							<h4 class="page-title" id="searchTitleLabel">-</h4>
 						</div>		
 						<div class="col-md-12">
-							<div  id="tasksOfListMain" style="float:left; width:100%">
-								<!-- Tasks -->
-								<div class="card card-tasks" id="tasksOfListDiv">
-									<div class="card-header ">
-										<div style="float:left">
-											<h4 class="card-title">List Name</h4>
-										</div>
-									</div>
-									<div class="card-body ">
-										<div class="table-full-width">
-											<table class="table">
-												<thead>
-													<tr>
-														<th>
-				
-														</th>
-														<th>Task</th>
-														<th><!-- Action --></th>
-													</tr>
-												</thead>
-												<tbody id="searchedTasksDiv">
-														
-												</tbody>
-											</table>
-										</div>
-									</div>
-								</div>	
+							<div id="searchResultDiv" style="float:left; width:100%">
+									
 							</div>
 						</div>
 					</div>
@@ -387,29 +362,28 @@
 					</div>
 				</footer>
 			</div>
-		</div>
 	</div>
-	<!-- Modal -->
-	<div class="modal fade" id="modalUpdate" tabindex="-1" role="dialog" aria-labelledby="modalUpdatePro" aria-hidden="true">
-		<div class="modal-dialog modal-dialog-centered" role="document">
-			<div class="modal-content">
-				<div class="modal-header bg-primary">
-					<h6 class="modal-title"><i class="la la-frown-o"></i> Under Development</h6>
-					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-						<span aria-hidden="true">&times;</span>
-					</button>
-				</div>
-				<div class="modal-body text-center">									
-					<p>Currently the pro version of the <b>Ready Dashboard</b> Bootstrap is in progress development</p>
-					<p>
-						<b>We'll let you know when it's done</b></p>
-				</div>
-				<div class="modal-footer">
-					<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-				</div>
-			</div>
-		</div>
-	</div>
+ 	<!-- Modal -->
+<!-- 	<div class="modal fade" id="modalUpdate" tabindex="-1" role="dialog" aria-labelledby="modalUpdatePro" aria-hidden="true"> -->
+<!-- 		<div class="modal-dialog modal-dialog-centered" role="document"> -->
+<!-- 			<div class="modal-content"> -->
+<!-- 				<div class="modal-header bg-primary"> -->
+<!-- 					<h6 class="modal-title"><i class="la la-frown-o"></i> Under Development</h6> -->
+<!-- 					<button type="button" class="close" data-dismiss="modal" aria-label="Close"> -->
+<!-- 						<span aria-hidden="true">&times;</span> -->
+<!-- 					</button> -->
+<!-- 				</div> -->
+<!-- 				<div class="modal-body text-center">									 -->
+<!-- 					<p>Currently the pro version of the <b>Ready Dashboard</b> Bootstrap is in progress development</p> -->
+<!-- 					<p> -->
+<!-- 						<b>We'll let you know when it's done</b></p> -->
+<!-- 				</div> -->
+<!-- 				<div class="modal-footer"> -->
+<!-- 					<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button> -->
+<!-- 				</div> -->
+<!-- 			</div> -->
+<!-- 		</div> -->
+<!-- 	</div> -->
 	
 	<div class="modal fade" id="shareListModal" tabindex="-1" role="dialog" aria-hidden="true">
 	  <div class="modal-dialog" role="document">

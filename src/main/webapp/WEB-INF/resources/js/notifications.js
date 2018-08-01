@@ -8,7 +8,7 @@ function showUnviewedNotifications(){
 	$.ajax({
 		url:"getUnviewedNotifications",
 		success : function(result){
-			debugger;
+			//debugger;
 			jQuery.each(result, function(index, value){
 				console.log(result[index].notification);
 				var dateString = new  Date(result[index].notifiedat).toString();

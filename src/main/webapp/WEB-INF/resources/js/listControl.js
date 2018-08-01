@@ -452,7 +452,7 @@ var isSubTaskPgOpen;
 					}	
 				});
 			}else{
-				alert('You have to write a task.');
+				alert('You have to write a comment.');
 			}
 		}
 		
@@ -859,18 +859,108 @@ var isSubTaskPgOpen;
 		
 		function searchTask(){
 			
-			var searchText = $("#searchTextBar").val();
-			var myLength = $("#searchTextBar").val().length;
+			var searchTextVal = $("#searchTextbox").val();
+			var searchTextLength = $("#searchTextbox").val().length;
 			
-			if(myLength > 0){
+			if(searchTextLength > 0){
 				$("#mainContentDiv").hide();
 				$("#searchContentDiv").show();
-				$("#searchTitleLabel").text("Search: "+searchText);
+				$("#searchTitleLabel").text("Search: "+searchTextVal);
+				
+				data = {
+						searchText: searchTextVal
+				}
+				
+				$.ajax({
+					url: "searchTask",
+					type: "POST",
+					data: data,
+					async :false,
+					success: function(result){
+						debugger;
+						$("#searchResultDiv").html("");
+						var sizeOfArrray = Array.isArray(result) ? result.length : Object.keys(result).length;
+						if(sizeOfArrray > 0){
+							jQuery.each(result.Names, function(n_index, n_value){
+								var searchHTML = "";
+								searchHTML = "<div class='card card-tasks'>"+
+												"<div class='card-header'>"+
+													"<div style='float:left'>"+
+														"<h4 class='card-title'>"+result.Names[n_index]+"</h4>"+
+													"</div>"+
+												"</div>"+
+												"<div class='card-body '>"+
+													"<div class='table-full-width'>"+
+														"<table class='table'>"+
+															"<thead>"+
+																"<tr>"+
+																	"<th></th>"+
+																	"<th>Task</th>"+
+																	"<th></th>"+
+																"</tr>"+
+															"</thead>"+
+															"<tbody>";
+												jQuery.each(result.Lists[n_index], function(l_index, l_value){
+													var tempTaskList = result.Lists[n_index];
+													var listId = result.Ids[n_index];
+													debugger;
+													searchHTML += "<tr>"+
+									        							"<td>"+
+									        								"<div class='form-check'>"+
+									        									"<label class='form-check-label'>"+
+								        									(isTaskCompleted(tempTaskList[l_index].id) ? '<input onchange="taskCheckboxChange(\''+tempTaskList[l_index].id+'\')" class="form-check-input task-select" type="checkbox" checked>' : '<input onchange="taskCheckboxChange(\''+tempTaskList[l_index].id+'\')" class="form-check-input task-select" type="checkbox">')+
+									        											"<span class='form-check-sign'></span>"+
+									        									"</label>"+
+									        								"</div>"+
+									        							"</td>"+
+									        							"<td>"+tempTaskList[l_index].task+"</td>"+
+									        							"<td class='td-actions text-right'>"+
+									        								"<div class='form-button-action'>"+
+									        									"<button onclick='removeTask(\""+tempTaskList[l_index].id+"\",\""+listId+"\",\""+result.Names[n_index]+"\")' type='button' data-toggle='tooltip' title='Remove' class='btn btn-link btn-simple-danger'>"+
+									        										"<i class='la la-times'></i>"+
+									        									"</button>"+
+									        									(tempTaskList[l_index].stared ? '<button type="button" data-toggle="tooltip" title="Star" class="btn btn-link btn-simple-warning" onclick="starTheTask(\''+tempTaskList[l_index].id+'\',\''+listId+'\',\''+result.Names[n_index]+'\')"><i class="la la-star"></i></button>' : '<button type="button" data-toggle="tooltip" title="Star" class="btn btn-link btn-simple-warning" onclick="starTheTask(\''+tempTaskList[l_index].id+'\',\''+listId+'\',\''+result.Names[n_index]+'\')"><i class="la la-star-o"></i></button>')+
+//									        									"<button onclick='showTaskDetails(\""+listId+"\",\""+ tempTaskList[l_index].id +"\",\""+result.Names[n_index]+"\")' type='button' data-toggle='tooltip' title='Edit' class='btn btn-link btn-simple-primary'>"+
+//									        										"<i class='la la-edit'></i>"+
+//									        									"</button>"+
+									        								"</div>"+
+																	"</td>"+
+																"</tr>";
+												});
+								
+											  searchHTML += "</tbody>"+
+														"</table>"+
+													"</div>"+
+												"</div>"+
+											"</div>";
+							
+							$("#searchResultDiv").append(searchHTML);
+							});
+						}
+					}
+				});
+				
 			}else{
 				$("#searchContentDiv").hide();
 				$("#mainContentDiv").show();
 			}
 			
 		}
+		
+		/*function getListIdFromTask(tid){
+			data = {
+					taskId: tid
+			}	
+			$.ajax({
+				url:"getListIdFromTask",
+				type: "POST",
+				data: data,
+				async :false,
+				success : function(result){
+					debugger;
+					return result;
+				}
+			});
+		}*/
 		
 		

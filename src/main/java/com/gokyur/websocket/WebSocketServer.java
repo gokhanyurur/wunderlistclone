@@ -56,7 +56,7 @@ public class WebSocketServer {
 					Users user = userService.getUser(session.getUserPrincipal().getName());
 					checkTheTasks(user.getLists());
 				} catch (ParseException e) {
-					e.printStackTrace();
+					//e.printStackTrace();
 				}
 			}
 
@@ -64,7 +64,7 @@ public class WebSocketServer {
 				for(Lists thelist: lists) {
 					for(Tasks theTask: thelist.getTasks()) {
 						if(theTask.getLastdate() != null) {
-							if(checkTime(theTask.getLastdate()) >=-30000 && checkTime(theTask.getLastdate()) <=0) {
+							if(checkTime(theTask.getLastdate()) ==0) {
 								Users user = userService.getUser(session.getUserPrincipal().getName());
 								NotificationTypes type = notificationService.getType("REMINDER");
 								Notifications notif = new Notifications(user, theTask.getTask(), type);
@@ -103,7 +103,7 @@ public class WebSocketServer {
 				return difference;
 			}
 			
-		}, 0, 30*(1000*1));
+		}, 0, 1*(1000*1));
 	}
 
 	@OnClose
