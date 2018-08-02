@@ -58,7 +58,7 @@
                	<form name='loginForm' action="<c:url value='j_spring_security_check' />" method='POST'>
 	               	<div class="card-body">
 						<input class="form-control input-sm chat-input" type='text' name='username' value='' placeholder="Username">
-	                	</br>
+	                	<br>
 						<input class="form-control input-sm chat-input" type='password' name='password' placeholder="Password"/>
 	              	</div>
 		            <div class="card-footer text-muted">

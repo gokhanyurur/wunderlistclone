@@ -20,11 +20,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.gokyur.email.TLSEmail;
 import com.gokyur.entity.Comments;
 import com.gokyur.entity.Lists;
 import com.gokyur.entity.Notifications;
@@ -62,10 +64,10 @@ public class HomeController {
 		return "register";
 	}
 	
-	@RequestMapping(value="/ws", method = RequestMethod.GET)
+	/*@RequestMapping(value="/ws", method = RequestMethod.GET)
 	public String wsPage(Model theModel, HttpServletRequest req) {
 		return "ws";
-	}
+	}*/
 	
 	@RequestMapping(value="/registerUser", method = RequestMethod.POST)
 	public String registerUser(@ModelAttribute("user") Users theUser,Model theModel) throws ParseException {
@@ -76,10 +78,9 @@ public class HomeController {
 	        roleService.saveRole(new Roles(roleAdmin));
 	        roleService.saveRole(new Roles(roleUser));
 		}
-
-                
-        System.out.println("PW    : "+theUser.getPassword());
-        System.out.println("PWConf: "+theUser.getPasswordConf());
+          
+        /*System.out.println("PW    : "+theUser.getPassword());
+        System.out.println("PWConf: "+theUser.getPasswordConf());*/
         
         Users checkUser = userService.getUser(theUser.getUsername());
         if(checkUser != null) {
@@ -96,13 +97,40 @@ public class HomeController {
 	        String encodedPass = GokyurUtilities.MD5(theUser.getPassword());
 	        theUser.setPassword(encodedPass);
 	        theUser.setRole(userRole);
-	        
 	        theUser.setCreatedAt(GokyurUtilities.getNow());
+	        	        
+	        userService.saveUser(theUser);
 	        
-			userService.saveUser(theUser);
+	        Users dbUser = userService.getUser(theUser.getUsername());
+	        
+	        String userUniqueHash = GokyurUtilities.MD5(String.valueOf(dbUser.getId())) + GokyurUtilities.MD5(dbUser.getUsername());
+			//System.out.println("Users unique hash: "+userUniqueHash);
+			TLSEmail.sendEmail(dbUser.getEmail(), userUniqueHash);
+			
+			return "redirect:/login?activationsent";
 		}
+		
 		return "redirect:/login";
 		
+	}
+	
+	@RequestMapping("activation/{userHash}")
+	public String activeUser(@PathVariable(value="userHash") String userHash) {
+		
+		List<Users> allUsers = userService.getAllUsers();
+		
+		for(Users theUser: allUsers) {
+			String tempHash = GokyurUtilities.MD5(String.valueOf(theUser.getId())) + GokyurUtilities.MD5(theUser.getUsername());
+			//System.out.println("user temp hash: "+tempHash);
+			if(tempHash.equals(userHash) && !theUser.isActive()) {
+				theUser.setActive(true);
+				userService.saveUser(theUser);
+				System.out.println("User activated.");
+				return "redirect:/login?useractivated";
+			}
+		}
+
+		return "redirect:/login";
 	}
 	
 	@RequestMapping(value="/lists**", method = RequestMethod.GET)
@@ -466,8 +494,6 @@ public class HomeController {
 		comment.setTask(theTask);
 		comment.setWrittenBy(theUser.getUsername());
 		
-//		String timeStamp = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss").format(Calendar.getInstance().getTime());
-//		comment.setCommentedat(new SimpleDateFormat("yyyy/MM/dd HH:mm:ss").parse(timeStamp));
 		comment.setCommentedat(GokyurUtilities.getNow());
 		
 		listService.addComment(comment);
@@ -518,14 +544,24 @@ public class HomeController {
 	public String login(
 		@RequestParam(value = "error", required = false) String error,
 		@RequestParam(value = "logout", required = false) String logout,
+		@RequestParam(value = "activationsent", required = false) String activationsent,
+		@RequestParam(value = "useractivated", required = false) String useractivated,
 		Model theModel) {
 
 		if (error != null) {
-			theModel.addAttribute("error", "Invalid username and password!");
+			theModel.addAttribute("error", "Login failed. Please check credentials and be sure you activated your account.");
 		}
 
 		if (logout != null) {
 			theModel.addAttribute("msg", "You've been logged out successfully.");
+		}
+		
+		if (activationsent != null) {
+			theModel.addAttribute("msg", "Activation link has been sent to your email.");
+		}
+		
+		if (useractivated != null) {
+			theModel.addAttribute("msg", "User activated. Now you can login.");
 		}
 
 		return "login";

@@ -45,36 +45,6 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 </head>
 <body>
-<!-- 	<div id="login-box"> -->
-<!-- 		<h2>Register!</h2> -->
-		
-<%-- 		<c:if test="${not empty error}"> --%>
-<%-- 			<div class="error">${error}</div> --%>
-<%-- 		</c:if> --%>
-<%-- 		<c:if test="${not empty msg}"> --%>
-<%-- 			<div class="msg">${msg}</div> --%>
-<%-- 		</c:if> --%>
-		
-<%-- 		<form:form action="registerUser" modelAttribute = "user" method="POST"> --%>
-<!-- 			<table> -->
-<!-- 				<tr> -->
-<!-- 					<td>Username:</td> -->
-<%-- 					<td> <form:input path="username"/><td> --%>
-<!-- 				</tr> -->
-<!-- 				<tr> -->
-<!-- 					<td>Email:</td> -->
-<%-- 					<td><form:input path="email"/></td> --%>
-<!-- 				</tr> -->
-<!-- 				<tr> -->
-<!-- 					<td>Password:</td> -->
-<%-- 					<td><form:password path="password"/></td> --%>
-<!-- 				</tr> -->
-<!-- 				<tr> -->
-<!-- 					<td><button type="submit">Register</button></td> -->
-<!-- 				</tr> -->
-<!-- 			</table> -->
-<%-- 		</form:form> --%>
-<!-- 	</div> -->
 <div class="container" style="margin-top: 150px;">
     <div class="row">
         <div class="col-md-4 offset-md-4">

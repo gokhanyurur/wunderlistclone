@@ -62,6 +62,9 @@ public class Users {
 	@OneToMany(mappedBy="user", cascade=CascadeType.ALL)
 	@JsonIgnore
 	private List<Notifications> notifications;
+	
+	@Column(name="active")
+	private boolean active;
 			
 	public Users() {
 		
@@ -168,6 +171,14 @@ public class Users {
 
 	public void setEmailConf(String emailConf) {
 		this.emailConf = emailConf;
+	}
+
+	public boolean isActive() {
+		return active;
+	}
+
+	public void setActive(boolean active) {
+		this.active = active;
 	}
 
 	
