@@ -117,11 +117,11 @@
 
 							<div class="collapse in" id="collapseExample" aria-expanded="true" style="">
 								<ul class="nav">
-									<li>
-										<a href="#profile">
-											<span class="link-collapse">My Profile</span>
-										</a>
-									</li>
+<!-- 									<li> -->
+<!-- 										<a href="#profile"> -->
+<!-- 											<span class="link-collapse">My Profile</span> -->
+<!-- 										</a> -->
+<!-- 									</li> -->
 									<li>
 										<a href="#edit">
 											<span class="link-collapse">Edit Profile</span>
@@ -129,7 +129,7 @@
 									</li>
 									<li>
 										<a href="#settings">
-											<span class="link-collapse">Settings</span>
+											<span class="link-collapse">About Us</span>
 										</a>
 									</li>
 									<li>

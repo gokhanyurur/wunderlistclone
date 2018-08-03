@@ -15,8 +15,8 @@ public class TLSEmail {
 	   Port for TLS/STARTTLS: 587
 	 */
 	public static void sendEmail(String toEmail, String userHash) {
-		final String fromEmail = "example@gmail.com"; //requires valid gmail id
-		final String password = "pass"; // correct password for gmail id
+		final String fromEmail = "wunderlistclone@gmail.com"; //requires valid gmail id
+		final String password = "Gkhn.159753"; // correct password for gmail id
 		
 		System.out.println("TLSEmail Start");
 		Properties props = new Properties();
