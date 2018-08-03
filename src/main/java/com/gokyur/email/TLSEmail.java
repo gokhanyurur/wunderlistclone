@@ -34,7 +34,7 @@ public class TLSEmail {
 		};
 		Session session = Session.getInstance(props, auth);
 		
-		String activationLink = "http://localhost:8080/wunderlistclone/activation/"+userHash;
+		String activationLink = "http://wunderlistclone.azurewebsites.net/activation/"+userHash;
 		
 		EmailUtil.sendEmail(session, toEmail,"Activate Your Account", "Welcome to Wunderlistclone! This application is made only for educational purpose. Here is your activation link: "+activationLink);
 		
