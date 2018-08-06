@@ -9,6 +9,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.TimeZone;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -224,8 +225,36 @@ public class TaskController {
 	public @ResponseBody void setTimeForTask(@RequestParam("lastDate") String dateString, @RequestParam("taskId") int tid, HttpServletRequest req, HttpServletResponse resp) throws ParseException {
 		dateString+=":00";
 		Tasks theTask = listService.getTask(tid);
-		Date tempDate = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss").parse(dateString);
-		theTask.setLastdate(tempDate);
+		
+//		Date tempDate = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss").parse(dateString);
+		
+		String DATE_FORMAT = "MM/dd/yyyy HH:mm:ss";
+		
+		SimpleDateFormat formatter = new SimpleDateFormat(DATE_FORMAT);
+
+        Date date = formatter.parse(dateString);
+        TimeZone tz = TimeZone.getDefault();
+
+        // From TimeZone Local
+        System.out.println("TimeZone : " + tz.getID() + " - " + tz.getDisplayName());
+        System.out.println("TimeZone : " + tz);
+        System.out.println("Date (Local) : " + formatter.format(date));
+
+        // To TimeZone Server
+        SimpleDateFormat sdfServer = new SimpleDateFormat(DATE_FORMAT);
+        TimeZone tzInServer = TimeZone.getTimeZone("Atlantic/Bermuda");
+        sdfServer.setTimeZone(tzInServer);
+
+        String sDateInServer = sdfServer.format(date); // Convert to String first
+        Date dateInServer = formatter.parse(sDateInServer); // Create a new Date object
+
+        System.out.println("\nTimeZone : " + tzInServer.getID() + " - " + tzInServer.getDisplayName());
+        System.out.println("TimeZone : " + tzInServer);
+        System.out.println("Date (Server) (String) : " + sDateInServer);
+        System.out.println("Date (Server) (Object) : " + formatter.format(dateInServer));
+		
+		
+		theTask.setLastdate(dateInServer);
 		listService.addTask(theTask);
 
 	}

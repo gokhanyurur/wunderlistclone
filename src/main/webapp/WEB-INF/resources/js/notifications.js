@@ -81,7 +81,7 @@ $(function() {
 });
 
 //WEB SOCKET STARTS
-var wsUrl = "ws://localhost:8080/wunderlistclone/ws";
+var wsUrl = "ws://wunderlistclone.azurewebsites.net/ws";
 var webSocket;
 
 function init() {

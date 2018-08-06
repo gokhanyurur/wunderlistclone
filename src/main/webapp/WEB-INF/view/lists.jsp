@@ -56,7 +56,7 @@
 				<button class="navbar-toggler sidenav-toggler ml-auto" type="button" data-toggle="collapse" data-target="collapse" aria-controls="sidebar" aria-expanded="false" aria-label="Toggle navigation">
 					<span class="navbar-toggler-icon"></span>
 				</button>
-				<button class="topbar-toggler more"><i class="la la-ellipsis-v"></i></button>
+				<button style="margin-top: 15px;" class="topbar-toggler more"><i class="la la-ellipsis-v"></i></button>
 			</div>
 			<nav class="navbar navbar-header navbar-expand-lg" style="padding-top:10px;">
 				<div class="container-fluid">
@@ -303,7 +303,7 @@
 									</div>
 									<div class="card-footer">
 										<!-- COMMENT TEST -->
-										<div id="commentsDiv">
+										<div id="commentsDiv" style="overflow-y: scroll; max-height: 270px; margin-bottom: 10px; margin-left:5px; padding-right: 10px;">
 											<!-- Comments go here -->													
 										</div>
 										<div class="stats">
@@ -398,7 +398,7 @@
 	      	</div>
 	      	<h6 style="padding: 10px 0 0 3px;">Share</h6>
 	      	<div class="input-group">
-	      		<select id="userSelect" class="shareListSelect" name="states[]" multiple="multiple" style="width: 90%;">
+	      		<select id="userSelect" class="shareListSelect" name="states[]" multiple="multiple" style="width: 86%;">
 	      			<!-- List of all users for sharing a list -->
 				</select>
  	      		<button id="shareListBtn" class="btn btn-danger" style="padding: 4px;">Share</button>
@@ -428,6 +428,7 @@
 		
 		$(document).ready(function(){
 			$('#myDateTimePicker').datetimepicker();
+			
 		});
 		$(".shareListSelect").select2({
 		    placeholder: "Select a user"

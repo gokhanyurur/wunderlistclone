@@ -55,7 +55,7 @@
 				<c:if test="${not empty msg}">
 					<div class="msg">${msg}</div>
 				</c:if>
-               	<form name='loginForm' action="<c:url value='j_spring_security_check' />" method='POST'>
+               	<form style="margin-bottom: 0;" name='loginForm' action="<c:url value='j_spring_security_check' />" method='POST'>
 	               	<div class="card-body">
 						<input class="form-control input-sm chat-input" type='text' name='username' value='' placeholder="Username">
 	                	<br>

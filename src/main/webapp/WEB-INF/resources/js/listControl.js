@@ -345,7 +345,7 @@ var isSubTaskPgOpen;
 					data: data,
 					success : function(result){
 						$('#taskDetailsTaskText').val(result.task);
-						debugger;
+						//debugger;
 						
 						if(isLastDateOfTaskSet(data.taskId)){
 							var lastDateString = timeConverter(result.lastdate);
@@ -392,19 +392,20 @@ var isSubTaskPgOpen;
 			return isSet;
 		}
 		function timeConverter(UNIX_timestamp){
-			  var a = new Date(UNIX_timestamp);
-			  var year = a.getFullYear();
-			  var month = a.getMonth()+1;
-			  var date = a.getDate();
-			  var hour = a.getHours();
-			  var min = a.getMinutes();
-			  var sec = a.getSeconds();
-			  var time = month + '/' + date + '/' + year + ' ' + hour + ':' + min + ':' + sec ;
-			  if(year != 1970){
-				  return time;
-			  }else{
-				  return null;
-			  }
+			debugger;
+			var a = new Date(UNIX_timestamp);
+			var year = a.getFullYear();
+			var month = a.getMonth()+1;
+			var date = a.getDate();
+			var hour = a.getHours();
+			var min = a.getMinutes();
+			var sec = a.getSeconds();
+			var time = month + '/' + date + '/' + year + ' ' + hour + ':' + min + ':' + sec ;
+			if(year != 1970){
+				return time;
+			}else{
+				return null;
+			}
 		}
 		
 		function addSubTaskToTask(task){
@@ -666,10 +667,10 @@ var isSubTaskPgOpen;
 							$("#commentsDiv").append("<div class='card'>"+
 														"<div class='card-body'>"+
 															"<div class='row' style='position: relative;'>"+
-																"<div class='col-md-3 photo'>"+
+																"<div class='col-md-2 photo'>"+
 																	"<p data-letters='"+result[index].writtenBy.charAt(0).toUpperCase()+"'></p>"+
 																"</div>"+
-																"<div class='col-md-9'>"+
+																"<div class='col-md-10'>"+
 																	"<p>"+
 																		"<a class='float-left' href='#'><strong>"+result[index].writtenBy+"</strong></a>"+
 																	"</p>"+
@@ -881,7 +882,7 @@ var isSubTaskPgOpen;
 					data: data,
 					async :false,
 					success: function(result){
-						debugger;
+						//debugger;
 						$("#searchResultDiv").html("");
 						var sizeOfArrray = Array.isArray(result) ? result.length : Object.keys(result).length;
 						if(sizeOfArrray > 0){
@@ -907,7 +908,7 @@ var isSubTaskPgOpen;
 												jQuery.each(result.Lists[n_index], function(l_index, l_value){
 													var tempTaskList = result.Lists[n_index];
 													var listId = result.Ids[n_index];
-													debugger;
+													//debugger;
 													searchHTML += "<tr>"+
 									        							"<td>"+
 									        								"<div class='form-check'>"+
