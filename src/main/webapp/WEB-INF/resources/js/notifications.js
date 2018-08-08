@@ -2,6 +2,52 @@ var seeAllNotif = false;
 
 $(document).ready(function() {
 	showUnviewedNotifications();			
+	
+	//WEB SOCKET STARTS
+	var wsUrl = "ws://localhost:8080/wunderlistclone/ws";
+	var webSocket;
+
+	function init() {
+		
+		webSocket = new WebSocket(wsUrl);
+		webSocket.onopen = function(evt) {
+			onOpen(event)
+		};
+		webSocket.onclose = function(evt) {
+			onClose(event)
+		};
+		webSocket.onmessage = function(evt) {
+			onMessage(event)
+		};
+		webSocket.onerror = function(evt) {
+			onError(event)
+		};
+	}
+
+	function onOpen(event){
+		console.log("OnOpen Event");
+	}
+
+	function onClose(event) {
+		console.log("OnClose Event");
+	}
+
+	function onError(event) {
+		console.log("OnError Event");
+	}
+
+	function sendMessage() {
+		webSocket.send(textBox.value);
+	}
+
+	function sendCustomMessage(text) {
+		webSocket.send(text);
+	}
+
+	function onMessage(event) {
+		notify(event.data);
+	}
+	init();
 });
 
 function showUnviewedNotifications(){
@@ -80,51 +126,9 @@ $(function() {
     });
 });
 
-//WEB SOCKET STARTS
-var wsUrl = "ws://wunderlistclone.azurewebsites.net/ws";
-var webSocket;
 
-function init() {
-	webSocket = new WebSocket(wsUrl);
-	webSocket.onopen = function(evt) {
-		onOpen(event)
-	};
-	webSocket.onclose = function(evt) {
-		onClose(event)
-	};
-	webSocket.onmessage = function(evt) {
-		onMessage(event)
-	};
-	webSocket.onerror = function(evt) {
-		onError(event)
-	};
-}
 
-function onOpen(event){
-	console.log("OnOpen Event");
-}
 
-function onClose(event) {
-	console.log("OnClose Event");
-}
-
-function onError(event) {
-	console.log("OnError Event");
-}
-
-function sendMessage() {
-	webSocket.send(textBox.value);
-}
-
-function sendCustomMessage(text) {
-	webSocket.send(text);
-}
-
-function onMessage(event) {
-	notify(event.data);
-}
-
-window.addEventListener("load", init, false);
 
 function notify(text){
 	var notificationC = parseInt($("#notificationCountSpan").text());

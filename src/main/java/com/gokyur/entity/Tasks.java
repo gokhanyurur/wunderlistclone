@@ -68,6 +68,11 @@ public class Tasks {
 	@JsonIgnore
 	private List<SubTasks> subTasks;
 	
+	@LazyCollection(LazyCollectionOption.FALSE)
+	@OneToMany(mappedBy="task", cascade=CascadeType.ALL)
+	@JsonIgnore
+	private List<Notifications> notifications;
+	
 	
 	public Tasks() {
 		
@@ -157,5 +162,14 @@ public class Tasks {
 		this.comments = comments;
 	}
 
+	public List<Notifications> getNotifications() {
+		return notifications;
+	}
+
+	public void setNotifications(List<Notifications> notifications) {
+		this.notifications = notifications;
+	}
+
+	
 	
 }

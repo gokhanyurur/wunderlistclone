@@ -72,6 +72,13 @@ public class NotificationDAOImpl implements NotificationDAO {
 		NotificationTypes tempType = (NotificationTypes) theQuery.uniqueResult();
 		return tempType;
 	}
+
+	public List<Notifications> getAllNotifications() {
+		Session currentSession = sessionFactory.getCurrentSession();
+		@SuppressWarnings("unchecked")
+		List<Notifications> allNotifications =(List<Notifications>) currentSession.createQuery("from Notifications").list();
+		return allNotifications;
+	}
 	
 
 }

@@ -17,4 +17,6 @@ public interface NotificationDAO {
 
 	public NotificationTypes getType(String type);
 
+	public List<Notifications> getAllNotifications();
+
 }

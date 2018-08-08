@@ -9,7 +9,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.TimeZone;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -24,11 +23,13 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.gokyur.entity.Comments;
 import com.gokyur.entity.Lists;
+import com.gokyur.entity.Notifications;
 import com.gokyur.entity.SharedLists;
 import com.gokyur.entity.SubTasks;
 import com.gokyur.entity.Tasks;
 import com.gokyur.entity.Users;
 import com.gokyur.service.ListService;
+import com.gokyur.service.NotificationService;
 //import com.gokyur.service.NotificationService;
 //import com.gokyur.service.RoleService;
 import com.gokyur.service.UserService;
@@ -43,11 +44,8 @@ public class TaskController {
 	@Autowired
 	private ListService listService;
 	
-//	@Autowired
-//    private RoleService roleService;
-//	
-//	@Autowired
-//	private NotificationService notificationService;
+	@Autowired
+	private NotificationService notificationService;
 
 	@RequestMapping(value = "/searchTask", method = RequestMethod.POST)
 	public @ResponseBody  Map<String, Object> searchTask(@RequestParam("searchText") String searchText, HttpServletRequest req, HttpServletResponse resp) {
@@ -226,35 +224,23 @@ public class TaskController {
 		dateString+=":00";
 		Tasks theTask = listService.getTask(tid);
 		
-//		Date tempDate = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss").parse(dateString);
+		//LOCAL
+		Date tempDate = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss").parse(dateString);
+		theTask.setLastdate(tempDate);
 		
-		String DATE_FORMAT = "MM/dd/yyyy HH:mm:ss";
+		//SERVER
+//		Date tempDate = GokyurUtilities.convertLocalDateTimeToServer(dateString);
+//		theTask.setLastdate(tempDate);
 		
-		SimpleDateFormat formatter = new SimpleDateFormat(DATE_FORMAT);
-
-        Date date = formatter.parse(dateString);
-        TimeZone tz = TimeZone.getDefault();
-
-        // From TimeZone Local
-        System.out.println("TimeZone : " + tz.getID() + " - " + tz.getDisplayName());
-        System.out.println("TimeZone : " + tz);
-        System.out.println("Date (Local) : " + formatter.format(date));
-
-        // To TimeZone Server
-        SimpleDateFormat sdfServer = new SimpleDateFormat(DATE_FORMAT);
-        TimeZone tzInServer = TimeZone.getTimeZone("Atlantic/Bermuda");
-        sdfServer.setTimeZone(tzInServer);
-
-        String sDateInServer = sdfServer.format(date); // Convert to String first
-        Date dateInServer = formatter.parse(sDateInServer); // Create a new Date object
-
-        System.out.println("\nTimeZone : " + tzInServer.getID() + " - " + tzInServer.getDisplayName());
-        System.out.println("TimeZone : " + tzInServer);
-        System.out.println("Date (Server) (String) : " + sDateInServer);
-        System.out.println("Date (Server) (Object) : " + formatter.format(dateInServer));
+		Users loginedUser = userService.getUser(req.getUserPrincipal().getName());
+		Notifications tempNotif = new Notifications();
+		tempNotif.setLastdate(tempDate);
+		tempNotif.setNotification(theTask.getTask());
+		tempNotif.setTask(theTask);
+		tempNotif.setType(notificationService.getType("REMINDER"));
+		tempNotif.setUser(loginedUser);
+		notificationService.saveNotification(tempNotif);
 		
-		
-		theTask.setLastdate(dateInServer);
 		listService.addTask(theTask);
 
 	}

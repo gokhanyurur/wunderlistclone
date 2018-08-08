@@ -42,12 +42,12 @@
 		<property value="org.postgresql.Driver" name="driverClassName"/>
 		
 		<!-- Local -->
-<!-- 		<property value="jdbc:postgresql://localhost:5433/wunderlistclone_db" name="url"/> -->
-<!-- 		<property value="postgres" name="username"/> -->
-<!-- 		<property value="gyurur123" name="password"/> -->
+		<property value="jdbc:postgresql://localhost:5433/wunderlistclone_db" name="url"/>
+		<property value="postgres" name="username"/>
+		<property value="gyurur123" name="password"/>
 
 		<!-- Live -->
-		<property value="jdbc:postgresql://wunderlistclone.postgres.database.azure.com:5432/wunderlistclone_db?user=postgres@wunderlistclone&amp;password=Gyurur123&amp;ssl=true" name="url"/>
+<!-- 		<property value="jdbc:postgresql://wunderlistclone.postgres.database.azure.com:5432/wunderlistclone_db?user=postgres@wunderlistclone&amp;password=Gyurur123&amp;ssl=true" name="url"/> -->
 
 	</bean>
 

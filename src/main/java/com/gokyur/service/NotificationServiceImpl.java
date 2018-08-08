@@ -41,4 +41,9 @@ public class NotificationServiceImpl implements NotificationService {
 		return notificationDAO.getType(type);
 	}
 
+	@Transactional
+	public List<Notifications> getAllNotifications() {
+		return notificationDAO.getAllNotifications();
+	}
+
 }

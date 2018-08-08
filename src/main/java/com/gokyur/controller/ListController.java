@@ -34,12 +34,6 @@ public class ListController {
 	@Autowired
 	private ListService listService;
 	
-//	@Autowired
-//    private RoleService roleService;
-//	
-//	@Autowired
-//	private NotificationService notificationService;
-	
 	@RequestMapping(value="/lists**", method = RequestMethod.GET)
 	public String listsPage(Model theModel, HttpServletRequest req) {
 		return "lists";
@@ -68,13 +62,7 @@ public class ListController {
 		List<Lists> userLists = userService.getUser(req.getUserPrincipal().getName()).getLists();			
 		return userLists;
 	}
-	
-	/*@RequestMapping(value="/getListIdFromTask", method=RequestMethod.POST)
-	public @ResponseBody int getListIdFromTask(@RequestParam("taskId") int id, HttpServletRequest req, HttpServletResponse resp) {
-		Tasks tempTask = listService.getTask(id);
-		return tempTask.getList().getId();
-	}*/
-	
+		
 	@RequestMapping(value = "/getSharedLists", method = RequestMethod.GET)
 	public @ResponseBody  List<Lists> getSharedLists(HttpServletRequest req, HttpServletResponse resp) {
 		Users loginedUser = userService.getUser(req.getUserPrincipal().getName());

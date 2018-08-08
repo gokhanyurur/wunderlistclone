@@ -41,9 +41,6 @@ public class UserController {
 	@Autowired
     private RoleService roleService;
 	
-//	@Autowired
-//	private NotificationService notificationService;
-	
 	@RequestMapping("/register")
 	public String registerPage(Model theModel) {
 		Users theUser = new Users();
@@ -83,7 +80,7 @@ public class UserController {
 	        Users dbUser = userService.getUser(theUser.getUsername());
 	        
 	        String userUniqueHash = GokyurUtilities.MD5(String.valueOf(dbUser.getId())) + GokyurUtilities.MD5(dbUser.getUsername());
-			//System.out.println("Users unique hash: "+userUniqueHash);
+
 			TLSEmail.sendEmail(dbUser.getEmail(), userUniqueHash);
 			
 			return "redirect:/login?activationsent";

@@ -38,5 +38,4 @@ public class NotificationTypes {
 		this.type = type;
 	}
     
-    
 }

@@ -17,10 +17,8 @@ import javax.websocket.server.ServerEndpoint;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.socket.server.standard.SpringConfigurator;
 
-import com.gokyur.entity.Lists;
 import com.gokyur.entity.NotificationTypes;
 import com.gokyur.entity.Notifications;
-import com.gokyur.entity.Tasks;
 import com.gokyur.entity.Users;
 import com.gokyur.service.NotificationService;
 import com.gokyur.service.UserService;
@@ -41,7 +39,8 @@ public class WebSocketServer {
 	@OnOpen
 	public void connect(final Session session) {
 		this.session = session;
-				
+	
+		//System.out.println(session.getId());
 		if(!notificationService.isNotificationsConfigured()) {
 			notificationService.saveNotificationType(new NotificationTypes("REMINDER"));
 			notificationService.saveNotificationType(new NotificationTypes("INFO"));
@@ -54,54 +53,48 @@ public class WebSocketServer {
 			public void run() {
 				try {
 					Users user = userService.getUser(session.getUserPrincipal().getName());
-					checkTheTasks(user.getLists());
+					List<Notifications> allNotifs = user.getNotifications();
+					checkTheNotifications(allNotifs);
 				} catch (ParseException e) {
 					//e.printStackTrace();
 				}
 			}
 
-			private void checkTheTasks(List<Lists> lists) throws ParseException {
-				for(Lists thelist: lists) {
-					for(Tasks theTask: thelist.getTasks()) {
-						if(theTask.getLastdate() != null) {
-							if(checkTime(theTask.getLastdate()) ==0) {
-								Users user = userService.getUser(session.getUserPrincipal().getName());
-								NotificationTypes type = notificationService.getType("REMINDER");
-								Notifications notif = new Notifications(user, theTask.getTask(), type);
-								notif.setNotifiedat(GokyurUtilities.getNow());
-								notificationService.saveNotification(notif);
-								message(theTask.getTask());
-							}
-						}
+//			private void checkTheTasks(List<Lists> lists) throws ParseException {
+//				for(Lists thelist: lists) {
+//					for(Tasks theTask: thelist.getTasks()) {
+//						if(theTask.getLastdate() != null) {
+//							if(checkTime(theTask.getLastdate()) ==0) {
+//								Users user = userService.getUser(session.getUserPrincipal().getName());
+//								NotificationTypes type = notificationService.getType("REMINDER");
+//								Notifications notif = new Notifications(user, theTask.getTask(), type);
+//								notif.setNotifiedat(GokyurUtilities.getNow());
+//								notificationService.saveNotification(notif);
+//								message(theTask.getTask());
+//							}
+//						}
+//					}
+//				}
+//			}
+			
+			private void checkTheNotifications(List<Notifications> notifs) throws ParseException {
+				for(Notifications tempNotif: notifs) {
+					if(GokyurUtilities.checkTime(tempNotif.getLastdate()) == 0 && !tempNotif.isNotified()) {
+						
+						//SERVER
+//						tempNotif.setNotifiedat(GokyurUtilities.convertLocalDateTimeToServer(GokyurUtilities.getNow().toString()));
+						
+						//LOCAL
+						tempNotif.setNotifiedat(GokyurUtilities.getNow());
+						
+						tempNotif.setNotified(true);
+						notificationService.saveNotification(tempNotif);
+						message(tempNotif.getTask().getTask());
 					}
 				}
 			}
 
-			private long checkTime(Date lastdate) throws ParseException {
-				
-//				String timeStamp = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss").format(Calendar.getInstance().getTime());
-//		        Date nowDate = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss").parse(timeStamp);
-
-				Date nowDate = GokyurUtilities.getNow();
-				
-				SimpleDateFormat format = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
-				Date lastd = lastdate;
-				
-				DateFormat inputFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.S");
-				Date date = inputFormat.parse(lastd.toString());
-
-				// Format date into output format
-				DateFormat outputFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
-				String outputString = outputFormat.format(date);
-				
-				lastd = format.parse(outputString);
-				
-				long difference = nowDate.getTime() - lastd.getTime(); 
-				
-				//System.out.println("Time difference is "+difference);
-				
-				return difference;
-			}
+			
 			
 		}, 0, 1*(1000*1));
 	}

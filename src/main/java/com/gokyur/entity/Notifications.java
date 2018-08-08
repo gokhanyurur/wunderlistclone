@@ -6,6 +6,8 @@ import javax.persistence.*;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 @Entity
 @Table(name="notifications")
 public class Notifications {
@@ -17,7 +19,12 @@ public class Notifications {
 	
 	@ManyToOne(cascade={CascadeType.DETACH,CascadeType.MERGE,CascadeType.PERSIST,CascadeType.REFRESH})
 	@JoinColumn(nullable=false ,name="userid")
+	@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 	private Users user;
+	
+	@ManyToOne(cascade={CascadeType.DETACH,CascadeType.MERGE,CascadeType.PERSIST,CascadeType.REFRESH})
+	@JoinColumn(nullable=false ,name="taskid")
+	private Tasks task;
 	
 	@Column(nullable=false, name="notification")
 	private String notification;
@@ -28,11 +35,19 @@ public class Notifications {
 	
 	@Temporal(TemporalType.TIMESTAMP)
 	@DateTimeFormat(pattern = "MM/dd/yyyy HH:mm:ss")
-	@Column(nullable=false, name="notifiedat")
+	@Column(nullable=true, name="lastdate")
+	private Date lastdate;
+	
+	@Temporal(TemporalType.TIMESTAMP)
+	@DateTimeFormat(pattern = "MM/dd/yyyy HH:mm:ss")
+	@Column(nullable=true, name="notifiedat")
 	protected Date notifiedat;
 	
 	@Column(name="viewed")
 	private boolean viewed;
+	
+	@Column(name="notified")
+	private boolean notified;
 	
 	public Notifications() {
 		
@@ -90,6 +105,30 @@ public class Notifications {
 
 	public void setViewed(boolean viewed) {
 		this.viewed = viewed;
+	}
+
+	public Tasks getTask() {
+		return task;
+	}
+
+	public void setTask(Tasks task) {
+		this.task = task;
+	}
+
+	public Date getLastdate() {
+		return lastdate;
+	}
+
+	public void setLastdate(Date lastdate) {
+		this.lastdate = lastdate;
+	}
+
+	public boolean isNotified() {
+		return notified;
+	}
+
+	public void setNotified(boolean notified) {
+		this.notified = notified;
 	}
 	
 	

@@ -14,4 +14,6 @@ public interface NotificationService {
 	
 	public void saveNotificationType(NotificationTypes type);
 	public NotificationTypes getType(String string);
+	
+	public List<Notifications> getAllNotifications();
 }
