@@ -204,4 +204,37 @@ public class UserController {
 		SharedLists sharedList = listService.getSharedList(id,userService.getUser(userName).getId());
 		listService.removeSharedList(sharedList);
 	}
+	
+	@RequestMapping(value="/getUserDetails", method=RequestMethod.POST)
+	public @ResponseBody Users getUserDetails(HttpServletRequest req, HttpServletResponse resp) {
+		Users tempUser = userService.getUser(req.getUserPrincipal().getName());
+		return tempUser;
+	}
+	
+	@RequestMapping(value="/saveNewEmail", method=RequestMethod.POST)
+	public @ResponseBody boolean saveNewEmail(@RequestParam("newEmail") String newEmail, @RequestParam("userPass") String userPass, HttpServletRequest req, HttpServletResponse resp) {
+		boolean changed = false;
+		Users loginedUser = userService.getUser(req.getUserPrincipal().getName());
+		if(GokyurUtilities.MD5(userPass).equals(loginedUser.getPassword())) {
+			loginedUser.setEmail(newEmail);
+			userService.saveUser(loginedUser);
+			changed = true;
+		}
+		return changed;
+	}
+	
+	@RequestMapping(value="/saveNewPassword", method=RequestMethod.POST)
+	public @ResponseBody boolean saveNewPassword(@RequestParam("currentPass") String currentPass, @RequestParam("newPass") String newPass, @RequestParam("newPassConf") String newPassConf, HttpServletRequest req, HttpServletResponse resp) {
+		boolean changed = false;
+		Users loginedUser = userService.getUser(req.getUserPrincipal().getName());
+		if(GokyurUtilities.MD5(currentPass).equals(loginedUser.getPassword())) {
+			if(newPass.equals(newPassConf)) {
+				String newPassMD5 = GokyurUtilities.MD5(newPass);			
+				loginedUser.setPassword(newPassMD5);
+				userService.saveUser(loginedUser);
+				changed = true;
+			}
+		}
+		return changed;
+	}
 }

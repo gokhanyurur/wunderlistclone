@@ -44,6 +44,7 @@
 	<script src="${pageContext.request.contextPath}/resources/js/demo.js"></script>
 	<script src="${pageContext.request.contextPath}/resources/js/listControl.js"></script>
 	<script src="${pageContext.request.contextPath}/resources/js/notifications.js"></script>
+	<script src="${pageContext.request.contextPath}/resources/js/userDetails.js"></script>
 
 </head>
 <body>
@@ -123,12 +124,12 @@
 <!-- 										</a> -->
 <!-- 									</li> -->
 									<li>
-										<a href="#edit">
+										<a href="#" data-toggle='modal' data-target='#userProfileModal'>
 											<span class="link-collapse">Edit Profile</span>
 										</a>
 									</li>
 									<li>
-										<a href="#settings">
+										<a href="#" data-toggle='modal' data-target='#aboutUsModal'>
 											<span class="link-collapse">About Us</span>
 										</a>
 									</li>
@@ -423,6 +424,125 @@
 	      </div>
 	    </div>
 	  </div>
+	</div>
+	<div class="modal fade" id="userProfileModal" tabindex="-1" role="dialog" aria-hidden="true">
+		<div class="modal-dialog" role="document">
+		    <div class="modal-content">
+		    	<div class="modal-header">
+			        <div class="col-md-12">
+			        	<h5 style="font-size: 15px; font-weight: bold; text-align: center;" class="modal-title" id="exampleModalLabel">Edit your profile</h5>
+			        </div>
+		      	</div>
+		      	<div class="modal-body">
+			      	<table>
+				      	<tr>
+				      		<td style="padding-top: 5px; text-align: right;"><label style="padding-top: 2px; font-size:20px;">Full name </label></td>
+				      		<td style="padding-left: 10px;"><input style="height: 25px;" type="text" class="form-control" id="fullname" placeholder="John Doe"></td>
+				      	</tr>
+						<tr>
+							<td style="padding-top: 5px; text-align: right;"><label style="padding-top: 2px; font-size:20px;">User name </label></td>
+							<td style="padding-left: 10px;"><input style="height: 25px;" type="text" class="form-control" id="username" placeholder="User123"></td>
+						</tr>
+					    <tr>
+					    	<td style="padding-top: 5px; text-align: right;"><label style="padding-top: 2px; font-size:20px;">Email </label></td>
+					    	<td style="padding-left: 10px;">
+					    		<div class="input-group">
+					    			<div class="col-md-9" style="padding-left: 0;">
+					    				<input style="margin-right: 5px; height: 25px;" type="text" class="form-control" id="email" placeholder="example@mail.com" disabled>
+					    			</div>
+					    			<div class="col-md-3" style="padding-left: 0;">
+					    				<input onclick="enableEmailTextBox()" style="padding-top: 0; padding-bottom: 0; height: 25px;" id="changeEmailBtn" type="button" class="btn btn-danger" value="Change"/>
+					    			</div>
+					    		</div>
+					    	</td>
+					    </tr>
+					    <tr id="changeEmailRow">
+					    	<td style="padding-top: 5px; text-align: right;"><label style="padding-top: 2px; font-size:20px;">Password </label></td>
+					    	<td style="padding-left: 10px;">
+					    		<div class="input-group">
+					    			<div class="col-md-9" style="padding-left: 0;">
+					    				<input style="margin-right: 5px; height: 25px;" type="password" class="form-control" id="passwordToChangeEmail" placeholder="********" required>
+			      					</div>
+			      					<div class="col-md-3" style="padding-left: 0;">
+					    			</div>
+					    		</div>
+					    	</td>
+					    </tr>
+					    <tr id="changeEmailBtnsRow">
+					    	<td></td>
+					    	<td>
+						    	<div class="col-md-9" style="padding-left: 10px;">
+						    		<input onclick="cancelChangeEmail()" style="padding-top: 0; padding-bottom: 0; height: 25px;" type="button" class="btn btn-default" value="Cancel"/>
+						    		<input onclick="saveChangeEmail()"  style="padding-top: 0; padding-bottom: 0; height: 25px;" type="button" class="btn btn-success" value="Save"/>
+						    	</div>
+					    	</td>
+					    </tr>
+					    <tr>
+					    	<td style="padding-top: 5px; text-align: right;"><label style="padding-top: 2px; font-size:20px;">Password </label></td>
+					    	<td style="padding-left: 10px;">
+					    		<div class="input-group">
+					    			<div class="col-md-9" style="padding-left: 0;">
+					    				<input style="margin-right: 5px; height: 25px;" type="password" class="form-control" id="password" placeholder="Current Password" disabled>
+			      					</div>
+			      					<div class="col-md-3" style="padding-left: 0;">
+			      						<input onclick="enablePasswordTextbox()" style="padding-top: 0; padding-bottom: 0; height: 25px;" type="button" class="btn btn-danger" id="changePasswordBtn" value="Change"/>
+					    			</div>
+					    		</div>
+					    	</td>
+					    </tr>
+					    <tr id="newPasswordRow">
+					    	<td></td>
+					    	<td>
+					    		<div class="col-md-9" style="padding-left: 10px;">
+					    			<input style="margin-right: 5px; height: 25px;" type="password" class="form-control" id="newpassword" placeholder="New Password">
+			      				</div>
+					    	</td>
+					    </tr>	
+					    <tr id="newPasswordAgainRow">
+					    	<td></td>
+					    	<td>
+					    		<div class="col-md-9" style="padding-left: 10px;">
+					    			<input style="margin-right: 5px; height: 25px;" type="password" class="form-control" id="newpasswordagain" placeholder="New Password Again">
+			      				</div>
+					    	</td>
+					    </tr>
+					    <tr id="changePasswordBtnsRow">
+							<td></td>
+							<td>
+								<div class="col-md-9" style="padding-left: 10px;">
+						    		<input onclick="cancelChangePassword()" style="padding-top: 0; padding-bottom: 0; height: 25px;" type="button" class="btn btn-default" value="Cancel"/>
+						    		<input onclick="saveChangePassword()" style="padding-top: 0; padding-bottom: 0; height: 25px;" type="button" class="btn btn-success" value="Save"/>
+						    	</div>
+							</td>				    
+					    </tr>		    
+				    </table>  
+			   	</div>
+			    <div class="modal-footer">
+			       	<button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+			    </div>
+			</div>
+		</div>
+	</div>
+	<div class="modal fade" id="aboutUsModal" tabindex="-1" role="dialog" aria-hidden="true">
+		<div class="modal-dialog" role="document">
+		    <div class="modal-content">
+		    	<div class="modal-header">
+			        <div class="col-md-12">
+			        	<h5 style="font-size: 15px; font-weight: bold; text-align: center;" class="modal-title" id="exampleModalLabel">About Us</h5>
+			        </div>
+		      	</div>
+		      	<div class="modal-body" style="text-align: center;">
+			      	<h4>Wunderlistclone</h4>
+			      	<h6>This web application is created only for educational purpose by
+			      		<a href="http://linkedin.com/in/gokhanyurur/">Gokhan Yurur</a>.
+			      		<br>Source code can be find on <a href="http://github.com/gokhanyurur/wunderlistclone">GitHub</a>
+			      	</h6>  
+			   	</div>
+			    <div class="modal-footer">
+			       	<button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+			    </div>
+			</div>
+		</div>
 	</div>
 	<script type="text/javascript">
 		
