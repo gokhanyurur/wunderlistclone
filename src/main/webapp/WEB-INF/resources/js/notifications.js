@@ -69,7 +69,7 @@ function showUnviewedNotifications(){
 												"</a>");
 			});
 			$("#notificationCountSpan").text(result.length);
-			$("#notificationCountDiv").text("You have "+result.length+" new notification");
+			$("#notificationCountDiv").text(youhaveText+" "+result.length+" "+newnotificationText);
 		}
 	});
 }
@@ -101,7 +101,7 @@ function seeAllNotifications(){
 				});
 				$("#notificationsBoxDiv").html("");
 				$("#notificationCountSpan").text("0");
-				$("#notificationCountDiv").text("You have 0 new notification");
+				$("#notificationCountDiv").text(youhaveText+" 0 "+newnofiticationText);
 			}else{
 				$("#seeAllNotifIcon").removeClass("la la-angle-down").addClass("la la-angle-right");
 			}			
@@ -148,7 +148,7 @@ function notify(text){
 	
 	notificationC++;
 	$("#notificationCountSpan").text(notificationC.toString());
-	$("#notificationCountDiv").text("You have "+notificationC.toString()+" new notification");
+	$("#notificationCountDiv").text(youhaveText+" "+notificationC.toString()+" "+newnotificationText);
 	$("#notificationsBoxDiv").append("<a href='#'>"+
 										"<div class='notif-icon notif-danger'> <i class='la la-bell'></i> </div>"+
 											"<div class='notif-content'>"+

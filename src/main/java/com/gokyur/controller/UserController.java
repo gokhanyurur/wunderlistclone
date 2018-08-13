@@ -90,7 +90,12 @@ public class UserController {
 	        String encodedPass = GokyurUtilities.MD5(theUser.getPassword());
 	        theUser.setPassword(encodedPass);
 	        theUser.setRole(userRole);
+	        
+	        //LOCAL
 	        theUser.setCreatedAt(GokyurUtilities.getNow());
+	        
+	        //SERVER
+//	        theUser.setCreatedAt(GokyurUtilities.convertLocalDateTimeToServer(GokyurUtilities.getNow().toString()));
 	        	        
 	        userService.saveUser(theUser);
 	        

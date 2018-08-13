@@ -24,6 +24,7 @@ import com.gokyur.service.ListService;
 //import com.gokyur.service.NotificationService;
 //import com.gokyur.service.RoleService;
 import com.gokyur.service.UserService;
+import com.gokyur.utilities.GokyurUtilities;
 
 @Controller
 public class ListController {
@@ -46,7 +47,12 @@ public class ListController {
 		theList.setOwner(theUser);
 		
 		String timeStamp = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss").format(Calendar.getInstance().getTime());
+		
+		//LOCAL
         theList.setCreatedat(new SimpleDateFormat("yyyy/MM/dd HH:mm:ss").parse(timeStamp));
+        
+        //SERVER
+//        theList.setCreatedat(GokyurUtilities.convertLocalDateTimeToServer(timeStamp));
         
 		listService.createList(theList);
 	}

@@ -1,10 +1,32 @@
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <%@ taglib uri = "http://java.sun.com/jsp/jstl/functions" prefix = "fn" %>
 <%@page session="true"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
+	<script type="text/javascript">
+		var donthavelistmsg = '<spring:message code="donthavelist" text=""/>';
+		var nolistsharedmsg = '<spring:message code="nosharedlist" text=""/>';
+		var removeText = '<spring:message code="remove" text=""/>';
+		var starText = '<spring:message code="star" text=""/>';
+		var editText = '<spring:message code="edit" text=""/>';
+
+		var searchTextLang = '<spring:message code="search" text=""/>';
+		var removeTaskMsg = '<spring:message code="removetaskmessage" text=""/>';
+		var removesTaskMsg = '<spring:message code="removesubtaskmessage" text=""/>';
+		var removeCommentMsg = '<spring:message code="removecommentmessage" text=""/>';
+		var removeListMsg = '<spring:message code="removelistmessage" text=""/>';
+		var notesText = '<spring:message code="notes" text=""/>';
+		var setText = '<spring:message code="set" text=""/>';
+
+		var youhaveText = '<spring:message code="notification.youhave" text=""/>';
+		var newnotificationText = '<spring:message code="notification.newnotification" text=""/>';
+				
+	</script>
+
+
 	<title>Wunderlist Clone</title>
 	<meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, shrink-to-fit=no' name='viewport' />
 	<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/bootstrap.min.css">
@@ -45,6 +67,7 @@
 	<script src="${pageContext.request.contextPath}/resources/js/listControl.js"></script>
 	<script src="${pageContext.request.contextPath}/resources/js/notifications.js"></script>
 	<script src="${pageContext.request.contextPath}/resources/js/userDetails.js"></script>
+	
 
 </head>
 <body>
@@ -63,7 +86,7 @@
 				<div class="container-fluid">
 					<form class="navbar-left navbar-form nav-search mr-md-3" action="">
 						<div class="input-group">
-							<input type="text" placeholder="Search a task..." class="form-control" id="searchTextbox" onkeyup="searchTask()">
+							<input type="text" placeholder="<spring:message code="searchatask" text=""/>" class="form-control" id="searchTextbox" onkeyup="searchTask()">
 							<div class="input-group-append">
 								<span class="input-group-text">
 									<i class="la la-search search-icon"></i>
@@ -79,7 +102,7 @@
 							</a>
 							<ul class="dropdown-menu notif-box" aria-labelledby="navbarDropdown">
 								<li>
-									<div class="dropdown-title" id="notificationCountDiv">You have 0 new notification</div>
+									<div class="dropdown-title" id="notificationCountDiv"><spring:message code="notification.youhave" text=""/> 0 <spring:message code="notification.newnotification" text=""/></div>
 								</li>
 								<li>
 									<div class="notif-center" id="notificationsBoxDiv">
@@ -87,7 +110,7 @@
 									</div>
 								</li>
 								<li>
-									<a class="see-all" href="#" onclick="seeAllNotifications()"> <strong>See all notifications</strong> <i id="seeAllNotifIcon" class="la la-angle-right"></i> </a>
+									<a class="see-all" href="#" onclick="seeAllNotifications()"> <strong><spring:message code="seeallnotifications" text=""/></strong> <i id="seeAllNotifIcon" class="la la-angle-right"></i> </a>
 								</li>
 								<li>
 									<div class="notif-center" id="allNotificationsBoxDiv" style="overflow-y: scroll; max-height: 200px;">
@@ -109,7 +132,7 @@
 						<div class="info">
 							<a class="" data-toggle="collapse" href="#collapseExample" aria-expanded="true">
 								<span>
-									Logined as
+									<spring:message code="loginedas" text=""/>
 									<span class="user-level">${pageContext.request.userPrincipal.name}</span>
 									<span class="caret"></span>
 								</span>
@@ -125,17 +148,17 @@
 <!-- 									</li> -->
 									<li>
 										<a href="#" data-toggle='modal' data-target='#userProfileModal'>
-											<span class="link-collapse">Edit Profile</span>
+											<span class="link-collapse"><spring:message code="editprofile" text=""/></span>
 										</a>
 									</li>
 									<li>
 										<a href="#" data-toggle='modal' data-target='#aboutUsModal'>
-											<span class="link-collapse">About Us</span>
+											<span class="link-collapse"><spring:message code="aboutus" text=""/></span>
 										</a>
 									</li>
 									<li>
 										<a href="login?logout">
-											<span class="link-collapse">Logout</span>
+											<span class="link-collapse"><spring:message code="logout" text=""/></span>
 										</a>
 									</li>
 								</ul>
@@ -151,7 +174,7 @@
 										<i class="la la-list-alt" style="margin-top: 3px; width: 25px;"></i>
 									</span>
 									<span>
-										Lists
+										<spring:message code="lists" text=""/>
 									</span>
 								</a>
 								<div class="clearfix"></div>
@@ -173,7 +196,7 @@
 										<i class="la la-share-square"></i>
 									</span>
 									<span>
-										Shared Lists
+										<spring:message code="sharedlists" text=""/>
 									</span>
 								</a>
 								<div class="clearfix"></div>
@@ -188,7 +211,7 @@
 					</ul>
 					<!-- Create list form go here -->
 					<div class="input-group" style="margin-left: 5px; margin-top: 5px;">
-						<input type="text" class="form-control" id="createListText" placeholder="Create a list">
+						<input type="text" class="form-control" id="createListText" placeholder="<spring:message code="createlist" text=""/>">
 						<span class="input-group-btn">
 							<button onclick="createList()" class="btn btn-danger" style="height: 38px; margin-right: 10px;">
 								<i class="la la-plus"></i>	
@@ -201,7 +224,7 @@
 				<div class="content" id="mainContentDiv">
 					<div class="container-fluid">
 						<div style="padding-left: 15px;">
-							<h4 class="page-title" id="listTitleLabel">No List Selected</h4>
+							<h4 class="page-title" id="listTitleLabel"><spring:message code="nolistselected" text=""/></h4>
 						</div>		
 						<div class="col-md-12">
 							<div  id="allTaskDiv" style="float:left; width:100%">
@@ -209,8 +232,8 @@
 								<div class="card card-tasks" id="tasksOfList">
 									<div class="card-header ">
 										<div style="float:left">
-											<h4 class="card-title">Tasks</h4>
-											<p class="card-category">To Do List</p>
+											<h4 class="card-title"><spring:message code="tasks" text=""/></h4>
+											<p class="card-category"><spring:message code="todolist" text=""/></p>
 										</div>
 										<div style="float:right;" id="refreshButtonDiv">
 											<!-- Refresh Button -->
@@ -229,7 +252,7 @@
 <!-- 																</label> -->
 <!-- 															</div> -->
 														</th>
-														<th>Task</th>
+														<th><spring:message code="task" text=""/></th>
 														<th><!-- Action --></th>
 													</tr>
 												</thead>
@@ -243,7 +266,7 @@
 										<div class="stats">
 											<i class="now-ui-icons loader_refresh spin"></i>
 											<div class="input-group">
-												<input class="form-control" id="addTaskText" placeholder="Add a task to this list">
+												<input class="form-control" id="addTaskText" placeholder="<spring:message code="addatasktothislist" text=""/>">
 												<span class="input-group-btn">
 													<button id="addTaskBtn" class="btn btn-danger" style="height: 38px; margin-right: 10px;">
 														<i class="la la-plus"></i>
@@ -263,7 +286,7 @@
 										</div>
 									</div>
 									<div class="input-group" style="padding: 15px 15px 0 15px;">
-										<input type="text" class="form-control" id="myDateTimePicker"  placeholder="Select the last date"/>
+										<input type="text" class="form-control" id="myDateTimePicker"  placeholder="<spring:message code="selectlastdate" text=""/>"/>
 										<div  id="setTimeTaskDiv">
 										
 										</div>
@@ -281,7 +304,7 @@
 <!-- 																</label> -->
 <!-- 															</div> -->
 														</th>
-														<th>Sub-task</th>
+														<th><spring:message code="subtask" text=""/></th>
 														<th><!-- Action --></th>
 													</tr>
 												</thead>
@@ -290,7 +313,7 @@
 												</tbody>
 											</table>
 											<div class="input-group" style="padding-left: 20px; padding-right: 20px;">
-												<input class="form-control" id="addSubTaskText" placeholder="Add a subtask to this task">
+												<input class="form-control" id="addSubTaskText" placeholder="<spring:message code="addsubtask" text=""/>">
 												<span class="input-group-btn">
 													<button id="addSubTaskBtn" class="btn btn-danger" style="height: 38px; margin-right: 0px;">
 														<i class="la la-plus"></i>
@@ -309,7 +332,7 @@
 										</div>
 										<div class="stats">
 											<div class="input-group">
-												<input class="form-control" id="writeCommentText" placeholder="Write a comment for this task">
+												<input class="form-control" id="writeCommentText" placeholder="<spring:message code="writecomment" text=""/>">
 												<span class="input-group-btn">
 													<button id="writeCommentBtn" class="btn btn-danger" style="height: 38px; margin-right: 0px;">
 														<i class="la la-comment"></i>
@@ -346,12 +369,12 @@
 								</li>
 								<li class="nav-item">
 									<a class="nav-link" href="#">
-										Help
+										<spring:message code="help" text=""/>
 									</a>
 								</li>
 								<li class="nav-item">
 									<a class="nav-link" href="#">
-										Licenses
+										<spring:message code="licenses" text=""/>
 									</a>
 								</li>
 							</ul>
@@ -430,30 +453,30 @@
 		    <div class="modal-content">
 		    	<div class="modal-header">
 			        <div class="col-md-12">
-			        	<h5 style="font-size: 15px; font-weight: bold; text-align: center;" class="modal-title" id="exampleModalLabel">Edit your profile</h5>
+			        	<h5 style="font-size: 15px; font-weight: bold; text-align: center;" class="modal-title" id="exampleModalLabel"><spring:message code="edityourprofile" text=""/></h5>
 			        </div>
 		      	</div>
 		      	<div class="modal-body">
 			      	<table>
 				      	<tr>
-				      		<td style="padding-top: 5px; text-align: right;"><label style="padding-top: 2px; font-size:20px;">Full name </label></td>
-				      		<td style="padding-left: 10px;"><input style="height: 25px;" type="text" class="form-control" id="fullname" onblur="changeFullName()" placeholder="Firstname Lastname"></td>
+				      		<td style="padding-top: 5px; text-align: right;"><label style="padding-top: 2px; font-size:20px;"><spring:message code="fullname" text=""/> </label></td>
+				      		<td style="padding-left: 10px;"><input style="height: 25px;" type="text" class="form-control" id="fullname" onblur="changeFullName()" placeholder="<spring:message code="firstnamelastname" text=""/>"></td>
 				      	</tr>
 					    <tr>
-					    	<td style="padding-top: 5px; text-align: right;"><label style="padding-top: 2px; font-size:20px;">Email </label></td>
+					    	<td style="padding-top: 5px; text-align: right;"><label style="padding-top: 2px; font-size:20px;"><spring:message code="email" text=""/> </label></td>
 					    	<td style="padding-left: 10px;">
 					    		<div class="input-group">
 					    			<div class="col-md-9" style="padding-left: 0;">
-					    				<input style="margin-right: 5px; height: 25px;" type="text" class="form-control" id="email" placeholder="example@mail.com" disabled>
+					    				<input style="margin-right: 5px; height: 25px;" type="text" class="form-control" id="email" placeholder="<spring:message code="exemail" text=""/>" disabled>
 					    			</div>
 					    			<div class="col-md-3" style="padding-left: 0;">
-					    				<input onclick="enableEmailTextBox()" style="padding-top: 0; padding-bottom: 0; height: 25px;" id="changeEmailBtn" type="button" class="btn btn-danger" value="Change"/>
+					    				<input onclick="enableEmailTextBox()" style="padding-top: 0; padding-bottom: 0; height: 25px;" id="changeEmailBtn" type="button" class="btn btn-danger" value="<spring:message code="change" text=""/>"/>
 					    			</div>
 					    		</div>
 					    	</td>
 					    </tr>
 					    <tr id="changeEmailRow">
-					    	<td style="padding-top: 5px; text-align: right;"><label style="padding-top: 2px; font-size:20px;">Password </label></td>
+					    	<td style="padding-top: 5px; text-align: right;"><label style="padding-top: 2px; font-size:20px;"><spring:message code="password" text=""/> </label></td>
 					    	<td style="padding-left: 10px;">
 					    		<div class="input-group">
 					    			<div class="col-md-9" style="padding-left: 0;">
@@ -468,20 +491,20 @@
 					    	<td></td>
 					    	<td>
 						    	<div class="col-md-9" style="padding-left: 10px;">
-						    		<input onclick="cancelChangeEmail()" style="padding-top: 0; padding-bottom: 0; height: 25px;" type="button" class="btn btn-default" value="Cancel"/>
-						    		<input onclick="saveChangeEmail()"  style="padding-top: 0; padding-bottom: 0; height: 25px;" type="button" class="btn btn-success" value="Save"/>
+						    		<input onclick="cancelChangeEmail()" style="padding-top: 0; padding-bottom: 0; height: 25px;" type="button" class="btn btn-default" value="<spring:message code="cancel" text=""/>"/>
+						    		<input onclick="saveChangeEmail()"  style="padding-top: 0; padding-bottom: 0; height: 25px;" type="button" class="btn btn-success" value="<spring:message code="save" text=""/>"/>
 						    	</div>
 					    	</td>
 					    </tr>
 					    <tr>
-					    	<td style="padding-top: 5px; text-align: right;"><label style="padding-top: 2px; font-size:20px;">Password </label></td>
+					    	<td style="padding-top: 5px; text-align: right;"><label style="padding-top: 2px; font-size:20px;"><spring:message code="password" text=""/> </label></td>
 					    	<td style="padding-left: 10px;">
 					    		<div class="input-group">
 					    			<div class="col-md-9" style="padding-left: 0;">
-					    				<input style="margin-right: 5px; height: 25px;" type="password" class="form-control" id="password" placeholder="Current Password" disabled>
+					    				<input style="margin-right: 5px; height: 25px;" type="password" class="form-control" id="password" placeholder="<spring:message code="currpass" text=""/>" disabled>
 			      					</div>
 			      					<div class="col-md-3" style="padding-left: 0;">
-			      						<input onclick="enablePasswordTextbox()" style="padding-top: 0; padding-bottom: 0; height: 25px;" type="button" class="btn btn-danger" id="changePasswordBtn" value="Change"/>
+			      						<input onclick="enablePasswordTextbox()" style="padding-top: 0; padding-bottom: 0; height: 25px;" type="button" class="btn btn-danger" id="changePasswordBtn" value="<spring:message code="change" text=""/>"/>
 					    			</div>
 					    		</div>
 					    	</td>
@@ -490,7 +513,7 @@
 					    	<td></td>
 					    	<td>
 					    		<div class="col-md-9" style="padding-left: 10px;">
-					    			<input style="margin-right: 5px; height: 25px;" type="password" class="form-control" id="newpassword" placeholder="New Password">
+					    			<input style="margin-right: 5px; height: 25px;" type="password" class="form-control" id="newpassword" placeholder="<spring:message code="newpass" text=""/>">
 			      				</div>
 					    	</td>
 					    </tr>	
@@ -498,7 +521,7 @@
 					    	<td></td>
 					    	<td>
 					    		<div class="col-md-9" style="padding-left: 10px;">
-					    			<input style="margin-right: 5px; height: 25px;" type="password" class="form-control" id="newpasswordagain" placeholder="New Password Again">
+					    			<input style="margin-right: 5px; height: 25px;" type="password" class="form-control" id="newpasswordagain" placeholder="<spring:message code="newpassagain" text=""/>">
 			      				</div>
 					    	</td>
 					    </tr>
@@ -506,15 +529,15 @@
 							<td></td>
 							<td>
 								<div class="col-md-9" style="padding-left: 10px;">
-						    		<input onclick="cancelChangePassword()" style="padding-top: 0; padding-bottom: 0; height: 25px;" type="button" class="btn btn-default" value="Cancel"/>
-						    		<input onclick="saveChangePassword()" style="padding-top: 0; padding-bottom: 0; height: 25px;" type="button" class="btn btn-success" value="Save"/>
+						    		<input onclick="cancelChangePassword()" style="padding-top: 0; padding-bottom: 0; height: 25px;" type="button" class="btn btn-default" value="<spring:message code="cancel" text=""/>"/>
+						    		<input onclick="saveChangePassword()" style="padding-top: 0; padding-bottom: 0; height: 25px;" type="button" class="btn btn-success" value="<spring:message code="save" text=""/>"/>
 						    	</div>
 							</td>				    
 					    </tr>		    
 				    </table>  
 			   	</div>
 			    <div class="modal-footer">
-			       	<button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+			       	<button type="button" class="btn btn-danger" data-dismiss="modal"><spring:message code="close" text=""/></button>
 			    </div>
 			</div>
 		</div>
@@ -524,18 +547,18 @@
 		    <div class="modal-content">
 		    	<div class="modal-header">
 			        <div class="col-md-12">
-			        	<h5 style="font-size: 15px; font-weight: bold; text-align: center;" class="modal-title" id="exampleModalLabel">About Us</h5>
+			        	<h5 style="font-size: 15px; font-weight: bold; text-align: center;" class="modal-title" id="exampleModalLabel"><spring:message code="aboutus" text=""/></h5>
 			        </div>
 		      	</div>
 		      	<div class="modal-body" style="text-align: center;">
 			      	<h4>Wunderlistclone</h4>
-			      	<h6>This web application is created only for educational purpose by
+			      	<h6><spring:message code="aboutus.message" text=""/>
 			      		<a href="http://linkedin.com/in/gokhanyurur/">Gokhan Yurur</a>.
-			      		<br>Source code can be find on <a href="http://github.com/gokhanyurur/wunderlistclone">GitHub</a>
+			      		<br><spring:message code="aboutus.message2" text=""/> <a href="http://github.com/gokhanyurur/wunderlistclone">GitHub</a>
 			      	</h6>  
 			   	</div>
 			    <div class="modal-footer">
-			       	<button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+			       	<button type="button" class="btn btn-danger" data-dismiss="modal"><spring:message code="close" text=""/></button>
 			    </div>
 			</div>
 		</div>

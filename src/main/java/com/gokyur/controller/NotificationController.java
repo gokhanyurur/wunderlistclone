@@ -75,9 +75,10 @@ public class NotificationController {
 							notif.setNotified(true);
 							
 							//LOCAL
-//							notif.setNotifiedat(GokyurUtilities.getNow());		
+							notif.setNotifiedat(GokyurUtilities.getNow());		
+							
 							//SERVER
-							notif.setNotifiedat(GokyurUtilities.convertLocalDateTimeToServer(GokyurUtilities.getNow().toString()));
+//							notif.setNotifiedat(GokyurUtilities.convertLocalDateTimeToServer(GokyurUtilities.getNow().toString()));
 							
 							notificationService.saveNotification(notif);
 						}

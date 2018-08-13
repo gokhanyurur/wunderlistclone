@@ -1,3 +1,4 @@
+
 var isSubTaskPgOpen;
 		$(document).ready(function() {
 			getAllLists();
@@ -48,7 +49,7 @@ var isSubTaskPgOpen;
 					}else{
 						$("#listsUL").append("<li>"+
 									"<a href='#'>"+
-										"<span class='link-collapse'>You do not have a list yet.</span>"+
+										"<span class='link-collapse'>"+donthavelistmsg+"</span>"+
 									"</a>"+
 								"</li>");
 					}
@@ -79,7 +80,7 @@ var isSubTaskPgOpen;
 					}else{
 						$("#sharedListsUL").append("<li>"+
 									"<a href='#'>"+
-										"<span class='link-collapse'>There is no list shared with you.</span>"+
+										"<span class='link-collapse'>"+nolistsharedmsg+"</span>"+
 									"</a>"+
 								"</li>");
 					}
@@ -162,11 +163,11 @@ var isSubTaskPgOpen;
 	 		        							"<td>"+result[index].task+"</td>"+
 	 		        							"<td class='td-actions text-right'>"+
 	 		        								"<div class='form-button-action'>"+
-	 		        									"<button onclick='removeTask(\""+result[index].id+"\",\""+data.listId+"\",\""+data.listName+"\")' type='button' data-toggle='tooltip' title='Remove' class='btn btn-link btn-simple-danger'>"+
+	 		        									"<button onclick='removeTask(\""+result[index].id+"\",\""+data.listId+"\",\""+data.listName+"\")' type='button' data-toggle='tooltip' title='"+removeText+"' class='btn btn-link btn-simple-danger'>"+
 	 		        										"<i class='la la-times'></i>"+
 	 		        									"</button>"+
-	 		        									(result[index].stared ? '<button type="button" data-toggle="tooltip" title="Star" class="btn btn-link btn-simple-warning" onclick="starTheTask(\''+result[index].id+'\',\''+data.listId+'\',\''+data.listName+'\')"><i class="la la-star"></i></button>' : '<button type="button" data-toggle="tooltip" title="Star" class="btn btn-link btn-simple-warning" onclick="starTheTask(\''+result[index].id+'\',\''+data.listId+'\',\''+data.listName+'\')"><i class="la la-star-o"></i></button>')+
-	 		        									"<button onclick='showTaskDetails(\""+data.listId+"\",\""+ result[index].id +"\",\""+data.listName+"\")' type='button' data-toggle='tooltip' title='Edit' class='btn btn-link btn-simple-primary'>"+
+	 		        									(result[index].stared ? '<button type="button" data-toggle="tooltip" title="'+starText+'" class="btn btn-link btn-simple-warning" onclick="starTheTask(\''+result[index].id+'\',\''+data.listId+'\',\''+data.listName+'\')"><i class="la la-star"></i></button>' : '<button type="button" data-toggle="tooltip" title="'+starText+'" class="btn btn-link btn-simple-warning" onclick="starTheTask(\''+result[index].id+'\',\''+data.listId+'\',\''+data.listName+'\')"><i class="la la-star-o"></i></button>')+
+	 		        									"<button onclick='showTaskDetails(\""+data.listId+"\",\""+ result[index].id +"\",\""+data.listName+"\")' type='button' data-toggle='tooltip' title='"+editText+"' class='btn btn-link btn-simple-primary'>"+
 	 		        										"<i class='la la-edit'></i>"+
 	 		        									"</button>"+
 	 		        								"</div>"+
@@ -255,11 +256,11 @@ var isSubTaskPgOpen;
 	 		        							"<td>"+result[index].task+"</td>"+
 	 		        							"<td class='td-actions text-right'>"+
 	 		        								"<div class='form-button-action'>"+
-	 		        									"<button onclick='removeTask(\""+result[index].id+"\",\""+data.listId+"\",\""+data.listName+"\")' type='button' data-toggle='tooltip' title='Remove' class='btn btn-link btn-simple-danger'>"+
+	 		        									"<button onclick='removeTask(\""+result[index].id+"\",\""+data.listId+"\",\""+data.listName+"\")' type='button' data-toggle='tooltip' title='"+removeText+"' class='btn btn-link btn-simple-danger'>"+
 	 		        										"<i class='la la-times'></i>"+
 	 		        									"</button>"+
-	 		        									(result[index].stared ? '<button type="button" data-toggle="tooltip" title="Star" class="btn btn-link btn-simple-warning" onclick="starTheTask(\''+result[index].id+'\',\''+data.listId+'\',\''+data.listName+'\')"><i class="la la-star"></i></button>' : '<button type="button" data-toggle="tooltip" title="Star" class="btn btn-link btn-simple-warning" onclick="starTheTask(\''+result[index].id+'\',\''+data.listId+'\',\''+data.listName+'\')"><i class="la la-star-o"></i></button>')+
-	 		        									"<button onclick='showTaskDetails(\""+data.listId+"\",\""+ result[index].id +"\",\""+data.listName+"\")' type='button' data-toggle='tooltip' title='Edit' class='btn btn-link btn-simple-primary'>"+
+	 		        									(result[index].stared ? '<button type="button" data-toggle="tooltip" title="'+starText+'" class="btn btn-link btn-simple-warning" onclick="starTheTask(\''+result[index].id+'\',\''+data.listId+'\',\''+data.listName+'\')"><i class="la la-star"></i></button>' : '<button type="button" data-toggle="tooltip" title="'+starText+'" class="btn btn-link btn-simple-warning" onclick="starTheTask(\''+result[index].id+'\',\''+data.listId+'\',\''+data.listName+'\')"><i class="la la-star-o"></i></button>')+
+	 		        									"<button onclick='showTaskDetails(\""+data.listId+"\",\""+ result[index].id +"\",\""+data.listName+"\")' type='button' data-toggle='tooltip' title='"+editText+"' class='btn btn-link btn-simple-primary'>"+
 	 		        										"<i class='la la-edit'></i>"+
 	 		        									"</button>"+
 	 		        								"</div>"+
@@ -338,7 +339,7 @@ var isSubTaskPgOpen;
 	 			$('#addSubTaskBtn').attr('onClick', 'addSubTaskToTask('+data.taskId+');');
 	 			$('#writeCommentBtn').attr('onClick', 'addCommentToTask('+data.taskId+');');
 	 			$('#setTimeTaskDiv').html("");
-	 			$('#setTimeTaskDiv').append("<input type='button' class='btn btn-danger' value='Set' onclick='setTimeForTask("+data.taskId+")'/>")
+	 			$('#setTimeTaskDiv').append("<input type='button' class='btn btn-danger' value='"+setText+"' onclick='setTimeForTask("+data.taskId+")'/>")
 				$.ajax({
 					url:"getTaskDetails",
 					type: "POST",
@@ -359,7 +360,7 @@ var isSubTaskPgOpen;
 						getCommentsFromTaskId(result.id);
 						
 						$("#taskNotesDiv").html("");
-						$("#taskNotesDiv").append("<label for='notes'>Notes</label>"+
+						$("#taskNotesDiv").append("<label for='notes'>"+notesText+"</label>"+
 												"<textarea class='form-control' id='notes' rows='3' onblur='saveTaskNotes(\""+data.taskId+"\")'></textarea>");
 						
 						$("#notes").val(result.notes);
@@ -564,7 +565,7 @@ var isSubTaskPgOpen;
 				taskId: task,
 				subTaskId: subTask
 			}
-			if(confirm('Are you sure you want to remove this subtask?')){
+			if(confirm(removesTaskMsg)){
 				$.ajax({
 					url:"removeSubTask",
 					type: "POST",
@@ -587,7 +588,7 @@ var isSubTaskPgOpen;
 				listName: name
 			}
 			
-			if (confirm('Are you sure you want to remove this task?')) {
+			if (confirm(removeTaskMsg)) {
 				$.ajax({
 					url:"removeTask",
 					type: "POST",
@@ -697,7 +698,7 @@ var isSubTaskPgOpen;
 					commentId: cid
 			}
 			
-			if(confirm('Are you sure you want to remove this comment?')){
+			if(confirm(removeCommentMsg)){
 				$.ajax({
 					url:"removeComment",
 					type: "POST",
@@ -715,7 +716,7 @@ var isSubTaskPgOpen;
 					listName: name
 			}
 			
-			if(confirm('Are you sure you want to remove this list: '+data.listName)){
+			if(confirm(removeListMsg+' '+data.listName)){
 				$.ajax({
 					url:"removeList",
 					type: "POST",
@@ -870,7 +871,7 @@ var isSubTaskPgOpen;
 			if(searchTextLength > 0){
 				$("#mainContentDiv").hide();
 				$("#searchContentDiv").show();
-				$("#searchTitleLabel").text("Search: "+searchTextVal);
+				$("#searchTitleLabel").text(searchTextLang+": "+searchTextVal);
 				
 				data = {
 						searchText: searchTextVal
@@ -921,10 +922,10 @@ var isSubTaskPgOpen;
 									        							"<td>"+tempTaskList[l_index].task+"</td>"+
 									        							"<td class='td-actions text-right'>"+
 									        								"<div class='form-button-action'>"+
-									        									"<button onclick='removeTask(\""+tempTaskList[l_index].id+"\",\""+listId+"\",\""+result.Names[n_index]+"\")' type='button' data-toggle='tooltip' title='Remove' class='btn btn-link btn-simple-danger'>"+
+									        									"<button onclick='removeTask(\""+tempTaskList[l_index].id+"\",\""+listId+"\",\""+result.Names[n_index]+"\")' type='button' data-toggle='tooltip' title='"+removeText+"' class='btn btn-link btn-simple-danger'>"+
 									        										"<i class='la la-times'></i>"+
 									        									"</button>"+
-									        									(tempTaskList[l_index].stared ? '<button type="button" data-toggle="tooltip" title="Star" class="btn btn-link btn-simple-warning" onclick="starTheTask(\''+tempTaskList[l_index].id+'\',\''+listId+'\',\''+result.Names[n_index]+'\')"><i class="la la-star"></i></button>' : '<button type="button" data-toggle="tooltip" title="Star" class="btn btn-link btn-simple-warning" onclick="starTheTask(\''+tempTaskList[l_index].id+'\',\''+listId+'\',\''+result.Names[n_index]+'\')"><i class="la la-star-o"></i></button>')+
+									        									(tempTaskList[l_index].stared ? '<button type="button" data-toggle="tooltip" title="'+starText+'" class="btn btn-link btn-simple-warning" onclick="starTheTask(\''+tempTaskList[l_index].id+'\',\''+listId+'\',\''+result.Names[n_index]+'\')"><i class="la la-star"></i></button>' : '<button type="button" data-toggle="tooltip" title="'+starText+'" class="btn btn-link btn-simple-warning" onclick="starTheTask(\''+tempTaskList[l_index].id+'\',\''+listId+'\',\''+result.Names[n_index]+'\')"><i class="la la-star-o"></i></button>')+
 //									        									"<button onclick='showTaskDetails(\""+listId+"\",\""+ tempTaskList[l_index].id +"\",\""+result.Names[n_index]+"\")' type='button' data-toggle='tooltip' title='Edit' class='btn btn-link btn-simple-primary'>"+
 //									        										"<i class='la la-edit'></i>"+
 //									        									"</button>"+

@@ -105,13 +105,6 @@ public class TaskController {
 	@RequestMapping(value = "/getTasksList", method = RequestMethod.GET)
 	public @ResponseBody  List<Tasks> getTasksList(@RequestParam("listId") int id, HttpServletRequest req, HttpServletResponse resp) {
 		List<Tasks> allTasks = listService.getList(id).getTasks();
-		/*List<Tasks> tempTasks = new ArrayList<Tasks>();
-		for(Tasks theTask: allTasks) {
-			if(!theTask.isCompleted()) {
-				tempTasks.add(theTask);
-			}
-		}
-		return tempTasks;*/
 		return allTasks;
 	}
 	
@@ -124,7 +117,12 @@ public class TaskController {
 		theTask.setList(theList);
 		
 		String timeStamp = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss").format(Calendar.getInstance().getTime());
+		
+		//LOCAL
         theTask.setCreatedat(new SimpleDateFormat("yyyy/MM/dd HH:mm:ss").parse(timeStamp));
+        
+        //SERVER
+//        theTask.setCreatedat(GokyurUtilities.convertLocalDateTimeToServer(timeStamp));
 		
 		listService.addTask(theTask);
 	}
@@ -226,11 +224,11 @@ public class TaskController {
 		
 		//LOCAL
 		Date tempDate = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss").parse(dateString);
-		theTask.setLastdate(tempDate);
 		
 		//SERVER
 //		Date tempDate = GokyurUtilities.convertLocalDateTimeToServer(dateString);
-//		theTask.setLastdate(tempDate);
+		
+		theTask.setLastdate(tempDate);
 		
 		Users loginedUser = userService.getUser(req.getUserPrincipal().getName());
 		Notifications tempNotif = new Notifications();
@@ -278,7 +276,11 @@ public class TaskController {
 		comment.setTask(theTask);
 		comment.setWrittenBy(theUser.getUsername());
 		
+		//LOCAL
 		comment.setCommentedat(GokyurUtilities.getNow());
+		
+		//SERVER
+//		comment.setCommentedat(GokyurUtilities.convertLocalDateTimeToServer(GokyurUtilities.getNow().toString()));
 		
 		listService.addComment(comment);
 		
