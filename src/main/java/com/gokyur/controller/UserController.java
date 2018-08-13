@@ -1,5 +1,6 @@
 package com.gokyur.controller;
 
+import java.security.SecureRandom;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -41,10 +42,26 @@ public class UserController {
 	@Autowired
     private RoleService roleService;
 	
+	static final String AB = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+	static SecureRandom rnd = new SecureRandom();
+
+	String randomString( int len ){
+	   StringBuilder sb = new StringBuilder( len );
+	   for( int i = 0; i < len; i++ ) 
+	      sb.append( AB.charAt( rnd.nextInt(AB.length()) ) );
+	   return sb.toString();
+	}
+	
 	@RequestMapping("/register")
-	public String registerPage(Model theModel) {
+	public String registerPage(Model theModel,
+			@RequestParam(value = "error", required = false) String error) {
 		Users theUser = new Users();
 		theModel.addAttribute("user",theUser);
+		
+		if(error != null) {
+			theModel.addAttribute("error", "Register failed! Please try again.");
+		}
+		
 		return "register";
 	}
 	
@@ -80,14 +97,55 @@ public class UserController {
 	        Users dbUser = userService.getUser(theUser.getUsername());
 	        
 	        String userUniqueHash = GokyurUtilities.MD5(String.valueOf(dbUser.getId())) + GokyurUtilities.MD5(dbUser.getUsername());
+	        
+	        String activationLink = "http://wunderlistclone.azurewebsites.net/activation/"+userUniqueHash;
+	        String emailContent = "Welcome to Wunderlistclone! This application is made only for educational purpose. Here is your activation link: "+activationLink;
 
-			TLSEmail.sendEmail(dbUser.getEmail(), userUniqueHash);
+			TLSEmail.sendEmail(dbUser.getEmail(), "Activate your account!", emailContent);
 			
 			return "redirect:/login?activationsent";
 		}
 		
-		return "redirect:/login";
+		return "redirect:/register?error";
 		
+	}
+	
+	@RequestMapping(value="/resetpassword")
+	public String resetpassword(
+			@RequestParam(value = "error", required = false) String error,
+			@RequestParam(value = "sent", required = false) String sent,
+			Model theModel) {
+		theModel.addAttribute("user", new Users());
+		
+		if(error != null) {
+			theModel.addAttribute("error", "There is no such an email.");
+		}
+		
+		if(sent != null) {
+			theModel.addAttribute("msg", "Your new password is sent to your email.");
+		}
+		
+		return "resetpassword";
+	}
+	
+	@RequestMapping(value="/resetUserPassword")
+	public String resetUserPassword(
+			@ModelAttribute("user") Users theUser,
+			Model theModel) {
+		
+		Users tempUser = userService.getUserByEmail(theUser.getEmail());
+		if(tempUser != null) {
+			String newPassword = randomString(8);
+			tempUser.setPassword(GokyurUtilities.MD5(newPassword));
+			userService.saveUser(tempUser);
+			
+	        String emailContent = "You have requested to reset your password. Your new password is: "+newPassword;
+			TLSEmail.sendEmail(tempUser.getEmail(), "Reset your password!", emailContent);
+			
+			return "redirect:/resetpassword?sent";
+		}else {
+			return "redirect:/resetpassword?error";
+		}
 	}
 	
 	@RequestMapping(value = "/login", method = RequestMethod.GET)
@@ -237,4 +295,32 @@ public class UserController {
 		}
 		return changed;
 	}
+	
+	@RequestMapping(value="/changeFullname", method=RequestMethod.POST)
+	public @ResponseBody boolean changeFullname(@RequestParam("newfullname") String fullname, HttpServletRequest req, HttpServletResponse resp) {
+		boolean changed = false;
+		Users loginedUser = userService.getUser(req.getUserPrincipal().getName());
+		try {
+			loginedUser.setFullname(fullname);
+			userService.saveUser(loginedUser);
+			changed = true;
+		}catch(Exception e) {
+			changed = false;
+		}
+		return changed;
+	}
+	
+//	@RequestMapping(value="/changeUsername", method=RequestMethod.POST)
+//	public @ResponseBody boolean changeUsername(@RequestParam("newusername") String username, HttpServletRequest req, HttpServletResponse resp) {
+//		boolean changed = false;
+//		Users loginedUser = userService.getUser(req.getUserPrincipal().getName());
+//		try {
+//			loginedUser.setUsername(username);
+//			userService.saveUser(loginedUser);
+//			changed = true;
+//		}catch(Exception e) {
+//			changed = false;
+//		}
+//		return changed;
+//	}
 }

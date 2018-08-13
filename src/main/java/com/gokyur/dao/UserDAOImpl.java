@@ -65,6 +65,14 @@ public class UserDAOImpl implements UserDAO{
 		return allSharedLists;
 	}
 
+	public Users getUserByEmail(String email) {
+		Session currentSession = sessionFactory.getCurrentSession();
+		Query theQuery=currentSession.createQuery("FROM Users WHERE email=:uEmail");
+		theQuery.setParameter("uEmail", email);
+		Users tempUser = (Users) theQuery.uniqueResult();
+		return tempUser;
+	}
+
 	
 
 	

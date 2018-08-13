@@ -47,4 +47,9 @@ public class UserServiceImpl implements UserService{
 		return userDAO.getAllSharedLists();
 	}
 
+	@Transactional
+	public Users getUserByEmail(String email) {
+		return userDAO.getUserByEmail(email);
+	}
+
 }

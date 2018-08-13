@@ -10,10 +10,13 @@ public interface UserDAO {
 
 	public Users getUser(int id);
 	public Users getUser(String username);
+	public Users getUserByEmail(String email);
 
 	public List<Users> getAllUsers();
 	
 	public List<SharedLists> getSharedLists(int listId);
 	public List<SharedLists> getAllSharedLists();
+
+
 	
 }

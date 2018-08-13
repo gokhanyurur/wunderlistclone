@@ -11,11 +11,14 @@ public interface UserService{
 	
 	public Users getUser(int id);
 	public Users getUser(String username);
+	public Users getUserByEmail(String email);
 	
 	public List<Users> getAllUsers();
 	
 	public List<SharedLists> getAllSharedLists();
 	public List<SharedLists> getSharedLists(int listId);
+
+
 
 
 

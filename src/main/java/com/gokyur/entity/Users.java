@@ -34,7 +34,7 @@ public class Users {
 	@Transient
 	private String passwordConf;
 		
-	@Column(length=30, nullable=false, name="email")
+	@Column(length=30, nullable=false, unique=true, name="email")
 	private String email;
 	
 	@Transient

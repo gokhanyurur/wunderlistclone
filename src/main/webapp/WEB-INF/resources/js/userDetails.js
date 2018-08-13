@@ -112,3 +112,41 @@ function saveChangePassword(){
 		}
 	});
 }
+
+function changeFullName(){
+	data = {
+			newfullname: $("#fullname").val()
+	}
+	$.ajax({
+		url:"changeFullname",
+		type: "POST",
+		data: data,
+		async: false,
+		success: function(result){
+			if(result){
+				//alert("Your full name has been changed.");
+			}else{
+				alert("There is an error while changing your full name. Please try again!");
+			}
+		}
+	});
+}
+
+//function changeUsername(){
+//	data = {
+//			newusername: $("#username").val()
+//	}
+//	$.ajax({
+//		url:"changeUsername",
+//		type: "POST",
+//		data: data,
+//		async: false,
+//		success: function(result){
+//			if(result){
+//				//alert("Your username has been changed.");
+//			}else{
+//				alert("Username already exist. Please try again!");
+//			}
+//		}
+//	});
+//}

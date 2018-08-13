@@ -14,7 +14,7 @@ public class TLSEmail {
 	   Use Authentication: Yes
 	   Port for TLS/STARTTLS: 587
 	 */
-	public static void sendEmail(String toEmail, String userHash) {
+	public static void sendEmail(String toEmail, String title, String content) {
 		final String fromEmail = "wunderlistclone@gmail.com"; //requires valid gmail id
 		final String password = "Gkhn.159753"; // correct password for gmail id
 		
@@ -33,10 +33,8 @@ public class TLSEmail {
 			}
 		};
 		Session session = Session.getInstance(props, auth);
-		
-		String activationLink = "http://wunderlistclone.azurewebsites.net/activation/"+userHash;
-		
-		EmailUtil.sendEmail(session, toEmail,"Activate Your Account", "Welcome to Wunderlistclone! This application is made only for educational purpose. Here is your activation link: "+activationLink);
+				
+		EmailUtil.sendEmail(session, toEmail, title, content);
 		
 	}
 

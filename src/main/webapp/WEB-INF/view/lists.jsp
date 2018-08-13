@@ -437,12 +437,8 @@
 			      	<table>
 				      	<tr>
 				      		<td style="padding-top: 5px; text-align: right;"><label style="padding-top: 2px; font-size:20px;">Full name </label></td>
-				      		<td style="padding-left: 10px;"><input style="height: 25px;" type="text" class="form-control" id="fullname" placeholder="John Doe"></td>
+				      		<td style="padding-left: 10px;"><input style="height: 25px;" type="text" class="form-control" id="fullname" onblur="changeFullName()" placeholder="Firstname Lastname"></td>
 				      	</tr>
-						<tr>
-							<td style="padding-top: 5px; text-align: right;"><label style="padding-top: 2px; font-size:20px;">User name </label></td>
-							<td style="padding-left: 10px;"><input style="height: 25px;" type="text" class="form-control" id="username" placeholder="User123"></td>
-						</tr>
 					    <tr>
 					    	<td style="padding-top: 5px; text-align: right;"><label style="padding-top: 2px; font-size:20px;">Email </label></td>
 					    	<td style="padding-left: 10px;">
