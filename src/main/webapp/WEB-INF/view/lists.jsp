@@ -23,6 +23,16 @@
 
 		var youhaveText = '<spring:message code="notification.youhave" text=""/>';
 		var newnotificationText = '<spring:message code="notification.newnotification" text=""/>';
+
+		var youarenotsharingMsg = '<spring:message code="youarenotsharing" text=""/>';
+		var writeTaskMsg = 	'<spring:message code="alert.writetaskname" text=""/>';
+		var writelistMsg = '<spring:message code="alert.writelistname" text=""/>';
+		var writeSubtaskMsg = '<spring:message code="alert.writesubtaskname" text=""/>';
+		var writeCommentMsg = '<spring:message code="alert.writecomment" text=""/>';
+
+		var afewsecondsagoText = '<spring:message code="afewsecondsago" text=""/>';
+		var reminderText = '<spring:message code="reminder" text=""/>';
+		var ownerofthislistText = '<spring:message code="ownerofthislist" text=""/>';
 				
 	</script>
 
@@ -413,28 +423,28 @@
 	    <div class="modal-content">
 	      <div class="modal-header">
 	        <div class="col-md-12">
-	        	<h5 style="font-size: 15px; font-weight: bold; text-align: center;" class="modal-title" id="exampleModalLabel">Edit the List</h5>
+	        	<h5 style="font-size: 15px; font-weight: bold; text-align: center;" class="modal-title" id="exampleModalLabel"><spring:message code="editthelist" text=""/></h5>
 	        </div>
 	      </div>
 	      <div class="modal-body">
 	      	<div id="editListNameDiv">
 	      		
 	      	</div>
-	      	<h6 style="padding: 10px 0 0 3px;">Share</h6>
+	      	<h6 style="padding: 10px 0 0 3px;"><spring:message code="share" text=""/></h6>
 	      	<div class="input-group">
-	      		<select id="userSelect" class="shareListSelect" name="states[]" multiple="multiple" style="width: 86%;">
+	      		<select id="userSelect" class="shareListSelect" name="states[]" multiple="multiple" style="width: 82%;">
 	      			<!-- List of all users for sharing a list -->
 				</select>
- 	      		<button id="shareListBtn" class="btn btn-danger" style="padding: 4px;">Share</button>
+ 	      		<button id="shareListBtn" class="btn btn-danger" style="padding: 4px;"><spring:message code="share" text=""/></button>
 	      	</div>
 	      </div>
 	      <div class="modal-body" style="padding-top: 0;">
-	      	<h6 style="padding: 0 0 0 3px;">Shared With</h6>
+	      	<h6 style="padding: 0 0 0 3px;"><spring:message code="sharedwith" text=""/></h6>
 	      	<table class="table table-head-bg-primary mt-4">
 				<thead>
 					<tr>
-						<th scope="col">Username</th>
-						<th scope="col" style="text-align: right;">Action</th>
+						<th scope="col"><spring:message code="username" text=""/></th>
+						<th scope="col" style="text-align: right;"><spring:message code="action" text=""/></th>
 					</tr>
 				</thead>
 				<tbody id="sharedListUserTable">
@@ -443,7 +453,7 @@
 			</table>
 	      </div>
 	      <div class="modal-footer">
-	        <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+	        <button type="button" class="btn btn-danger" data-dismiss="modal"><spring:message code="close" text=""/></button>
 	      </div>
 	    </div>
 	  </div>

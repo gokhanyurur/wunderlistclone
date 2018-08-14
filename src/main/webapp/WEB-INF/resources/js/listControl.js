@@ -145,7 +145,7 @@ var isSubTaskPgOpen;
 											  "</button>");
 							  }else{
 								  var owner = getOwnerOfTheList(data.listId);
-								  tempListTitle += " (Owner of this list: "+owner+")";						  
+								  tempListTitle += " ("+ownerofthislistText+": "+owner+")";						  
 							  }
 
 							  $("#listTitleLabel").text(tempListTitle);  
@@ -291,7 +291,7 @@ var isSubTaskPgOpen;
 					}
 				});
 			}else{
-				alert('You have to write a task.');
+				alert(writeTaskMsg);
 			}
 		}
 		
@@ -310,7 +310,7 @@ var isSubTaskPgOpen;
 					}
 				});
 			}else{
-				alert('You have to write the name of the list.');
+				alert(writelistMsg);
 			}
 			
 		}
@@ -429,7 +429,7 @@ var isSubTaskPgOpen;
 					}	
 				});
 			}else{
-				alert('You have to write a task.');
+				alert(writeSubtaskMsg);
 			}
 		}
 		
@@ -454,7 +454,7 @@ var isSubTaskPgOpen;
 					}	
 				});
 			}else{
-				alert('You have to write a comment.');
+				alert(writeCommentMsg);
 			}
 		}
 		
@@ -486,7 +486,7 @@ var isSubTaskPgOpen;
 					        							"<td>"+result[index].subTask+"</td>"+
 					        							"<td class='td-actions text-right'>"+
 					        								"<div class='form-button-action'>"+
-					        									"<button type='button' data-toggle='tooltip' title='Remove' onclick='removeSubTask(\""+data.taskId+"\",\""+result[index].id+"\")' class='btn btn-link btn-simple-danger'>"+
+					        									"<button type='button' data-toggle='tooltip' title='"+removeText+"' onclick='removeSubTask(\""+data.taskId+"\",\""+result[index].id+"\")' class='btn btn-link btn-simple-danger'>"+
 																"<i class='la la-times'></i>"+
 															"</button>"+
 															"</div>"+
@@ -777,13 +777,13 @@ var isSubTaskPgOpen;
 							$("#sharedListUserTable").append("<tr>"+
 																"<td>"+result[index].username+"</td>"+
 																	"<td align='right'>"+
-																		"<button onclick='removeSharedUser(\""+data.listId+"\",\""+data.listName+"\",\""+result[index].username+"\")' class='btn btn-danger' style='padding: 4px;'>Remove</button>"+
+																		"<button onclick='removeSharedUser(\""+data.listId+"\",\""+data.listName+"\",\""+result[index].username+"\")' class='btn btn-danger' style='padding: 4px;'>"+removeText+"</button>"+
 																	"</td>"+
 															"</tr>");
 						});
 					}else{
 						$("#sharedListUserTable").append("<tr>"+
-															"<td>You are not sharing this list with anyone</td>"+
+															"<td>"+youarenotsharingMsg+"</td>"+
 															"<td align='right'></td>"+
 														"</tr>");
 					}				

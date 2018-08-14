@@ -101,7 +101,7 @@ function seeAllNotifications(){
 				});
 				$("#notificationsBoxDiv").html("");
 				$("#notificationCountSpan").text("0");
-				$("#notificationCountDiv").text(youhaveText+" 0 "+newnofiticationText);
+				$("#notificationCountDiv").text(youhaveText+" 0 "+newnotificationText);
 			}else{
 				$("#seeAllNotifIcon").removeClass("la la-angle-down").addClass("la la-angle-right");
 			}			
@@ -135,7 +135,7 @@ function notify(text){
 	
 	$.notify({
 		icon: 'la la-bell',
-		title: 'Reminder',
+		title: reminderText,
 		message: text,
 	},{
 		type: 'danger',
@@ -153,7 +153,7 @@ function notify(text){
 										"<div class='notif-icon notif-danger'> <i class='la la-bell'></i> </div>"+
 											"<div class='notif-content'>"+
 												"<span class='block'>"+text+"</span>"+
-												"<span class='time'>A few seconds ago</span>"+ 
+												"<span class='time'>"+afewsecondsagoText+"</span>"+ 
 											"</div>"+
 											
 									"</a>");

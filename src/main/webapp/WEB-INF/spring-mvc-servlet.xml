@@ -88,7 +88,7 @@
 	
 	<mvc:interceptors>
 	   <mvc:interceptor>
-	       <mvc:mapping path="/lists" />
+	       <mvc:mapping path="/login" />
 	       <bean id="localeChangeInterceptor"
 	           class="org.springframework.web.servlet.i18n.LocaleChangeInterceptor">
 	           <property name="paramName" value="lang" />

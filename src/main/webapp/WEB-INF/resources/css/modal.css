@@ -12,6 +12,7 @@
 }
 
 .modal-dialog {
+	min-width: 321px;
   	display: inline-block;
   	text-align: left;
   	vertical-align: middle;

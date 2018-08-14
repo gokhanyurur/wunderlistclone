@@ -2,11 +2,12 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib uri = "http://java.sun.com/jsp/jstl/functions" prefix = "fn" %>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>Register</title>
+<title><spring:message code="register" text=""/></title>
 	<link href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
 	<script src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
 	<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
@@ -50,7 +51,7 @@
         <div class="col-md-4 offset-md-4">
             <div class="card text-center card  bg-default mb-3">
               <div class="card-header">
-                REGISTER
+                <spring:message code="register" text=""/>
               </div>
               	<c:if test="${not empty error}"> 
 					<div class="error">${error}</div>
@@ -71,8 +72,8 @@
 						<form:password path="passwordConf" cssClass="form-control input-sm chat-input" placeholder="Password Again" required="required"/>
 	              	</div>
 		            <div class="card-footer text-muted">
-		           		<input class="btn btn-danger" name="submit" type="submit" value="Register" />
-		           		<a href="login" class="btn btn-primary">Login</a>
+		           		<input class="btn btn-danger" name="submit" type="submit" value="<spring:message code="register" text=""/>" />
+		           		<a href="login" class="btn btn-primary"><spring:message code="login" text=""/></a>
 		            </div>
                		<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
                </form:form>
