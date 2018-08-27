@@ -37,12 +37,14 @@ var isSubTaskPgOpen;
 					$('#createListText').val("");
 					$("#listsUL").html("");
 		        
-					var sizeOfArrray = Array.isArray(result) ? result.length : Object.keys(result).length;
+					var sizeOfArrray = Array.isArray(result.UserLists) ? result.UserLists.length : Object.keys(result.UserLists).length;
 					if(sizeOfArrray > 0){
-						jQuery.each(result, function(index, value){
+						debugger;
+						jQuery.each(result.UserLists, function(n_index, n_value){
 	 						$("#listsUL").append("<li>"+
-	 												"<a href='#' onclick='getTasks(\""+ result[index].id +"\",\""+result[index].listName+"\")'>"+
-	 													"<span class='link-collapse'>"+result[index].listName+"</span>"+
+	 												"<a href='#' style='display: flex;' onclick='getTasks(\""+ result.UserLists[n_index].id +"\",\""+result.UserLists[n_index].listName+"\")'>"+
+	 													"<span class='link-collapse'>"+result.UserLists[n_index].listName+"</span>"+
+	 													"<span class='badge badge-danger' style='width: 20px; height: 20px; color: white; padding-left: 7px; margin-top: 8px; font-size: 10px;'>"+result.TaskCounts[n_index]+"</span>"+
 	 												"</a>"+
 	 											"</li>");
 	 		            });
@@ -63,17 +65,19 @@ var isSubTaskPgOpen;
 		}
 		
 		function getAllSharedLists(){
+			debugger;
 			$.ajax({
 				url: "getSharedLists",
 				success : function(result){
 					$("#sharedListsUL").html("");
-					
-					var sizeOfArrray = Array.isArray(result) ? result.length : Object.keys(result).length;
+					debugger;
+					var sizeOfArrray = Array.isArray(result.sharedLists) ? result.sharedLists.length : Object.keys(result.sharedLists).length;
 					if(sizeOfArrray > 0){
-						jQuery.each(result, function(index, value){
+						jQuery.each(result.sharedLists, function(n_index, n_value){
 	 						$("#sharedListsUL").append("<li>"+
-	 												"<a href='#' onclick='getTasks(\""+ result[index].id +"\",\""+result[index].listName+"\")'>"+
-	 													"<span class='link-collapse'>"+result[index].listName+"</span>"+
+	 												"<a href='#' style='display: flex;' onclick='getTasks(\""+ result.sharedLists[n_index].id +"\",\""+result.sharedLists[n_index].listName+"\")'>"+
+	 													"<span class='link-collapse'>"+result.sharedLists[n_index].listName+"</span>"+
+	 													"<span class='badge badge-danger' style='width: 20px; height: 20px; color: white; padding-left: 7px; margin-top: 8px; font-size: 10px;'>"+result.taskCounts[n_index]+"</span>"+
 	 												"</a>"+
 	 											"</li>");
 	 		            });
@@ -88,7 +92,7 @@ var isSubTaskPgOpen;
 	 		        
 				}, 
 				error : function(){
-					console.log("error");
+					console.log("error while getting shared lists");
 				}
 			});
 		}
@@ -132,7 +136,7 @@ var isSubTaskPgOpen;
 					$("#taskDetailsMainDiv").hide();
 					isSubTaskPgOpen = false;
 					$("#refreshButtonDiv").html("");					
-					$("#refreshButtonDiv").append("<button alt='Refresh the list' onclick='refreshTasks(\""+data.listId+"\",\""+data.listName+"\")' class='btn btn-danger btn-round' style='margin-right: 10px;'>"+
+					$("#refreshButtonDiv").append("<button alt='Refresh the list' onclick='getTasks(\""+data.listId+"\",\""+data.listName+"\")' class='btn btn-danger btn-round' style='margin-right: 10px;'>"+
 							"<i class='la la-refresh'></i>"+
 							  "</button>");
 							var isOwner=isLoginedUserOwnerOf(data.listId);
@@ -155,12 +159,13 @@ var isSubTaskPgOpen;
 	 		        							"<td>"+
 	 		        								"<div class='form-check'>"+
 	 		        									"<label class='form-check-label'>"+
-			        									(isTaskCompleted(result[index].id) ? '<input onchange="taskCheckboxChange(\''+result[index].id+'\')" class="form-check-input task-select" type="checkbox" checked>' : '<input onchange="taskCheckboxChange(\''+result[index].id+'\')" class="form-check-input task-select" type="checkbox">')+
+			        									(isTaskCompleted(result[index].id) ? '<input onchange="taskCheckboxChange(\''+result[index].id+'\',\''+data.listId+'\',\''+data.listName+'\')" class="form-check-input task-select" type="checkbox" checked>' : '<input onchange="taskCheckboxChange(\''+result[index].id+'\',\''+data.listId+'\',\''+data.listName+'\')" class="form-check-input task-select" type="checkbox">')+
 	 		        											"<span class='form-check-sign'></span>"+
 	 		        									"</label>"+
 	 		        								"</div>"+
 	 		        							"</td>"+
-	 		        							"<td>"+result[index].task+"</td>"+
+	 		        							(isTaskCompleted(result[index].id) ? '<td style="text-decoration: line-through;">'+result[index].task+'</td>' : '<td>'+result[index].task+'</td>')+
+//	 		        							"<td style='text-decoration: line-through;'>"+result[index].task+"</td>"+
 	 		        							"<td class='td-actions text-right'>"+
 	 		        								"<div class='form-button-action'>"+
 	 		        									"<button onclick='removeTask(\""+result[index].id+"\",\""+data.listId+"\",\""+data.listName+"\")' type='button' data-toggle='tooltip' title='"+removeText+"' class='btn btn-link btn-simple-danger'>"+
@@ -183,9 +188,11 @@ var isSubTaskPgOpen;
 			});
 		}
 		
-		function taskCheckboxChange(tid){
+		function taskCheckboxChange(tid,lid,lname){
 			data = {
 					taskId: tid,
+					listId: lid,
+					listName: lname
 			}
 			
 			$.ajax({
@@ -194,7 +201,7 @@ var isSubTaskPgOpen;
 				data: data,
 				async :false,
 				success: function(){
-					//getTasks(data.listId,data.listName);
+					getTasks(data.listId, data.listName);
 				}
 			});
 		}
@@ -232,46 +239,6 @@ var isSubTaskPgOpen;
 			});
 			return tempOwner;
 		}
-
-		function refreshTasks(id,name){
-			var data = {
-					listId: id,
-					listName: name 
-			}
-			$("#tasksDiv").html("");
-			$.ajax({
-				url:"getTasksList",
-				data: data,
-				success : function(result){
-					jQuery.each(result, function(index, value){
-						$("#tasksDiv").append("<tr>"+
-	 		        							"<td>"+
-	 		        								"<div class='form-check'>"+
-	 		        									"<label class='form-check-label'>"+
-			        									(isTaskCompleted(result[index].id) ? '<input onchange="taskCheckboxChange(\''+result[index].id+'\')" class="form-check-input task-select" type="checkbox" checked>' : '<input onchange="taskCheckboxChange(\''+result[index].id+'\')" class="form-check-input task-select" type="checkbox">')+
-	 		        											"<span class='form-check-sign'></span>"+
-	 		        									"</label>"+
-	 		        								"</div>"+
-	 		        							"</td>"+
-	 		        							"<td>"+result[index].task+"</td>"+
-	 		        							"<td class='td-actions text-right'>"+
-	 		        								"<div class='form-button-action'>"+
-	 		        									"<button onclick='removeTask(\""+result[index].id+"\",\""+data.listId+"\",\""+data.listName+"\")' type='button' data-toggle='tooltip' title='"+removeText+"' class='btn btn-link btn-simple-danger'>"+
-	 		        										"<i class='la la-times'></i>"+
-	 		        									"</button>"+
-	 		        									(result[index].stared ? '<button type="button" data-toggle="tooltip" title="'+starText+'" class="btn btn-link btn-simple-warning" onclick="starTheTask(\''+result[index].id+'\',\''+data.listId+'\',\''+data.listName+'\')"><i class="la la-star"></i></button>' : '<button type="button" data-toggle="tooltip" title="'+starText+'" class="btn btn-link btn-simple-warning" onclick="starTheTask(\''+result[index].id+'\',\''+data.listId+'\',\''+data.listName+'\')"><i class="la la-star-o"></i></button>')+
-	 		        									"<button onclick='showTaskDetails(\""+data.listId+"\",\""+ result[index].id +"\",\""+data.listName+"\")' type='button' data-toggle='tooltip' title='"+editText+"' class='btn btn-link btn-simple-primary'>"+
-	 		        										"<i class='la la-edit'></i>"+
-	 		        									"</button>"+
-	 		        								"</div>"+
-												"</td>"+
-											"</tr>");
-								
-					});
-					//$("#listTitleLabel").text(data.listName);
-				}
-			});
-		}
 				
 		function addTaskToList(lid,liname){
 			var data = {
@@ -287,7 +254,9 @@ var isSubTaskPgOpen;
 					success : function(){
 						$('#addTaskText').val("");
 						console.log("Task added to the list.");
-						getTasks(data.listId, data.listName);			
+						getTasks(data.listId, data.listName);
+						getAllLists();
+						getAllSharedLists();
 					}
 				});
 			}else{
@@ -551,7 +520,7 @@ var isSubTaskPgOpen;
 					success : function(){
 						//$('#addTaskText').val("");		
 						console.log("Task is updated.");
-						refreshTasks(data.listId,data.listName);
+						getTasks(data.listId,data.listName);
 					}
 				});
 			}else{
@@ -597,7 +566,9 @@ var isSubTaskPgOpen;
 					success : function(result){
 						$("#allTasksDiv").html("");
 						getTasks(data.listId, data.listName);
-						searchTask(); 
+						searchTask();
+						getAllLists();
+						getAllSharedLists();
 					}
 				});
 			} else {
@@ -841,6 +812,7 @@ var isSubTaskPgOpen;
 				success: function(){
 					$("#listTitleLabel").text(data.listName);
 					getAllLists();
+					getTasks(data.listId,data.listName);
 				}
 			});
 			
@@ -968,5 +940,3 @@ var isSubTaskPgOpen;
 				}
 			});
 		}*/
-		
-		

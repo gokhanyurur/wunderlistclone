@@ -13,6 +13,7 @@ public interface ListService {
 	public void addTask(Tasks theTask);
 	public void removeTask(Tasks tempTask);
 	public Tasks getTask(int id);
+	public List<Tasks> getTasksByList(int id);
 	
 	public void createList(Lists theList);
 	public void removeList(Lists theList);

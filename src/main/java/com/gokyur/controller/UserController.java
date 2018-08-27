@@ -10,9 +10,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.authentication.AnonymousAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
+//import org.springframework.security.authentication.AnonymousAuthenticationToken;
+/*import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;*/
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -106,10 +106,12 @@ public class UserController {
 	        
 	        String userUniqueHash = GokyurUtilities.MD5(String.valueOf(dbUser.getId())) + GokyurUtilities.MD5(dbUser.getUsername());
 	        
-	        String activationLink = "http://wunderlistclone.azurewebsites.net/activation/"+userUniqueHash;
+	        String activationLink = "http://localhost:8080/wunderlistclone/activation/"+userUniqueHash;
 	        String emailContent = "Welcome to Wunderlistclone! This application is made only for educational purpose. Here is your activation link: "+activationLink;
-
-			TLSEmail.sendEmail(dbUser.getEmail(), "Activate your account!", emailContent);
+	        emailContent += "Wunderlistclone'a hoþgeldiniz! Bu web uygulamasý yalnýzca eðitimsel amaç ile yapýlmýþtýr. Aktivasyon linkiniz: "+activationLink;
+	        
+	        
+			TLSEmail.sendEmail(dbUser.getEmail(), "Activate your account!/Hesabýnýzý etkinleþtirin!", emailContent);
 			
 			return "redirect:/login?activationsent";
 		}
@@ -148,7 +150,8 @@ public class UserController {
 			userService.saveUser(tempUser);
 			
 	        String emailContent = "You have requested to reset your password. Your new password is: "+newPassword;
-			TLSEmail.sendEmail(tempUser.getEmail(), "Reset your password!", emailContent);
+	        emailContent += "\n\nÞifrenizi sýfýrlamayý talep ettiniz. Yeni þifreniz:"+newPassword;
+			TLSEmail.sendEmail(tempUser.getEmail(), "Reset your password!/Þifrenizi sýfýrlayýn", emailContent);
 			
 			return "redirect:/resetpassword?sent";
 		}else {
@@ -180,7 +183,7 @@ public class UserController {
 			theModel.addAttribute("msg", "User activated. Now you can login.");
 		}
 
-		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		//Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 
 //		if (!(auth instanceof AnonymousAuthenticationToken)) {
 //

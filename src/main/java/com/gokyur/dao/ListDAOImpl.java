@@ -22,10 +22,11 @@ public class ListDAOImpl implements ListDAO{
 
 	@Autowired
 	public SessionFactory sessionFactory;
-	
+		
 	public Lists getList(int id) {
 		Session currentSession = sessionFactory.getCurrentSession();
 		Lists tempList = (Lists) currentSession.get(Lists.class, id);
+			
 		return tempList;
 	}
 
@@ -124,6 +125,17 @@ public class ListDAOImpl implements ListDAO{
 		Comments tempComment = (Comments) theQuery.uniqueResult();
 		
 		return tempComment;
+	}
+
+	public List<Tasks> getTasksByList(int id) {
+		Session currentSession = sessionFactory.getCurrentSession();
+		Query theQuery=currentSession.createQuery("FROM Tasks WHERE listid=:lid ORDER BY id");
+		theQuery.setParameter("lid", id);
+		
+		@SuppressWarnings("unchecked")
+		List<Tasks> tempList = theQuery.list();
+		
+		return tempList;
 	}
 
 }

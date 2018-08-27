@@ -4,7 +4,9 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -24,7 +26,7 @@ import com.gokyur.service.ListService;
 //import com.gokyur.service.NotificationService;
 //import com.gokyur.service.RoleService;
 import com.gokyur.service.UserService;
-import com.gokyur.utilities.GokyurUtilities;
+//import com.gokyur.utilities.GokyurUtilities;
 
 @Controller
 public class ListController {
@@ -62,15 +64,28 @@ public class ListController {
 		Lists theList = listService.getList(listId);
 		listService.removeList(theList);
 	}
-	
-	@RequestMapping(value = "/getLists", method = RequestMethod.GET)
-	public @ResponseBody  List<Lists> getListsList(HttpServletRequest req, HttpServletResponse resp) {
-		List<Lists> userLists = userService.getUser(req.getUserPrincipal().getName()).getLists();			
-		return userLists;
-	}
 		
+	@RequestMapping(value = "/getLists", method = RequestMethod.GET)
+	public @ResponseBody  Map<String, Object> getListsList(HttpServletRequest req, HttpServletResponse resp) {
+		Map<String, Object> map = new HashMap<String, Object>();
+		
+		List<Integer> taskCounts = new ArrayList<Integer>();
+		List<Lists> userLists = userService.getUser(req.getUserPrincipal().getName()).getLists();	
+		
+		for(Lists tempList:userLists) {
+			taskCounts.add(listService.getTasksByList(tempList.getId()).size());
+		}
+		
+		map.put("UserLists", userLists);
+		map.put("TaskCounts", taskCounts);
+		
+		return map;
+		
+	}
+				
 	@RequestMapping(value = "/getSharedLists", method = RequestMethod.GET)
-	public @ResponseBody  List<Lists> getSharedLists(HttpServletRequest req, HttpServletResponse resp) {
+	public @ResponseBody  Map<String, Object> getSharedLists(HttpServletRequest req, HttpServletResponse resp) {
+		Map<String, Object> map = new HashMap<String, Object>();
 		Users loginedUser = userService.getUser(req.getUserPrincipal().getName());
 		List<SharedLists> allSharedLists = userService.getAllSharedLists();
 		List<Lists> sharedLists = new ArrayList<Lists>();
@@ -81,7 +96,14 @@ public class ListController {
 				sharedLists.add(tempList);
 			}
 		}
-		return sharedLists;
+		map.put("sharedLists", sharedLists);
+		List<Integer> taskCounts = new ArrayList<Integer>();
+		for(Lists tempList:sharedLists) {
+			taskCounts.add(listService.getTasksByList(tempList.getId()).size());
+		}
+		map.put("taskCounts", taskCounts);
+		
+		return map;
 	}
 	
 	@RequestMapping(value = "/editListName", method = RequestMethod.POST)

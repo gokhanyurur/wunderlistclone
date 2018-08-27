@@ -1,8 +1,8 @@
-<%@ page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%>
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ taglib uri = "http://java.sun.com/jsp/jstl/functions" prefix = "fn" %>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
+<%@ taglib uri = "http://java.sun.com/jsp/jstl/functions" prefix = "fn" %>
+<%@taglib uri="http://www.springframework.org/security/tags" prefix="sec"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
@@ -61,15 +61,20 @@
 				</c:if>
                	<form:form action="registerUser" modelAttribute = "user" method="POST">
 	               	<div class="card-body">
-						<form:input path="username" cssClass="form-control input-sm chat-input" placeholder="Username" required="required"/>
+	               		<spring:message code="username" var="varusername"/>
+						<form:input path="username" cssClass="form-control input-sm chat-input" placeholder="${varusername}" required="required"/>
 	                	<br>
-						<form:input path="email" cssClass="form-control input-sm chat-input" placeholder="Email" required="required"/>
+	                	<spring:message code="email" var="varemail"/>
+						<form:input path="email" cssClass="form-control input-sm chat-input" placeholder="${varemail}" required="required"/>
 						<br>
-						<form:input path="emailConf" cssClass="form-control input-sm chat-input" placeholder="Email Again" required="required"/>
+						<spring:message code="emailagain" var="varemailagain"/>
+						<form:input path="emailConf" cssClass="form-control input-sm chat-input" placeholder="${varemailagain}" required="required"/>
 						<br>
-						<form:password path="password" cssClass="form-control input-sm chat-input" placeholder="Password" required="required"/>
+						<spring:message code="password" var="varpassword"/>
+						<form:password path="password" cssClass="form-control input-sm chat-input" placeholder="${varpassword}" required="required"/>
 						<br>
-						<form:password path="passwordConf" cssClass="form-control input-sm chat-input" placeholder="Password Again" required="required"/>
+						<spring:message code="passwordagain" var="varpasswordagain"/>
+						<form:password path="passwordConf" cssClass="form-control input-sm chat-input" placeholder="${varpasswordagain}" required="required"/>
 	              	</div>
 		            <div class="card-footer text-muted">
 		           		<input class="btn btn-danger" name="submit" type="submit" value="<spring:message code="register" text=""/>" />

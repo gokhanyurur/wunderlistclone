@@ -17,6 +17,7 @@ public interface ListDAO {
 	public void addTask(Tasks theTask);
 	public void removeTask(Tasks tempTask);
 	public Tasks getTask(int id);
+	public List<Tasks> getTasksByList(int id);
 	
 	public void addSubTask(SubTasks theSubTask);
 	public SubTasks getSubTask(int id);
@@ -30,6 +31,7 @@ public interface ListDAO {
 	public void shareList(SharedLists theSharedList);
 	public void removeSharedList(SharedLists sharedList);
 	public SharedLists getSharedList(int lid, int uid);
+
 
 
 	

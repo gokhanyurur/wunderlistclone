@@ -104,7 +104,8 @@ public class TaskController {
 	
 	@RequestMapping(value = "/getTasksList", method = RequestMethod.GET)
 	public @ResponseBody  List<Tasks> getTasksList(@RequestParam("listId") int id, HttpServletRequest req, HttpServletResponse resp) {
-		List<Tasks> allTasks = listService.getList(id).getTasks();
+		//List<Tasks> allTasks = listService.getList(id).getTasks();
+		List<Tasks> allTasks = listService.getTasksByList(id);
 		return allTasks;
 	}
 	

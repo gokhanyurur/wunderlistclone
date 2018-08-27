@@ -100,5 +100,10 @@ public class ListServiceImpl implements ListService{
 		return listDAO.getComment(id);
 	}
 
+	@Transactional
+	public List<Tasks> getTasksByList(int id) {
+		return listDAO.getTasksByList(id);
+	}
+
 
 }

@@ -5764,13 +5764,16 @@ body {
 
 /*     Badge    */
 .badge {
-  border-radius: 50px;
+ border-radius: 50px;
   margin-left: auto;
   line-height: 1;
   padding: 6px 10px;
   vertical-align: middle;
   font-weight: 700;
   font-size: 11px;
+  
+  
+  
 }
 
 .badge-count {
