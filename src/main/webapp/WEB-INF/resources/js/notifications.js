@@ -128,8 +128,6 @@ $(function() {
 
 
 
-
-
 function notify(text){
 	var notificationC = parseInt($("#notificationCountSpan").text());
 	

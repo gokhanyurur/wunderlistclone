@@ -447,12 +447,12 @@ var isSubTaskPgOpen;
 					        							"<td>"+
 					        								"<div class='form-check'>"+
 					        									"<label class='form-check-label'>"+
-					        									(isSubTaskCompleted(result[index].id) ? '<input onchange="subTaskCheckboxChange(\''+result[index].id+'\')" class="form-check-input subtask-select" type="checkbox" checked>' : '<input onchange="subTaskCheckboxChange(\''+result[index].id+'\')" class="form-check-input subtask-select" type="checkbox">')+
+					        									(isSubTaskCompleted(result[index].id) ? '<input onchange="subTaskCheckboxChange(\''+result[index].id+'\',\''+data.taskId+'\')" class="form-check-input subtask-select" type="checkbox" checked>' : '<input onchange="subTaskCheckboxChange(\''+result[index].id+'\',\''+data.taskId+'\')" class="form-check-input subtask-select" type="checkbox">')+
 					        											"<span class='form-check-sign'></span>"+
 					        									"</label>"+
 					        								"</div>"+
 					        							"</td>"+
-					        							"<td>"+result[index].subTask+"</td>"+
+					        							(isSubTaskCompleted(result[index].id) ? '<td style="text-decoration: line-through;">'+result[index].subTask+'</td>' : '<td>'+result[index].subTask+'</td>')+
 					        							"<td class='td-actions text-right'>"+
 					        								"<div class='form-button-action'>"+
 					        									"<button type='button' data-toggle='tooltip' title='"+removeText+"' onclick='removeSubTask(\""+data.taskId+"\",\""+result[index].id+"\")' class='btn btn-link btn-simple-danger'>"+
@@ -461,7 +461,6 @@ var isSubTaskPgOpen;
 															"</div>"+
 														"</td>"+
 													"</tr>");
-							//console.log(result[index].subTask+" -> completed: "+ isSubTaskCompleted(result[index].id));
 						});
 					}		
 				}
@@ -469,9 +468,10 @@ var isSubTaskPgOpen;
 
 		}
 		
-		function subTaskCheckboxChange(sid){
+		function subTaskCheckboxChange(sid,tid){
 			data = {
-					subTaskId: sid
+					subTaskId: sid,
+					taskId: tid
 			}
 			
 			$.ajax({
@@ -480,10 +480,9 @@ var isSubTaskPgOpen;
 				data: data,
 				async :false,
 				success : function(){
-					
+					getSubTasksFromTaskId(data.taskId);
 				}
 			});
-			//getSubTasksFromTaskId(data.subTaskId);
 		}
 		
 		function isSubTaskCompleted(sid){
@@ -829,10 +828,24 @@ var isSubTaskPgOpen;
 				type: "POST",
 				data: data,
 				success: function(){
-					
+					basicNotify(reminderSetText);
 				}
 			});
-			//console.log(data.lastDate+" is the last date for the taskid: "+data.taskId);
+		}
+		
+		function basicNotify(text){
+			$.notify({
+				icon: 'la la-stack-exchange',
+				title: "",
+				message: text,
+			},{
+				type: 'primary',
+				placement: {
+					from: "top",
+					align: "right"
+				},
+				time: 1000,
+			});
 		}
 		
 		function searchTask(){

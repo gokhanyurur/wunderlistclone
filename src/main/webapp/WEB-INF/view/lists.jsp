@@ -33,6 +33,8 @@
 		var afewsecondsagoText = '<spring:message code="afewsecondsago" text=""/>';
 		var reminderText = '<spring:message code="reminder" text=""/>';
 		var ownerofthislistText = '<spring:message code="ownerofthislist" text=""/>';
+
+		var reminderSetText='<spring:message code="reminderisset" text=""/>';
 				
 	</script>
 

@@ -108,7 +108,7 @@ public class UserController {
 	        
 	        String activationLink = "http://localhost:8080/wunderlistclone/activation/"+userUniqueHash;
 	        String emailContent = "Welcome to Wunderlistclone! This application is made only for educational purpose. Here is your activation link: "+activationLink;
-	        emailContent += "Wunderlistclone'a hoþgeldiniz! Bu web uygulamasý yalnýzca eðitimsel amaç ile yapýlmýþtýr. Aktivasyon linkiniz: "+activationLink;
+	        emailContent += "\n\nWunderlistclone'a hoþgeldiniz! Bu web uygulamasý yalnýzca eðitimsel amaç ile yapýlmýþtýr. Aktivasyon linkiniz: "+activationLink;
 	        
 	        
 			TLSEmail.sendEmail(dbUser.getEmail(), "Activate your account!/Hesabýnýzý etkinleþtirin!", emailContent);
